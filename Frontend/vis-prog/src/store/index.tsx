@@ -10,3 +10,9 @@ const counterSlice = createSlice({
         }
     }
 })
+
+export const store = configureStore({
+    reducer: {counterRed: counterSlice.reducer}
+})
+
+export const actions = counterSlice.actions;
