@@ -1,6 +1,5 @@
 import React from 'react';
 import { actions, useAppDispatch, useAppSelector, changeAsync } from "./store/index";
-import './App.css';
 
 function App() {
 
@@ -16,7 +15,7 @@ function App() {
   }
 
   return (
-    <div className="App">
+    <div className="App bg-red-100">
       <p>{count}</p>  
       <button onClick = {handleClick}>Click me</button>
       <button onClick = {handleAsyncClick}>Click me</button>
