@@ -1,5 +1,6 @@
 import React from 'react';
 import { actions, useAppDispatch, useAppSelector, changeAsync } from "./store/index";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
 
@@ -15,11 +16,18 @@ function App() {
   }
 
   return (
-    <div className="App bg-blue-100">
-      <p>{count}</p>  
-      <button onClick = {handleClick}>Click me</button>
-      <button onClick = {handleAsyncClick}>Click me</button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path = "/" element = {
+          <div className="App bg-blue-100">
+            <p>{count}</p>  
+            <button onClick = {handleClick}>Click me</button>
+            <button onClick = {handleAsyncClick}>Click me</button>
+          </div>
+        }/>
+        <Route path = "*" element = {"nothing found"}/>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
