@@ -6,17 +6,22 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
 import { store } from "./store/index";
 import { Auth0ProviderWithNavigate } from "./auth0-provider-with-navigate";
+import { BrowserRouter } from "react-router-dom";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Auth0ProviderWithNavigate>
+    <BrowserRouter>
+    
       <Provider store = {store}>
-        <App />
+      <Auth0ProviderWithNavigate>
+        <App /> 
+      </Auth0ProviderWithNavigate>
       </Provider>
-    </Auth0ProviderWithNavigate>
+      </BrowserRouter>
+    
   </React.StrictMode>
 );
 

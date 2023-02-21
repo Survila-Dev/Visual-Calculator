@@ -1,11 +1,23 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import React from 'react';
 import { actions, useAppDispatch, useAppSelector, changeAsync } from "./store/index";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { Navbar } from "./components/navbar"
 
 function App() {
 
   const count = useAppSelector((state) => state.counterRed.counter)
   const dispatch = useAppDispatch();
+
+  const { isLoading } = useAuth0();
+
+  if (isLoading) {
+    return (
+      <div>
+        Page is loading
+      </div>
+    );
+  }
 
   const handleClick = (e: React.FormEvent) => {
     dispatch(actions.change(12))
@@ -16,10 +28,10 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
       <Routes>
         <Route path = "/" element = {
           <div className="bg-blue-100">
+            <Navbar/>
             <p>{count}</p>  
             <button onClick = {handleClick}>Click me</button>
             <button onClick = {handleAsyncClick}>Click me</button>
@@ -27,7 +39,6 @@ function App() {
         }/>
         <Route path = "*" element = {"nothing found"}/>
       </Routes>
-    </BrowserRouter>
   );
 }
 
