@@ -5,15 +5,18 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from "react-redux";
 import { store } from "./store/index";
+import { Auth0ProviderWithNavigate } from "./auth0-provider-with-navigate";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Provider store = {store}>
-      <App />
-    </Provider>
+    <Auth0ProviderWithNavigate>
+      <Provider store = {store}>
+        <App />
+      </Provider>
+    </Auth0ProviderWithNavigate>
   </React.StrictMode>
 );
 

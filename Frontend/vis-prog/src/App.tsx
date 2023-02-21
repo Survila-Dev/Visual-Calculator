@@ -19,7 +19,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path = "/" element = {
-          <div className="App bg-blue-100">
+          <div className="bg-blue-100">
             <p>{count}</p>  
             <button onClick = {handleClick}>Click me</button>
             <button onClick = {handleAsyncClick}>Click me</button>
