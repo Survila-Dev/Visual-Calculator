@@ -15,7 +15,7 @@ function App() {
   }
 
   return (
-    <div className="App bg-red-100">
+    <div className="App bg-blue-100">
       <p>{count}</p>  
       <button onClick = {handleClick}>Click me</button>
       <button onClick = {handleAsyncClick}>Click me</button>
