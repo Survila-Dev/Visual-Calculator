@@ -3,6 +3,7 @@ import React from 'react';
 import { actions, useAppDispatch, useAppSelector, changeAsync } from "./store/index";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/navbar"
+import { PageLoading } from "./components/page-loading"
 
 function App() {
 
@@ -14,7 +15,7 @@ function App() {
   if (isLoading) {
     return (
       <div>
-        Page is loading
+        <PageLoading/>
       </div>
     );
   }
