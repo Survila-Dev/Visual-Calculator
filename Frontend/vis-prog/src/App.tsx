@@ -1,14 +1,16 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import React from 'react';
-import { actions, useAppDispatch, useAppSelector, changeAsync } from "./store/index";
+// import { actions, useAppDispatch, useAppSelector, changeAsync } from "./store/index";
 import { Routes, Route } from "react-router-dom";
 import { Navbar } from "./components/navbar"
 import { PageLoading } from "./components/page-loading"
+import { WorkspaceEditor } from "./pages/workspace-editor"
+
 
 function App() {
 
-  const count = useAppSelector((state) => state.counterRed.counter)
-  const dispatch = useAppDispatch();
+  // const count = useAppSelector((state) => state.counterRed.counter)
+  // const dispatch = useAppDispatch();
 
   const { isLoading } = useAuth0();
 
@@ -20,23 +22,18 @@ function App() {
     );
   }
 
-  const handleClick = (e: React.FormEvent) => {
-    dispatch(actions.change(12))
-  }
+  // const handleClick = (e: React.FormEvent) => {
+  //   dispatch(actions.change(12))
+  // }
 
-  const handleAsyncClick = (e: React.FormEvent) => {
-    dispatch(changeAsync(20)) 
-  }
+  // const handleAsyncClick = (e: React.FormEvent) => {
+  //   dispatch(changeAsync(20)) 
+  // }
 
   return (
       <Routes>
         <Route path = "/" element = {
-          <div className="bg-blue-100">
-            <Navbar/>
-            <p>{count}</p>  
-            <button onClick = {handleClick}>Click me</button>
-            <button onClick = {handleAsyncClick}>Click me</button>
-          </div>
+          <WorkspaceEditor/>
         }/>
         <Route path = "*" element = {"nothing found"}/>
       </Routes>

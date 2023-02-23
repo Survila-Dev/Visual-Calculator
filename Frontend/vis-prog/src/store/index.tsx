@@ -77,11 +77,12 @@ const workspacesSlice = createSlice({
         },
 
         removeWSNode(state, action: PayloadAction<{curWS: Workspace, nodeToDelete: WSNode}>) {
+            //ToDo Iterate through the connections of node and change the connected nodes too
             state.workspaces[action.payload.curWS.id].nodes.splice(
                 action.payload.nodeToDelete.id, 1
             )
         },
-        
+
         updateConnection(state, action: PayloadAction<{curWS: Workspace, firstNode: WSNode, secondNode: WSNode}>) {
             state.workspaces[action.payload.curWS.id].nodes[action.payload.firstNode.id] = 
                 action.payload.firstNode

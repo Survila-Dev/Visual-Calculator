@@ -40,10 +40,10 @@ export const Navbar: React.FC = () => {
     }
 
     return (
-        <div>
+        <section>
             {!isAuthenticated && <button onClick = {handleClickLogIn}>Log In</button>}
             {!isAuthenticated && <button onClick = {handleClickSignUp}>Sign Up</button>}
             {isAuthenticated && <button onClick = {handleClickLogOut}>Log Out</button>}
-        </div>
+        </section>
     )
 }
