@@ -40,10 +40,15 @@ export const Navbar: React.FC = () => {
     }
 
     return (
-        <section>
-            {!isAuthenticated && <button onClick = {handleClickLogIn}>Log In</button>}
-            {!isAuthenticated && <button onClick = {handleClickSignUp}>Sign Up</button>}
-            {isAuthenticated && <button onClick = {handleClickLogOut}>Log Out</button>}
+        <section className="bg-blue-100 flex-none">
+            <div className ="flex flex-row justify-between">
+              <h1 className = "p-0.5 m-0.5">Visual Programming Interface</h1>
+              <div className = "flex flex-row">
+                {!isAuthenticated && <button className = "p-0.5 m-0.5 bg-blue-300" onClick = {handleClickLogIn}>Log In</button>}
+                {!isAuthenticated && <button className = "p-0.5 m-0.5 bg-blue-300"  onClick = {handleClickSignUp}>Sign Up</button>}
+                {isAuthenticated && <button className = "p-0.5 m-0.5 bg-blue-300"  onClick = {handleClickLogOut}>Log Out</button>}
+              </div>
+            </div>
         </section>
     )
 }
