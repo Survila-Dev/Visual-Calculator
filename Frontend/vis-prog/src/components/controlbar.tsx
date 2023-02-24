@@ -10,9 +10,12 @@ export const ControlBar: React.FC = () => {
     const classNameInput2: string = 'absolute flex-none mx-[5vw] w-[90vw] bg-red-200';
 
     const classNameInput3 = classNameInput;
+
+    const x = "100px"
+    const y = "20px"
     
     console.log(classNameInput)
     return (
-        <section className = "absolute flex-none mx-[5vw] w-[90vw] bg-red-100" style = {{top: "0px", left: "0px"}}>Control bar here.</section>
+        <section className = "absolute flex-none mx-[5vw] w-[90vw] bg-red-100" style = {{top: x, left: y}}>Control bar here.</section>
         )
 }
