@@ -35,15 +35,14 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
         if ((ctx) && (canvas)) {
             // drawing everything here
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.beginPath();
-
-            
-
-            listOfCurves.forEach((curCurve) => {
-                    if (ctx) drawConnection(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
-                )
-
+            ctx.beginPath()
             ctx.lineWidth = 7.5;
+            
+            listOfCurves.forEach((curCurve) => {
+                if (ctx) {
+                    drawConnection(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
+                }
+            )
             
             if (drawToMouse && pointToDrawToMouse) {
                 drawConnection(ctx, pointToDrawToMouse, mousePosition)

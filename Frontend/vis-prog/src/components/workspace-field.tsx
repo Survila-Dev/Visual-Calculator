@@ -37,12 +37,6 @@ export const WorkspaceField: React.FC = () => {
         {id: 0, type: "constant", connections: [], position: {x: 20, y: 30}},
         {id: 1, type: "constant", connections: [], position: {x: 50, y: 70}},
         {id: 2, type: "constant", connections: [], position: {x: 40, y: 100}},
-        {id: 3, type: "constant", connections: [], position: {x: 80, y: 30}},
-        {id: 4, type: "constant", connections: [], position: {x: 100, y: 70}},
-        {id: 5, type: "constant", connections: [], position: {x: 150, y: 100}},
-        {id: 6, type: "constant", connections: [], position: {x: 220, y: 30}},
-        {id: 7, type: "constant", connections: [], position: {x: 0, y: 70}},
-        {id: 8, type: "constant", connections: [], position: {x: 400, y: 100}}
     ]
 
     function handleMouseDown(e: React.FormEvent) {

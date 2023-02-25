@@ -21,7 +21,10 @@ export default function WSNode({WSNodeInput, mousePosition, fieldCOS} : WSNodePr
                 x: posBeforeDrag.x + mousePosition.x - mousePosBeforeDrag.x,
                 y: posBeforeDrag.y + mousePosition.y - mousePosBeforeDrag.y,
             })
-            console.log("Render")
+
+            // Dispatch changes to curve
+            
+
         }
     }, [mousePosition, fieldCOS])
 
@@ -47,7 +50,7 @@ export default function WSNode({WSNodeInput, mousePosition, fieldCOS} : WSNodePr
         e.preventDefault()
 
         changeBeingDragged(false)
-        // dispatch to state
+        // Dispatch changes to state
     }
 
     const listOfPorts: {id: number, position: {side: "left" | "right", row: number}}[] = [
@@ -67,7 +70,16 @@ export default function WSNode({WSNodeInput, mousePosition, fieldCOS} : WSNodePr
             onMouseUp = {handleMouseUp}
         >
             Id {WSNodeInput.id}
-            {listOfPorts.map((curPort) => <WSNodePort id = {curPort.id} position = {curPort.position}/>)}
+            {listOfPorts.map((curPort) => (
+                <WSNodePort
+                    id = {curPort.id}
+                    parentNodeId = {WSNodeInput.id}
+                    position = {curPort.position}
+                    parentBeingDragged = {isBeingDragged}
+                    mousePosition = {mousePosition}
+                    />
+                )
+            )}
         </article>
     )
 }

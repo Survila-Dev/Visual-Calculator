@@ -15,8 +15,8 @@ export interface CurveConnectionList {
 }
 
 const initCurveConnections: CurveConnection[] = [
-    {firstNodeId: 0, firstPortId: 0, secondNodeId: 1, secondPortId: 0, firstPortPosition: {x: 10, y: 10}, secondPortPosition: {x:20, y:20}},
-    {firstNodeId: 2, firstPortId: 0, secondNodeId: 3, secondPortId: 0, firstPortPosition: {x: 30, y: 10}, secondPortPosition: {x:30, y:10}}
+    // {firstNodeId: 0, firstPortId: 3, secondNodeId: 1, secondPortId: 0, firstPortPosition: {x: 0, y: 0}, secondPortPosition: {x:100, y:400}},
+    // {firstNodeId: 0, firstPortId: 4, secondNodeId: 1, secondPortId: 1, firstPortPosition: {x: 0, y: 0}, secondPortPosition: {x:100, y:100}},
 ]
 
 export const curveConnectionsSlice = createSlice({
@@ -27,7 +27,6 @@ export const curveConnectionsSlice = createSlice({
             state,
             action: PayloadAction<{nodeId: number, portId: number, newPos: {x: number, y:number}}>) {
             
-            // Iterate through whole lits and update where the ids are identical
             for (let i = 0; i < state.length; i++) {
                 if (state[i].firstNodeId === action.payload.nodeId && state[i].firstPortId === action.payload.portId) {
                     state[i].firstPortPosition = action.payload.newPos
@@ -42,7 +41,7 @@ export const curveConnectionsSlice = createSlice({
             action: PayloadAction<{
                 firstNodeId: number, firstPortId: number, 
                 secondNodeId: number, secondPortId: number,
-                fisrtPortPos: {x: number, y:number},
+                firstPortPos: {x: number, y:number},
                 secondPortPos: {x: number, y:number}}>) {
 
             state.push({
@@ -50,7 +49,7 @@ export const curveConnectionsSlice = createSlice({
                 firstPortId: action.payload.firstPortId,
                 secondNodeId: action.payload.secondNodeId,
                 secondPortId: action.payload.secondPortId,
-                firstPortPosition: action.payload.fisrtPortPos,
+                firstPortPosition: action.payload.firstPortPos,
                 secondPortPosition: action.payload.secondPortPos
             })
 
