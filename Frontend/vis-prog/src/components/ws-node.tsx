@@ -21,10 +21,6 @@ export default function WSNode({WSNodeInput, mousePosition, fieldCOS} : WSNodePr
                 x: posBeforeDrag.x + mousePosition.x - mousePosBeforeDrag.x,
                 y: posBeforeDrag.y + mousePosition.y - mousePosBeforeDrag.y,
             })
-
-            // Dispatch changes to curve
-            
-
         }
     }, [mousePosition, fieldCOS])
 

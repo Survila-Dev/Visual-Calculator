@@ -21,6 +21,7 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
     const [connected, changeConnected] = React.useState<boolean>(false)
 
     React.useEffect(() => {
+        // Check if the port was not connected via click on the connected port
         if (connected) {
             let notConnected = true;
             for (let i = 0; i < listOfConnections.length; i++) {
@@ -37,7 +38,7 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
     })
 
     React.useEffect(() => {
-
+        // Update the port positiong during dragging of the parent
         if (parentBeingDragged && portRef.current) {
             const rect = portRef.current.getBoundingClientRect()
             const newPosInput = {x: (rect.left + rect.right)/2, y: rect.top}
@@ -51,11 +52,9 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
     }, [mousePosition])
 
     function convertPositionToStyle(position : {side: "left" | "right", row: number}) {
-
         const portLateralOffset = 12
         const portRowOffset = 22
         const portRowStartOffset = 10
-
         const vertOffset = portRowStartOffset + portRowOffset * position.row;
 
         if (position.side === "left") {
@@ -122,9 +121,9 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
                     
                     dispatch(mouseConnectActions.clickSecond())
                 }
-                }
             }
-            }
+        }
+    }
 
     return (
         <div

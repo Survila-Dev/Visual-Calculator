@@ -13,11 +13,11 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
 
     function draw(drawToMouse: boolean = false, pointToDrawToMouse?: {x: number, y: number}) {
 
-        function drawConnection(
-                ctx: CanvasRenderingContext2D,
-                point1: {x: number, y: number},
-                point2: {x: number, y:number},
-                color: string = '#ff0000') {
+        function drawSingleConnection(
+            ctx: CanvasRenderingContext2D,
+            point1: {x: number, y: number},
+            point2: {x: number, y:number},
+            color: string = '#ff0000') {
 
             ctx.strokeStyle = color;
             ctx.moveTo(point1.x, point1.y);
@@ -32,26 +32,25 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
         if (canvas) {
             ctx = canvas.getContext('2d')
         }
-        if ((ctx) && (canvas)) {
+        if (ctx && canvas) {
             // drawing everything here
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath()
             ctx.lineWidth = 7.5;
             
             listOfCurves.forEach((curCurve) => {
-                if (ctx) {
-                    drawConnection(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
-                }
+                if (ctx) drawSingleConnection(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
             )
             
             if (drawToMouse && pointToDrawToMouse) {
-                drawConnection(ctx, pointToDrawToMouse, mousePosition)
+                drawSingleConnection(ctx, pointToDrawToMouse, mousePosition)
             }
             ctx.stroke();
         }
     }
 
     React.useEffect(() => {
+        // Resizing the canvas and adding listener for windows resize
         if (canvasRef.current) {
             canvasRef.current.width = window.innerWidth;
             canvasRef.current.height = window.innerHeight;
