@@ -13,7 +13,9 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
         function drawConnection(
                 ctx: CanvasRenderingContext2D,
                 point1: {x: number, y: number},
-                point2: {x: number, y:number}) {
+                point2: {x: number, y:number},
+                color: string = '#ff0000') {
+            ctx.strokeStyle = color;
             ctx.moveTo(point1.x, point1.y);
             ctx.bezierCurveTo(
                 (point1.x + point2.x)/2, point1.y,
@@ -32,7 +34,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
             ctx.beginPath();
 
             ctx.lineWidth = 7.5;
-            ctx.strokeStyle = '#ff0000';
+            
 
             if (drawToMouse && pointToDrawToMouse) {
                 drawConnection(ctx, pointToDrawToMouse, mousePosition)
