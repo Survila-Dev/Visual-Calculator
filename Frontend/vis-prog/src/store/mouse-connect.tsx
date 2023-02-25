@@ -22,7 +22,7 @@ export const mouseConnectSlice = createSlice({
         clickFirst(state, action: PayloadAction<{nodeId: number, portId: number, portPosition: {x: number, y: number}}>) {
             state.firstClicked = true
             state.firstNodeId = action.payload.nodeId
-            state.firstPortId = action.payload.nodeId
+            state.firstPortId = action.payload.portId
             state.firstPortPosition = action.payload.portPosition
         },
         clickSecond(state) {

@@ -16,8 +16,25 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
     const portRef = React.useRef<HTMLDivElement | null>(null)
     const dispatch = useAppDispatch();
     const mouseConnectStatus = useAppSelector((state) => state.mouseConnectReducer)
+    const listOfConnections = useAppSelector((state) => state.canvasStateReducers)
 
     const [connected, changeConnected] = React.useState<boolean>(false)
+
+    React.useEffect(() => {
+        if (connected) {
+            let notConnected = true;
+            for (let i = 0; i < listOfConnections.length; i++) {
+                if (listOfConnections[i].firstNodeId === parentNodeId && listOfConnections[i].firstPortId === id) {
+                    notConnected = false
+                } else if (listOfConnections[i].secondNodeId === parentNodeId && listOfConnections[i].secondPortId === id) {
+                    notConnected = false
+                }
+            }
+            if (notConnected) {
+                changeConnected(false)
+            }
+        }
+    })
 
     React.useEffect(() => {
 
@@ -71,6 +88,8 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
             }))
             console.log("Disconnected")
         } else {
+            changeConnected(true)
+
             if (portRef.current) {
                 const rect = portRef.current.getBoundingClientRect()
                 const newPosInput = {x: (rect.left + rect.right)/2, y: rect.top}
@@ -81,7 +100,10 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
                         nodeId: parentNodeId, portId: id, portPosition: newPosInput
                     }))
                     console.log("First selected")
-                    changeConnected(true)
+                    console.log({
+                        nodeId: parentNodeId, portId: id, portPosition: newPosInput
+                    })
+
                 } else {
                     // create new connection
                     console.log("Second selected")
@@ -93,11 +115,12 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
                         firstPortPos: mouseConnectStatus.firstPortPosition,
                         secondPortPos: newPosInput}
                     ))
+                    console.log({
+                        nodeId: mouseConnectStatus.firstNodeId, portId: mouseConnectStatus.firstPortId, portPosition: mouseConnectStatus.firstPortPosition
+                    })
                     // if (mouseConnectStatus.firstNodeId && mouseConnectStatus.firstPortId && mouseConnectStatus.firstPortPosition) {
-                        
+                    
                     dispatch(mouseConnectActions.clickSecond())
-                        
-                    changeConnected(true)
                 }
                 }
             }
