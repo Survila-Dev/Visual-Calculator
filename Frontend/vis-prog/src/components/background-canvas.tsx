@@ -8,30 +8,44 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
 
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
 
-    function draw() {
+    function draw(drawToMouse: boolean = false, pointToDrawToMouse?: {x: number, y: number}) {
+
+        function drawConnection(
+                ctx: CanvasRenderingContext2D,
+                point1: {x: number, y: number},
+                point2: {x: number, y:number}) {
+            ctx.moveTo(point1.x, point1.y);
+            ctx.bezierCurveTo(
+                (point1.x + point2.x)/2, point1.y,
+                (point1.x + point2.x)/2, point2.y,
+                point2.x, point2.y);
+        }
+
         const canvas = canvasRef.current
         let ctx = null;
         if (canvas) {
             ctx = canvas.getContext('2d')
         }
         if (ctx && canvas) {
-
             // drawing everything here
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.lineTo(canvas.width, canvas.height); 
-            ctx.moveTo(canvas.width, 0);
-            ctx.lineTo(0, canvas.height); 
-            ctx.moveTo(canvas.width/2, canvas.height/2);
-            ctx.lineTo(mousePosition.x, mousePosition.y); 
-            ctx.stroke();
 
-            
+            ctx.lineWidth = 7.5;
+            ctx.strokeStyle = '#ff0000';
+
+            if (drawToMouse && pointToDrawToMouse) {
+                drawConnection(ctx, pointToDrawToMouse, mousePosition)
+            }
+            ctx.stroke();
         }
     }
 
     React.useEffect(() => {
+        if (canvasRef.current) {
+            canvasRef.current.width = window.innerWidth;
+            canvasRef.current.height = window.innerHeight;
+        }
         function handleResize(this: Window, e: UIEvent){
             if (canvasRef.current) {
                 canvasRef.current.width = window.innerWidth;
@@ -46,7 +60,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
     }, [])
 
     React.useEffect(() => {
-        draw()
+        draw(true, {x: 100, y: 100})
     }, [mousePosition])
 
     return (
