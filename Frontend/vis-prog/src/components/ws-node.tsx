@@ -1,5 +1,6 @@
 import React from "react"
 import { WSNodeType } from ".././store/index"
+import { WSNodePort } from "./ws-node-port"
 
 interface WSNodeProps {
     WSNodeInput: WSNodeType,
@@ -49,6 +50,14 @@ export default function WSNode({WSNodeInput, mousePosition, fieldCOS} : WSNodePr
         // dispatch to state
     }
 
+    const listOfPorts: {id: number, position: {side: "left" | "right", row: number}}[] = [
+        {id: 0, position: {side: "left", row: 0}},
+        {id: 1, position: {side: "left", row: 1}},
+        {id: 2, position: {side: "left", row: 2}},
+        {id: 3, position: {side: "right", row: 0}},
+        {id: 4, position: {side: "right", row: 1}},
+    ]
+
     return (
         <article
             id = {WSNodeInput.id as any as string}
@@ -58,6 +67,7 @@ export default function WSNode({WSNodeInput, mousePosition, fieldCOS} : WSNodePr
             onMouseUp = {handleMouseUp}
         >
             Id {WSNodeInput.id}
+            {listOfPorts.map((curPort) => <WSNodePort id = {curPort.id} position = {curPort.position}/>)}
         </article>
     )
 }

@@ -2,6 +2,7 @@ import React from "react"
 import { ControlBar } from "../components/controlbar"
 import { WSNodeType } from "../store/index"
 import WSNode from "./ws-node"
+import { BackCanvas } from "./background-canvas"
 
 export const WorkspaceField: React.FC = () => {
 
@@ -57,14 +58,15 @@ export const WorkspaceField: React.FC = () => {
     }
 
     return (
-        <section className = "flex-1 ">
+        <section className = "grow">
             <div
-                className = "relative bg-green-200 h-full hover:cursor-grab active:cursor-grabbing"
+                className = "relative h-full hover:cursor-grab active:cursor-grabbing min-h-0"
                 onMouseDown = {handleMouseDown}
                 onMouseUp = {handleMouseUp}
             >
                 <ControlBar/>
                 {listOfNodes.map((curNode) => <WSNode WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>)}
+                <BackCanvas mousePosition = {mousePosition}/>
             </div>
         </section>
     )
