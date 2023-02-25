@@ -7,17 +7,17 @@ export interface UserInfo {
     userName: string,
 }
 
-export interface WSNode {
+export interface WSNodeType {
     id: number,
     type: "constant" | "addition" | "substraktion" | "multiplication" | "division",
-    connections: {portSelf: number, portOther: number, otherNode: WSNode}[],
-    postion: {x: number, y: number}
+    connections: {portSelf: number, portOther: number, otherNode: WSNodeType}[],
+    position: {x: number, y: number}
 }
 
 export interface Workspace {
     name: string,
     id: number,
-    nodes: WSNode[],
+    nodes: WSNodeType[],
 }
 
 export interface Workspaces {
@@ -72,18 +72,18 @@ const workspacesSlice = createSlice({
             state.workspaces.splice(action.payload.id, 1)
         },
 
-        addNewWSNode(state, action: PayloadAction<{curWS: Workspace, newNode: WSNode}>) {
+        addNewWSNode(state, action: PayloadAction<{curWS: Workspace, newNode: WSNodeType}>) {
             state.workspaces[action.payload.curWS.id].nodes.push(action.payload.newNode)
         },
 
-        removeWSNode(state, action: PayloadAction<{curWS: Workspace, nodeToDelete: WSNode}>) {
+        removeWSNode(state, action: PayloadAction<{curWS: Workspace, nodeToDelete: WSNodeType}>) {
             //ToDo Iterate through the connections of node and change the connected nodes too
             state.workspaces[action.payload.curWS.id].nodes.splice(
                 action.payload.nodeToDelete.id, 1
             )
         },
 
-        updateConnection(state, action: PayloadAction<{curWS: Workspace, firstNode: WSNode, secondNode: WSNode}>) {
+        updateConnection(state, action: PayloadAction<{curWS: Workspace, firstNode: WSNodeType, secondNode: WSNodeType}>) {
             state.workspaces[action.payload.curWS.id].nodes[action.payload.firstNode.id] = 
                 action.payload.firstNode
             state.workspaces[action.payload.curWS.id].nodes[action.payload.secondNode.id] = 

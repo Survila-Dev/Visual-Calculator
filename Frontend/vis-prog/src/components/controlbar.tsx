@@ -8,6 +8,6 @@ export const ControlBar: React.FC = () => {
     const y = "20px"
     
     return (
-        <section className = "absolute flex-none mx-[5vw] w-[90vw] bg-red-100" style = {{top: x, left: y}}>Control bar here.</section>
+        <section className = "absolute flex-none mx-[5vw] w-[90vw] bg-red-100">Control bar here.</section>
         )
 }
