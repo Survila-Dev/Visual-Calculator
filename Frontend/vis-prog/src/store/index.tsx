@@ -1,6 +1,7 @@
 import { createAsyncThunk, configureStore, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { curveConnectionsSlice } from "./canvas-curves"
 
 export interface UserInfo {
     isLoggedIn: boolean,
@@ -135,7 +136,10 @@ const workspacesSlice = createSlice({
 // })
 
 export const store = configureStore({
-    reducer: {workspaceStateReducers: workspacesSlice.reducer}
+    reducer: {
+        workspaceStateReducers: workspacesSlice.reducer,
+        canvasStateReducers: curveConnectionsSlice.reducer
+    }
 })
 
 export type DispatchType = typeof store.dispatch

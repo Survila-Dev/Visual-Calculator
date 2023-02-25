@@ -1,4 +1,6 @@
 import React from "react"
+import { useAppDispatch, useAppSelector } from "../store/index";
+import { canvasCurveActions } from "../store/canvas-curves"
 
 interface BackCanvasInteface {
     mousePosition: {x: number, y: number}
@@ -7,6 +9,7 @@ interface BackCanvasInteface {
 export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
 
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
+    const listOfCurves = useAppSelector((state) => state.canvasStateReducers)
 
     function draw(drawToMouse: boolean = false, pointToDrawToMouse?: {x: number, y: number}) {
 
@@ -15,6 +18,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
                 point1: {x: number, y: number},
                 point2: {x: number, y:number},
                 color: string = '#ff0000') {
+
             ctx.strokeStyle = color;
             ctx.moveTo(point1.x, point1.y);
             ctx.bezierCurveTo(
@@ -24,18 +28,23 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
         }
 
         const canvas = canvasRef.current
-        let ctx = null;
+        let ctx : null | CanvasRenderingContext2D = null;
         if (canvas) {
             ctx = canvas.getContext('2d')
         }
-        if (ctx && canvas) {
+        if ((ctx) && (canvas)) {
             // drawing everything here
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();
 
-            ctx.lineWidth = 7.5;
             
 
+            listOfCurves.forEach((curCurve) => {
+                    if (ctx) drawConnection(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
+                )
+
+            ctx.lineWidth = 7.5;
+            
             if (drawToMouse && pointToDrawToMouse) {
                 drawConnection(ctx, pointToDrawToMouse, mousePosition)
             }
@@ -62,7 +71,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
     }, [])
 
     React.useEffect(() => {
-        draw(true, {x: 100, y: 100})
+        draw()
     }, [mousePosition])
 
     return (
