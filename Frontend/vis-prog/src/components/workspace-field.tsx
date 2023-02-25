@@ -59,12 +59,10 @@ export const WorkspaceField: React.FC = () => {
     return (
         <section className = "flex-1 ">
             <div
-                className = "z-10 relative bg-green-200 h-full hover:cursor-grab active:cursor-grabbing"
+                className = "relative bg-green-200 h-full hover:cursor-grab active:cursor-grabbing"
                 onMouseDown = {handleMouseDown}
                 onMouseUp = {handleMouseUp}
             >
-                x: {String(mousePosition.x)}
-                y: {String(mousePosition.y)}
                 <ControlBar/>
                 {listOfNodes.map((curNode) => <WSNode WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>)}
             </div>
