@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/index";
 import { canvasCurveActions } from "../store/canvas-curves"
 import { mouseConnectActions } from "../store/mouse-connect";
 import { mouseCurveTrackActions } from "../store/mouse-curve-track";
+import { workspacesStateActions } from "../store/workspaces";
 
 interface WSNodePortProps {
     id: number,
@@ -18,6 +19,7 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
     const dispatch = useAppDispatch();
     const mouseConnectStatus = useAppSelector((state) => state.mouseConnectReducer)
     const listOfConnections = useAppSelector((state) => state.canvasStateReducers)
+    const workfieldIsDragged = useAppSelector((state) => state.workfieldDragReducer.dragged)
 
     const [connected, changeConnected] = React.useState<boolean>(false)
 
@@ -42,7 +44,7 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
 
     React.useEffect(() => {
         // Update the port positiong during dragging of the parent
-        if (parentBeingDragged && portRef.current) {
+        if ((parentBeingDragged || workfieldIsDragged) && portRef.current) {
             const rect = portRef.current.getBoundingClientRect()
             const newPosInput = {x: (rect.left + rect.right)/2, y: rect.top}
             dispatch(canvasCurveActions.updatePosition({
@@ -125,6 +127,13 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
                         dispatch(mouseConnectActions.clickSecond())
                         dispatch(mouseCurveTrackActions.stopTracking())
                         //ToDo dispatch to state that new connection was created
+
+                        // dispatch(workspacesStateActions.addNewPortConnection({
+                        //     firstNodeId: mouseConnectStatus.firstNodeId,
+                        //     firstPortId: mouseConnectStatus.firstPortId,
+                        //     secondNodeId: parentNodeId,
+                        //     secondPortId: id,
+                        // }))
                     }
 
                 }

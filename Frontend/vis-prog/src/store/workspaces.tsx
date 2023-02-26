@@ -89,18 +89,47 @@ export const workspacesSlice = createSlice({
         },
 
         removeWSNode(state, action: PayloadAction<{curWS: Workspace, nodeToDelete: WSNodeType}>) {
-            //ToDo Iterate through the connections of node and change the connected nodes too
             state.workspaces[action.payload.curWS.id].nodes.splice(
                 action.payload.nodeToDelete.id, 1
             )
         },
+        updateWSNodePosition(state, action: PayloadAction<{nodeId: number, newPosition: {x: number, y: number}}>) {
+            if (state.currentWS) {
+                state.currentWS.nodes[action.payload.nodeId].position = action.payload.newPosition
+                state.workspaces[state.currentWS.id] = state.currentWS
+            }
+        },
+        addNewPortConnection(
+            state,
+            action: PayloadAction<{
+                firstNodeId: number, firstPortId: number,
+                secondNodeId: number, secondPortId: number
+            }>) {
 
-        updateConnection(state, action: PayloadAction<{curWS: Workspace, firstNode: WSNodeType, secondNode: WSNodeType}>) {
-            state.workspaces[action.payload.curWS.id].nodes[action.payload.firstNode.id] = 
-                action.payload.firstNode
-            state.workspaces[action.payload.curWS.id].nodes[action.payload.secondNode.id] = 
-                action.payload.secondNode
+            if (state.currentWS) {
+                state.currentWS.nodes[action.payload.firstNodeId].connections.push({
+                    portSelf: action.payload.firstPortId,
+                    portOther: action.payload.secondPortId,
+                    otherNode: state.currentWS.nodes[action.payload.secondNodeId]
+                })
+                state.currentWS.nodes[action.payload.secondNodeId].connections.push({
+                    portSelf: action.payload.secondPortId,
+                    portOther: action.payload.firstPortId,
+                    otherNode: state.currentWS.nodes[action.payload.firstNodeId]
+                })
+                state.workspaces[state.currentWS.id] = state.currentWS
+            }
+
+        },
+        deletePortConnection(state, action: PayloadAction<{nodeId: number, portId: number}>) {
+            // find the other node
+            // const otherNode: WSNodeType = state.currentWS.nodes[nodeId].connections[]
+            // delete the connection from this node
+
+            // delete the connection from the other node
         }
+
+
     },
     extraReducers: (builder) => {
         //ToDo different handling of the three async function

@@ -1,6 +1,8 @@
 import React from "react"
 import { WSNodeType } from ".././store/workspaces"
 import { WSNodePort } from "./ws-node-port"
+import { useAppDispatch } from "../store"
+import { workspacesStateActions } from ".././store/workspaces"
 
 interface WSNodeProps {
     WSNodeInput: WSNodeType,
@@ -14,6 +16,8 @@ export default function WSNode({WSNodeInput, mousePosition, fieldCOS} : WSNodePr
     const [curPos, changeCurPos] = React.useState<{x: number, y:number}>(WSNodeInput.position)
     const [posBeforeDrag, changePosBeforeDrag] = React.useState<{x: number, y:number}>(WSNodeInput.position)
     const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y:number}>({x: 0, y: 0})
+
+    const dispatch = useAppDispatch()
 
     React.useEffect(() => {
         if (isBeingDragged) {
@@ -46,7 +50,7 @@ export default function WSNode({WSNodeInput, mousePosition, fieldCOS} : WSNodePr
         e.preventDefault()
 
         changeBeingDragged(false)
-        // Dispatch changes to state
+        dispatch(workspacesStateActions.updateWSNodePosition({nodeId: WSNodeInput.id, newPosition: curPos}))
     }
 
     const listOfPorts: {id: number, position: {side: "left" | "right", row: number}}[] = [

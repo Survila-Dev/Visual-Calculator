@@ -21,12 +21,14 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
             point2: {x: number, y:number},
             color: string = '#ff0000') {
 
+            ctx.beginPath()
             ctx.strokeStyle = color;
             ctx.moveTo(point1.x, point1.y);
             ctx.bezierCurveTo(
                 (point1.x + point2.x)/2, point1.y,
                 (point1.x + point2.x)/2, point2.y,
                 point2.x, point2.y);
+            ctx.stroke();
         }
 
         const canvas = canvasRef.current
@@ -37,7 +39,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
         if (ctx && canvas) {
             // drawing everything here
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.beginPath()
+            
             ctx.lineWidth = 7.5;
             
             listOfCurves.forEach((curCurve) => {
@@ -47,7 +49,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
             if (drawToMouse && pointToDrawToMouse) {
                 drawSingleConnection(ctx, pointToDrawToMouse, mousePosition)
             }
-            ctx.stroke();
+            
         }
     }
 

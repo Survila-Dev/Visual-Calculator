@@ -4,6 +4,7 @@ import { WSNodeType } from "../store/workspaces"
 import WSNode from "./ws-node"
 import { BackCanvas } from "./background-canvas"
 import { useAppDispatch, useAppSelector } from "../store/index"
+import { workfieldDragActions } from "../store/workfield-drag"
 
 export const WorkspaceField: React.FC = () => {
 
@@ -12,6 +13,8 @@ export const WorkspaceField: React.FC = () => {
     const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
+
+    const dispatch = useAppDispatch()
 
     const listOfNodes: WSNodeType[] = useAppSelector((state) => {
         if (state.workspaceStateReducers.currentWS) {
@@ -46,11 +49,13 @@ export const WorkspaceField: React.FC = () => {
         changeFieldOnDrag(true)
         changeMousePosBeforeDrag(mousePosition)
         changeFieldCOSBeforeDrag(fieldCOS)
+        dispatch(workfieldDragActions.isBeingDragged())
 
 
     }
     function handleMouseUp(e: React.FormEvent) {
         changeFieldOnDrag(false)
+        dispatch(workfieldDragActions.isNotBeingDragged())
 
     }
 

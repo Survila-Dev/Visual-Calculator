@@ -5,6 +5,7 @@ import { curveConnectionsSlice } from "./canvas-curves"
 import { mouseConnectSlice } from "./mouse-connect";
 import { workspacesSlice } from "./workspaces"
 import { mouseCurveTrackSlice } from "./mouse-curve-track";
+import { workfieldDragSlice } from "./workfield-drag";
 
 export interface UserInfo {
     isLoggedIn: boolean,
@@ -58,6 +59,7 @@ export const store = configureStore({
         canvasStateReducers: curveConnectionsSlice.reducer,
         mouseConnectReducer: mouseConnectSlice.reducer,
         mouseTrackReducer: mouseCurveTrackSlice.reducer,
+        workfieldDragReducer: workfieldDragSlice.reducer
     }
 })
 
