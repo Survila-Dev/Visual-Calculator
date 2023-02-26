@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../store/index";
 import { canvasCurveActions } from "../store/canvas-curves"
 
 interface BackCanvasInteface {
-    mousePosition: {x: number, y: number}
+    mousePosition: {x: number, y: number},
 }
 
 export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
@@ -15,20 +15,27 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
 
     function draw(drawToMouse: boolean = false, pointToDrawToMouse?: {x: number, y: number}) {
 
+        let yOffset = 0
+        if (canvasRef.current) {
+            const rect = canvasRef.current.getBoundingClientRect()
+            // const newPosInput = {x: (rect.left + rect.right)/2, y: (rect.top + rect.bottom)/2}
+            yOffset = -rect.top
+        }
+        
         function drawSingleConnection(
             ctx: CanvasRenderingContext2D,
             point1: {x: number, y: number},
             point2: {x: number, y:number},
             color: string = '#ff0000') {
 
-            ctx.beginPath()
+            
             ctx.strokeStyle = color;
-            ctx.moveTo(point1.x, point1.y);
+            ctx.moveTo(point1.x, point1.y + yOffset);
             ctx.bezierCurveTo(
-                (point1.x + point2.x)/2, point1.y,
-                (point1.x + point2.x)/2, point2.y,
-                point2.x, point2.y);
-            ctx.stroke();
+                (point1.x + point2.x)/2, point1.y + yOffset,
+                (point1.x + point2.x)/2, point2.y + yOffset,
+                point2.x, point2.y + yOffset);
+            
         }
 
         const canvas = canvasRef.current
@@ -39,7 +46,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
         if (ctx && canvas) {
             // drawing everything here
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
+            ctx.beginPath()
             ctx.lineWidth = 7.5;
             
             listOfCurves.forEach((curCurve) => {
@@ -49,6 +56,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
             if (drawToMouse && pointToDrawToMouse) {
                 drawSingleConnection(ctx, pointToDrawToMouse, mousePosition)
             }
+            ctx.stroke();
             
         }
     }
@@ -77,6 +85,9 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
     }, [mousePosition])
 
     return (
-        <canvas ref = {canvasRef} className="absolute bg-yellow-100 object-cover aspect-1 h-full w-full -z-10"/>
+        <canvas
+            ref = {canvasRef}
+            className="absolute bg-yellow-100 object-cover aspect-1 -z-10"
+        />
     )
 }

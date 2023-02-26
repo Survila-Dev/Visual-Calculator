@@ -40,7 +40,7 @@ export const Navbar: React.FC = () => {
     }
 
     return (
-        <section className="bg-blue-100 flex-none z-20 min-h-0">
+        <section className=" flex-none z-20 min-h-0">
             <div className ="flex flex-row justify-between">
               <h1 className = "p-0.5 m-0.5">Visual Programming Interface</h1>
               <div className = "flex flex-row">

@@ -44,9 +44,16 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
 
     React.useEffect(() => {
         // Update the port positiong during dragging of the parent
-        if ((parentBeingDragged || workfieldIsDragged) && portRef.current) {
+        if ((parentBeingDragged || workfieldIsDragged) && portRef.current) { // 
             const rect = portRef.current.getBoundingClientRect()
-            const newPosInput = {x: (rect.left + rect.right)/2, y: rect.top}
+            const newPosInput = {x: (rect.left + rect.right)/2, y: (rect.top + rect.bottom)/2}
+
+            // const newPosInput = {
+            //     x: (portRef.current.offsetLeft + portRef.current.offsetWidth/2),
+            //     y: (portRef.current.offsetTop + portRef.current.offsetHeight/2)
+            // }
+
+
             dispatch(canvasCurveActions.updatePosition({
                     nodeId: parentNodeId,
                     portId: id,
