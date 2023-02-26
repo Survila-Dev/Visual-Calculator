@@ -125,10 +125,30 @@ export const workspacesSlice = createSlice({
         },
         deletePortConnection(state, action: PayloadAction<{nodeId: number, portId: number}>) {
             // find the other node
-            // const otherNode: WSNodeType = state.currentWS.nodes[nodeId].connections[]
-            // delete the connection from this node
-
-            // delete the connection from the other node
+            let otherNodeId: number | null = null
+            let otherPortId: number | null = null
+            const curNodeId = action.payload.nodeId
+            const curPortId = action.payload.portId
+            if (state.currentWS) {
+                for (let i = 0; i < state.currentWS.nodes[curNodeId].connections.length; i++) {
+                    if (state.currentWS.nodes[curNodeId].connections[i].portSelf === curPortId) {
+                        otherNodeId = state.currentWS.nodes[curNodeId].connections[i].otherNodeId
+                        otherPortId = state.currentWS.nodes[curNodeId].connections[i].portOther
+                        state.currentWS.nodes[curNodeId].connections.splice(i, 1)
+                    }   
+                }
+                if (otherNodeId !== null && otherPortId !== null) {
+                    for (let i = 0; i < state.currentWS.nodes[otherNodeId].connections.length; i++) {
+                        if (state.currentWS.nodes[otherNodeId].connections[i].portSelf === otherPortId) {
+                            state.currentWS.nodes[otherNodeId].connections.splice(i, 1)
+                        }
+                    }
+                } else {
+                    console.error("Pair not found!")
+                }
+                state.workspaces[state.currentWS.id] = state.currentWS
+            }
+            
         }
 
 

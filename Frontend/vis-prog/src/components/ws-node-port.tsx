@@ -91,8 +91,10 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
                 nodeId: parentNodeId,
                 portId: id
             }))
-
-            //ToDo dispatch to state that a connection was disconnected
+            dispatch(workspacesStateActions.deletePortConnection({
+                nodeId: parentNodeId,
+                portId: id
+            }))
 
             console.log("Disconnected")
         } else {

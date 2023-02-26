@@ -14,6 +14,8 @@ export const WorkspaceField: React.FC = () => {
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
 
+    const workspacesStatus = useAppSelector((state) => state.workspaceStateReducers.workspaces)
+
     const dispatch = useAppDispatch()
 
     const listOfNodes: WSNodeType[] = useAppSelector((state) => {
@@ -67,6 +69,8 @@ export const WorkspaceField: React.FC = () => {
                 onMouseUp = {handleMouseUp}
             >
                 <ControlBar/>
+                <div>{JSON.stringify(workspacesStatus, null, "\t")}</div>
+                
                 {listOfNodes.map((curNode) => <WSNode WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>)}
                 <BackCanvas mousePosition = {mousePosition}/>
             </div>
