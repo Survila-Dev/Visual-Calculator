@@ -15,13 +15,16 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
 
     function draw(drawToMouse: boolean = false, pointToDrawToMouse?: {x: number, y: number}) {
 
+        let xOffset = 0
         let yOffset = 0
+        
         if (canvasRef.current) {
             const rect = canvasRef.current.getBoundingClientRect()
             // const newPosInput = {x: (rect.left + rect.right)/2, y: (rect.top + rect.bottom)/2}
+            xOffset = -rect.left
             yOffset = -rect.top
         }
-        
+
         function drawSingleConnection(
             ctx: CanvasRenderingContext2D,
             point1: {x: number, y: number},
@@ -30,11 +33,11 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
 
             
             ctx.strokeStyle = color;
-            ctx.moveTo(point1.x, point1.y + yOffset);
+            ctx.moveTo(point1.x + xOffset, point1.y + yOffset);
             ctx.bezierCurveTo(
-                (point1.x + point2.x)/2, point1.y + yOffset,
-                (point1.x + point2.x)/2, point2.y + yOffset,
-                point2.x, point2.y + yOffset);
+                (point1.x + point2.x)/2 + xOffset, point1.y + yOffset,
+                (point1.x + point2.x)/2 + xOffset, point2.y + yOffset,
+                point2.x + xOffset, point2.y + yOffset);
             
         }
 

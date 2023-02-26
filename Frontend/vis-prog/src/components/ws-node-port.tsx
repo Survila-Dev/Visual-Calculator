@@ -106,7 +106,7 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
 
             if (portRef.current) {
                 const rect = portRef.current.getBoundingClientRect()
-                const newPosInput = {x: (rect.left + rect.right)/2, y: rect.top}
+                const newPosInput = {x: (rect.left + rect.right)/2, y: (rect.top + rect.bottom)/2}
 
                 if (!mouseConnectStatus.firstClicked) {
                     dispatch(mouseConnectActions.clickFirst({
