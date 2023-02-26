@@ -143,7 +143,7 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
         <div
             id = {id as any as string}
             ref = {portRef}
-            className = {"absolute w-3 h-3 border-[1px] rounded-full shadow-2xl bg-sky-500 border-sky-300 cursor-pointer hover:bg-white"}
+            className = {"absolute w-3 h-3 border-[1px] rounded-full shadow-2xl bg-gray-800 border-white cursor-pointer hover:bg-white"}
             style = {convertPositionToStyle(position)}
             onMouseDown = {handleClick}
             onMouseUp = {preventDefaultReaction}

@@ -29,7 +29,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
             ctx: CanvasRenderingContext2D,
             point1: {x: number, y: number},
             point2: {x: number, y:number},
-            color: string = '#0ea5e9') {
+            color: string = '#1f2937') {
 
             
             ctx.strokeStyle = color;
