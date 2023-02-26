@@ -1,5 +1,5 @@
 import React from "react"
-import { WSNodeType } from ".././store/index"
+import { WSNodeType } from ".././store/workspaces"
 import { WSNodePort } from "./ws-node-port"
 
 interface WSNodeProps {

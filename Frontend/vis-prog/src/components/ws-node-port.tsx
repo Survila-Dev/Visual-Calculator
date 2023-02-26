@@ -85,6 +85,9 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
                 nodeId: parentNodeId,
                 portId: id
             }))
+
+            //ToDo dispatch to state
+
             console.log("Disconnected")
         } else {
             changeConnected(true)
@@ -117,9 +120,10 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
                     console.log({
                         nodeId: mouseConnectStatus.firstNodeId, portId: mouseConnectStatus.firstPortId, portPosition: mouseConnectStatus.firstPortPosition
                     })
-                    // if (mouseConnectStatus.firstNodeId && mouseConnectStatus.firstPortId && mouseConnectStatus.firstPortPosition) {
                     
                     dispatch(mouseConnectActions.clickSecond())
+                    //ToDo dispatch to state
+                    
                 }
             }
         }

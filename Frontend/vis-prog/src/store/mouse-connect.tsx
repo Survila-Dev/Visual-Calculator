@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { NodeBuilderFlags } from "typescript"
 
 export interface MouseConnectInterface {
     firstClicked: boolean,

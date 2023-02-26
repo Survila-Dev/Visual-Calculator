@@ -1,8 +1,9 @@
 import React from "react"
 import { ControlBar } from "../components/controlbar"
-import { WSNodeType } from "../store/index"
+import { WSNodeType } from "../store/workspaces"
 import WSNode from "./ws-node"
 import { BackCanvas } from "./background-canvas"
+import { useAppDispatch, useAppSelector } from "../store/index"
 
 export const WorkspaceField: React.FC = () => {
 
@@ -11,6 +12,14 @@ export const WorkspaceField: React.FC = () => {
     const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
+
+    const listOfNodes: WSNodeType[] = useAppSelector((state) => {
+        if (state.workspaceStateReducers.currentWS) {
+            return state.workspaceStateReducers.currentWS.nodes
+        } else {
+            return []
+        }
+    })
 
     // Create event listener for moving mouce and give this info to children
     React.useEffect(()=>{
@@ -32,12 +41,6 @@ export const WorkspaceField: React.FC = () => {
         }
 
     }, [mousePosition])
-
-    const listOfNodes: WSNodeType[] = [
-        {id: 0, type: "constant", connections: [], position: {x: 20, y: 30}},
-        {id: 1, type: "constant", connections: [], position: {x: 50, y: 70}},
-        {id: 2, type: "constant", connections: [], position: {x: 40, y: 100}},
-    ]
 
     function handleMouseDown(e: React.FormEvent) {
         changeFieldOnDrag(true)

@@ -3,99 +3,14 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { curveConnectionsSlice } from "./canvas-curves"
 import { mouseConnectSlice } from "./mouse-connect";
+import { workspacesSlice } from "./workspaces"
 
 export interface UserInfo {
     isLoggedIn: boolean,
     userName: string,
 }
 
-export interface WSNodeType {
-    id: number,
-    type: "constant" | "addition" | "substraktion" | "multiplication" | "division",
-    connections: {portSelf: number, portOther: number, otherNode: WSNodeType}[],
-    position: {x: number, y: number}
-}
 
-export interface Workspace {
-    name: string,
-    id: number,
-    nodes: WSNodeType[],
-}
-
-export interface Workspaces {
-    workspaces: Workspace[],
-    currentWS: Workspace | null,
-    status: "idle" | "loading" | "failed",
-}
-
-const workspacesInitValues: Workspaces = {
-    workspaces: [],
-    currentWS: null,
-    status: "idle"
-}
-
-// thunks:
-export const updateWorkspacesForServer = createAsyncThunk(
-    "workspace/workspacesUpdateToServer",
-    async (infoForUpdate: {idWS: number, updatedWS: Workspace}, thunkAPI) => {
-        // Async logic and return a Promise
-
-        //ToDO Update the server and return if OK
-    }
-)
-
-export const getWorkspacesForOverview = createAsyncThunk(
-    "workspace/getWorkspacesForOverview",
-    async () => {
-        //ToDo Get back a list of workspaces from server with names, ids and return it
-    }
-)
-
-export const getSingleWorkspace = createAsyncThunk(
-    "workspace/getSingleWorkspace",
-    async () => {
-        //ToDO Get a Workspace object from server and return it
-    }
-)
-
-const workspacesSlice = createSlice({
-    name: "workspaces",
-    initialState: workspacesInitValues,
-    reducers: {
-        changeCurWS(state, action: PayloadAction<number>) {
-            state.currentWS = state.workspaces[action.payload]
-        },
-
-        createNewWS(state, action: PayloadAction<Workspace>) {
-            state.workspaces.push(action.payload)
-        },
-
-        deleteWS(state, action: PayloadAction<Workspace>) {
-            state.workspaces.splice(action.payload.id, 1)
-        },
-
-        addNewWSNode(state, action: PayloadAction<{curWS: Workspace, newNode: WSNodeType}>) {
-            state.workspaces[action.payload.curWS.id].nodes.push(action.payload.newNode)
-        },
-
-        removeWSNode(state, action: PayloadAction<{curWS: Workspace, nodeToDelete: WSNodeType}>) {
-            //ToDo Iterate through the connections of node and change the connected nodes too
-            state.workspaces[action.payload.curWS.id].nodes.splice(
-                action.payload.nodeToDelete.id, 1
-            )
-        },
-
-        updateConnection(state, action: PayloadAction<{curWS: Workspace, firstNode: WSNodeType, secondNode: WSNodeType}>) {
-            state.workspaces[action.payload.curWS.id].nodes[action.payload.firstNode.id] = 
-                action.payload.firstNode
-            state.workspaces[action.payload.curWS.id].nodes[action.payload.secondNode.id] = 
-                action.payload.secondNode
-        }
-    },
-    extraReducers: (builder) => {
-        //ToDo different handling of the three async function
-    }
-})
 
 // A mock function to mimic making an async request for data
 // function fetchCount(amount = 1) {
@@ -150,4 +65,3 @@ export type RootState = ReturnType<typeof store.getState>
 export const useAppDispatch = useDispatch<DispatchType>;
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
-export const workspacesStateActions = workspacesSlice.actions;
