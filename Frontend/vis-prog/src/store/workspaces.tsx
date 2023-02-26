@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 export interface WSNodeType {
     id: number,
     type: "constant" | "addition" | "substraktion" | "multiplication" | "division",
-    connections: {portSelf: number, portOther: number, otherNode: WSNodeType}[],
+    connections: {portSelf: number, portOther: number, otherNodeId: number}[],
     position: {x: number, y: number}
 }
 
@@ -28,8 +28,8 @@ const initNode2: WSNodeType = {
 const initNode3: WSNodeType = {
     id: 2, type: "constant", connections: [], position: {x: 300, y: 300}
 }
-initNode1.connections[0] = {portSelf: 3, portOther: 0, otherNode: initNode2}
-initNode1.connections[1] = {portSelf: 4, portOther: 1, otherNode: initNode3}
+initNode1.connections[0] = {portSelf: 3, portOther: 0, otherNodeId: 1}
+initNode1.connections[1] = {portSelf: 4, portOther: 1, otherNodeId: 0}
 
 
 const initWorkspace: Workspace = {
@@ -107,15 +107,17 @@ export const workspacesSlice = createSlice({
             }>) {
 
             if (state.currentWS) {
+
                 state.currentWS.nodes[action.payload.firstNodeId].connections.push({
                     portSelf: action.payload.firstPortId,
                     portOther: action.payload.secondPortId,
-                    otherNode: state.currentWS.nodes[action.payload.secondNodeId]
+                    otherNodeId: action.payload.secondNodeId
                 })
+
                 state.currentWS.nodes[action.payload.secondNodeId].connections.push({
                     portSelf: action.payload.secondPortId,
                     portOther: action.payload.firstPortId,
-                    otherNode: state.currentWS.nodes[action.payload.firstNodeId]
+                    otherNodeId: action.payload.firstNodeId
                 })
                 state.workspaces[state.currentWS.id] = state.currentWS
             }

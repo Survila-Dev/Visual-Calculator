@@ -48,12 +48,6 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
             const rect = portRef.current.getBoundingClientRect()
             const newPosInput = {x: (rect.left + rect.right)/2, y: (rect.top + rect.bottom)/2}
 
-            // const newPosInput = {
-            //     x: (portRef.current.offsetLeft + portRef.current.offsetWidth/2),
-            //     y: (portRef.current.offsetTop + portRef.current.offsetHeight/2)
-            // }
-
-
             dispatch(canvasCurveActions.updatePosition({
                     nodeId: parentNodeId,
                     portId: id,
@@ -65,8 +59,8 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
 
     function convertPositionToStyle(position : {side: "left" | "right", row: number}) {
         const portLateralOffset = 18
-        const portRowOffset = 22
-        const portRowStartOffset = 10
+        const portRowOffset = 20
+        const portRowStartOffset = 40
         const vertOffset = portRowStartOffset + portRowOffset * position.row;
 
         if (position.side === "left") {
@@ -127,20 +121,17 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
                             firstPortPos: mouseConnectStatus.firstPortPosition,
                             secondPortPos: newPosInput}
                         ))
-                        console.log({
-                            nodeId: mouseConnectStatus.firstNodeId, portId: mouseConnectStatus.firstPortId, portPosition: mouseConnectStatus.firstPortPosition
-                        })
                         
                         dispatch(mouseConnectActions.clickSecond())
                         dispatch(mouseCurveTrackActions.stopTracking())
                         //ToDo dispatch to state that new connection was created
 
-                        // dispatch(workspacesStateActions.addNewPortConnection({
-                        //     firstNodeId: mouseConnectStatus.firstNodeId,
-                        //     firstPortId: mouseConnectStatus.firstPortId,
-                        //     secondNodeId: parentNodeId,
-                        //     secondPortId: id,
-                        // }))
+                        dispatch(workspacesStateActions.addNewPortConnection({
+                            firstNodeId: mouseConnectStatus.firstNodeId,
+                            firstPortId: mouseConnectStatus.firstPortId,
+                            secondNodeId: parentNodeId,
+                            secondPortId: id,
+                        }))
                     }
 
                 }
