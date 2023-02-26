@@ -64,12 +64,16 @@ export default function WSNode({WSNodeInput, mousePosition, fieldCOS} : WSNodePr
     return (
         <article
             id = {WSNodeInput.id as any as string}
-            className = "absolute h-20 w-20 bg-red-400 hover:bg-red-500 active:bg-red-800 hover:cursor-grab active:cursor-grabbing"
+            className = "absolute h-20 w-40 rounded-md bg-sky-600 shadow-2xl hover:bg-sky-500 active:bg-sky-400 hover:cursor-grab active:cursor-grabbing"
             style = {transformPositionToStyle(curPos)}
             onMouseDown = {handleMouseDown}
             onMouseUp = {handleMouseUp}
         >
-            Id {WSNodeInput.id}
+            <div className = "flex flex-col h-full">
+                <div className = "flex-none text-xl px-2 pb-1 text-white">Id {WSNodeInput.id}</div>
+                <div className = "grow bg-slate-600 rounded-b-md"></div>
+            </div>
+            
             {listOfPorts.map((curPort) => (
                 <WSNodePort
                     id = {curPort.id}

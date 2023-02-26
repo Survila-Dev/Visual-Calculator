@@ -64,7 +64,7 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
     }, [mousePosition])
 
     function convertPositionToStyle(position : {side: "left" | "right", row: number}) {
-        const portLateralOffset = 12
+        const portLateralOffset = 18
         const portRowOffset = 22
         const portRowStartOffset = 10
         const vertOffset = portRowStartOffset + portRowOffset * position.row;
@@ -148,15 +148,33 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
         }
     }
 
-    return (
+    const jsxElementActive = (
         <div
             id = {id as any as string}
             ref = {portRef}
-            className = "absolute w-3 h-3 bg-slate-500 cursor-pointer hover:bg-slate-700"
+            className = {"absolute w-3 h-3 border-[1px] rounded-full shadow-2xl bg-sky-500 border-sky-300 cursor-pointer hover:bg-white"}
             style = {convertPositionToStyle(position)}
             onMouseDown = {handleClick}
             onMouseUp = {preventDefaultReaction}
         >
+        </div>
+    )
+    const jsxElementNotActive = (
+        <div
+            id = {id as any as string}
+            ref = {portRef}
+            className = {"absolute w-3 h-3 border-[1px] rounded-full shadow-2xl border-white cursor-pointer hover:bg-white"}
+            style = {convertPositionToStyle(position)}
+            onMouseDown = {handleClick}
+            onMouseUp = {preventDefaultReaction}
+        >
+        </div>
+    )
+
+    return (
+        <div>
+            {connected && jsxElementActive}
+            {!connected && jsxElementNotActive}
         </div>
     )
 }

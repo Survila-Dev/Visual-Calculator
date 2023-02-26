@@ -29,7 +29,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
             ctx: CanvasRenderingContext2D,
             point1: {x: number, y: number},
             point2: {x: number, y:number},
-            color: string = '#ff0000') {
+            color: string = '#0ea5e9') {
 
             
             ctx.strokeStyle = color;
@@ -50,7 +50,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
             // drawing everything here
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath()
-            ctx.lineWidth = 7.5;
+            ctx.lineWidth = 4;
             
             listOfCurves.forEach((curCurve) => {
                 if (ctx) drawSingleConnection(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
@@ -90,7 +90,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
     return (
         <canvas
             ref = {canvasRef}
-            className="absolute bg-yellow-100 object-cover aspect-1 -z-10"
+            className="absolute bg-gray-700 object-cover aspect-1 -z-10"
         />
     )
 }
