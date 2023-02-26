@@ -15,9 +15,12 @@ export interface CurveConnectionList {
 }
 
 const initCurveConnections: CurveConnection[] = [
-    // {firstNodeId: 0, firstPortId: 3, secondNodeId: 1, secondPortId: 0, firstPortPosition: {x: 0, y: 0}, secondPortPosition: {x:100, y:400}},
-    // {firstNodeId: 0, firstPortId: 4, secondNodeId: 1, secondPortId: 1, firstPortPosition: {x: 0, y: 0}, secondPortPosition: {x:100, y:100}},
+    {firstNodeId: 0, firstPortId: 3, secondNodeId: 1, secondPortId: 0, firstPortPosition: {x: 0, y: 0}, secondPortPosition: {x:100, y:400}},
+    {firstNodeId: 0, firstPortId: 4, secondNodeId: 2, secondPortId: 1, firstPortPosition: {x: 0, y: 0}, secondPortPosition: {x:100, y:100}},
 ]
+
+// initNode1.connections[0] = {portSelf: 3, portOther: 0, otherNode: initNode2}
+// initNode1.connections[1] = {portSelf: 4, portOther: 1, otherNode: initNode3}
 
 export const curveConnectionsSlice = createSlice({
     name: "curveConnections",

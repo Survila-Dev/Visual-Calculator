@@ -10,6 +10,8 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
 
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
     const listOfCurves = useAppSelector((state) => state.canvasStateReducers)
+    const trackMouse = useAppSelector((state) => state.mouseTrackReducer.track)
+    const trackMouseFromPoint = useAppSelector((state) => state.mouseTrackReducer.startPoint)
 
     function draw(drawToMouse: boolean = false, pointToDrawToMouse?: {x: number, y: number}) {
 
@@ -60,7 +62,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
                 canvasRef.current.width = window.innerWidth;
                 canvasRef.current.height = window.innerHeight;
             }
-            draw()
+            draw(trackMouse, trackMouseFromPoint)
         }
         window.addEventListener("resize", handleResize);
         return () => {
@@ -69,7 +71,7 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
     }, [])
 
     React.useEffect(() => {
-        draw()
+        draw(trackMouse, trackMouseFromPoint)
     }, [mousePosition])
 
     return (

@@ -19,14 +19,23 @@ export interface Workspaces {
     status: "idle" | "loading" | "failed",
 }
 
+const initNode1: WSNodeType = {
+    id: 0, type: "constant", connections: [], position: {x: 50, y: 130}
+}
+const initNode2: WSNodeType = {
+    id: 1, type: "constant", connections: [], position: {x: 200, y: 50}
+}
+const initNode3: WSNodeType = {
+    id: 2, type: "constant", connections: [], position: {x: 300, y: 300}
+}
+initNode1.connections[0] = {portSelf: 3, portOther: 0, otherNode: initNode2}
+initNode1.connections[1] = {portSelf: 4, portOther: 1, otherNode: initNode3}
+
+
 const initWorkspace: Workspace = {
     name: "First workspace",
     id: 0,
-    nodes: [
-        {id: 0, type: "constant", connections: [], position: {x: 20, y: 30}},
-        {id: 1, type: "constant", connections: [], position: {x: 200, y: 200}},
-        {id: 2, type: "constant", connections: [], position: {x: 400, y: 100}}
-    ],
+    nodes: [initNode1, initNode2, initNode3],
 }
 
 const workspacesInitValues: Workspaces = {

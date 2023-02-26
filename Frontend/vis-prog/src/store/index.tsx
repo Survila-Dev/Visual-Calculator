@@ -1,9 +1,10 @@
-import { createAsyncThunk, configureStore, createSlice } from "@reduxjs/toolkit"
+import { configureStore, createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { curveConnectionsSlice } from "./canvas-curves"
 import { mouseConnectSlice } from "./mouse-connect";
 import { workspacesSlice } from "./workspaces"
+import { mouseCurveTrackSlice } from "./mouse-curve-track";
 
 export interface UserInfo {
     isLoggedIn: boolean,
@@ -55,7 +56,8 @@ export const store = configureStore({
     reducer: {
         workspaceStateReducers: workspacesSlice.reducer,
         canvasStateReducers: curveConnectionsSlice.reducer,
-        mouseConnectReducer: mouseConnectSlice.reducer
+        mouseConnectReducer: mouseConnectSlice.reducer,
+        mouseTrackReducer: mouseCurveTrackSlice.reducer,
     }
 })
 
