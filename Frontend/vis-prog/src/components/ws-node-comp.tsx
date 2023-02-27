@@ -39,3 +39,19 @@ export const WSNodeDivision = WSNode({
         {id: 2, position: {side: "right", row: 0}, jsxInput: <div>A / B</div>}
     ]
 })
+
+export const WSNodeConstant = WSNode({
+    type: "constant",
+    title: "Variable",
+    listOfPorts: [
+        {id: 0, position: {side: "right", row: 0}, jsxInput: <div>empty</div>},
+    ]
+})
+
+export const WSNodeOutput = WSNode({
+    type: "output",
+    title: "Output",
+    listOfPorts: [
+        {id: 0, position: {side: "left", row: 0}, jsxInput: <div>empty</div>},
+    ]
+})

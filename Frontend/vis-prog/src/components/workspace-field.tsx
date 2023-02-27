@@ -4,7 +4,9 @@ import { WSNodeType } from "../store/workspaces"
 import { BackCanvas } from "./background-canvas"
 import { useAppDispatch, useAppSelector } from "../store/index"
 import { workfieldDragActions } from "../store/workfield-drag"
-import { WSNodeAddition, WSNodeDivision, WSNodeMultiplication, WSNodeSubtraction } from "./ws-node-comp"
+import {
+    WSNodeAddition, WSNodeDivision, WSNodeMultiplication,
+    WSNodeSubtraction, WSNodeConstant, WSNodeOutput } from "./ws-node-comp"
 
 export const WorkspaceField: React.FC = () => {
 
@@ -77,6 +79,10 @@ export const WorkspaceField: React.FC = () => {
                             return <WSNodeMultiplication WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
                         case "division":
                             return <WSNodeDivision WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                        case "constant":
+                            return <WSNodeConstant WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                        case "output":
+                            return <WSNodeOutput WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
                     }
                 })}
                 <BackCanvas mousePosition = {mousePosition}/>

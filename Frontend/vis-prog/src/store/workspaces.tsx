@@ -22,7 +22,7 @@ export interface Workspaces {
 }
 
 const initNode1: WSNodeType = {
-    id: 0, type: "division", connections: [], position: {x: 50, y: 130}
+    id: 0, type: "division", connections: [], position: {x: 50, y: 180}
 }
 const initNode2: WSNodeType = {
     id: 1, type: "addition", connections: [], position: {x: 200, y: 50}
@@ -36,12 +36,18 @@ const initNode4: WSNodeType = {
 const initNode5: WSNodeType = {
     id: 4, type: "division", connections: [], position: {x: 400, y: 300}
 }
+const initNode6: WSNodeType = {
+    id: 5, type: "output", connections: [], position: {x: 0, y: 300}
+}
+const initNode7: WSNodeType = {
+    id: 6, type: "output", connections: [], position: {x: 50, y: 130}
+}
 
 
 const initWorkspace: Workspace = {
     name: "First workspace",
     id: 0,
-    nodes: [initNode1, initNode2, initNode3, initNode4, initNode5],
+    nodes: [initNode1, initNode2, initNode6, initNode7],
 }
 
 const workspacesInitValues: Workspaces = {

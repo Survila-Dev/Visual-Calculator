@@ -23,18 +23,50 @@ interface WSNodeChildProps {
     fieldCOS: {x: number, y: number}
 }
 
+function convertPositionToStyleForPort(
+    portOrDesc: "port" | "description",
+    position : {side: "left" | "right", row: number}) {
+
+    const portRowOffset = 20
+    const portRowStartOffsetPort = 40
+    const portRowStartOffsetDesc = 33
+
+    if (portOrDesc === "port") {
+        const portLateralOffset = 18
+        const vertOffset = portRowStartOffsetPort + portRowOffset * position.row;
+
+        if (position.side === "left") {
+            return ({ top: vertOffset + "px", left: (-portLateralOffset) + "px"})
+        } else {
+            return ({ top: vertOffset + "px", right: (-portLateralOffset) + "px"})
+        }
+
+    } else if (portOrDesc === "description") {
+        const portLateralOffset = 0
+        const vertOffset = portRowStartOffsetDesc + portRowOffset * position.row;
+
+        if (position.side === "left") {
+            return ({ top: vertOffset + "px", left: (portLateralOffset) + "px" })
+        } else {
+            return ({ top: vertOffset + "px", right: (portLateralOffset) + "px" })
+        }
+    } else {
+        console.error("Wrong position for the port.")
+        return { top: "0px", right: "0px" }
+    }
+}
+
 // HOC to create different types of wsnode elements
 export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChildElement => {
 
     const ChildComponent = ({WSNodeInput, mousePosition, fieldCOS}: WSNodeChildProps): JSX.Element => {
 
-        const [isBeingDragged, changeBeingDragged] = React.useState<boolean>(false)
         const [curPos, changeCurPos] = React.useState<{x: number, y:number}>(WSNodeInput.position)
         const [posBeforeDrag, changePosBeforeDrag] = React.useState<{x: number, y:number}>(WSNodeInput.position)
+        const [isBeingDragged, changeBeingDragged] = React.useState<boolean>(false)
         const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y:number}>({x: 0, y: 0})
-
         const dispatch = useAppDispatch()
-
+        
         React.useEffect(() => {
             if (isBeingDragged) {
                 changeCurPos({
@@ -57,8 +89,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
 
             changeBeingDragged(true)
             changePosBeforeDrag(curPos)
-            changeMousePosBeforeDrag(mousePosition)
-            
+            changeMousePosBeforeDrag(mousePosition) 
         }
 
         function handleMouseUp(e: React.FormEvent) {
@@ -69,37 +100,52 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             dispatch(workspacesStateActions.updateWSNodePosition({nodeId: WSNodeInput.id, newPosition: curPos}))
         }
 
-        function convertPositionToStyleForPort(
-            portOrDesc: "port" | "description",
-            position : {side: "left" | "right", row: number}) {
+        let elementContent : JSX.Element | null = <div>empty</div>
 
-            const portRowOffset = 20
-            const portRowStartOffsetPort = 40
-            const portRowStartOffsetDesc = 33
+        if (type !== "output" && type !== "constant") {
+            elementContent = (
+                <div>
+                    {listOfPorts.map((curPort) => (
+                        <div 
+                            className = "absolute text-white px-1"
+                            key = {curPort.id}
+                            style = {convertPositionToStyleForPort("description", curPort.position)}
+                        >
+                            {curPort.jsxInput}
+                        </div>
+                    ))}
+                </div>
+            )
+        } else if (type === "output") {
+            elementContent = (
+                <div>
+                    {listOfPorts.map((curPort) => (
+                        <div 
+                            className = "absolute text-white px-1"
+                            key = {curPort.id}
+                            style = {convertPositionToStyleForPort("description", curPort.position)}
+                        >
+                            12
+                        </div>
+                    ))}
+                </div>
+            )
 
-            if (portOrDesc === "port") {
-                const portLateralOffset = 18
-                const vertOffset = portRowStartOffsetPort + portRowOffset * position.row;
-        
-                if (position.side === "left") {
-                    return ({ top: vertOffset + "px", left: (-portLateralOffset) + "px"})
-                } else {
-                    return ({ top: vertOffset + "px", right: (-portLateralOffset) + "px"})
-                }
+        } else if (type === "constant") {
+            elementContent = (
+                <div>
+                    {listOfPorts.map((curPort) => (
+                        <div 
+                            className = "absolute text-white px-1"
+                            key = {curPort.id}
+                            style = {convertPositionToStyleForPort("description", curPort.position)}
+                        >
+                            <input type = "text" className = "w-full" />
+                        </div>
+                    ))}
+                </div>
+            )
 
-            } else if (portOrDesc === "description") {
-                const portLateralOffset = 0
-                const vertOffset = portRowStartOffsetDesc + portRowOffset * position.row;
-
-                if (position.side === "left") {
-                    return ({ top: vertOffset + "px", left: (portLateralOffset) + "px" })
-                } else {
-                    return ({ top: vertOffset + "px", right: (portLateralOffset) + "px" })
-                }
-            } else {
-                console.error("Wrong position for the port.")
-                return { top: "0px", right: "0px" }
-            }
         }
 
         return (
@@ -110,28 +156,18 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                 onMouseDown = {handleMouseDown}
                 onMouseUp = {handleMouseUp}
             >
-                
                 {listOfPorts.map((curPort) => (
-                    <WSNodePort
-                        id = {curPort.id}
-                        key = {curPort.id}
-                        parentNodeId = {WSNodeInput.id}
-                        positionStyle = {convertPositionToStyleForPort("port", curPort.position)}
-                        parentBeingDragged = {isBeingDragged}
-                        mousePosition = {mousePosition}
-                    />
-                    )
-                )}
-
-                {listOfPorts.map((curPort) => (
-                    <div 
-                        className = "absolute text-white px-1"
-                        key = {curPort.id}
-                        style = {convertPositionToStyleForPort("description", curPort.position)}
-                    >
-                        {curPort.jsxInput}
-                    </div>
-                ))}
+                        <WSNodePort
+                            id = {curPort.id}
+                            key = {curPort.id}
+                            parentNodeId = {WSNodeInput.id}
+                            positionStyle = {convertPositionToStyleForPort("port", curPort.position)}
+                            parentBeingDragged = {isBeingDragged}
+                            mousePosition = {mousePosition}
+                        />
+                        )
+                    )}
+                {elementContent}
 
                 <div className = "flex flex-col h-full">
                     <div className = "flex-none text-xl px-2 pb-1 text-white">Id {WSNodeInput.id} - {title}</div>
