@@ -133,11 +133,7 @@ export default function WSNode ({type, title, listOfPorts}:WSNodeParentProps): W
                 onMouseDown = {handleMouseDown}
                 onMouseUp = {handleMouseUp}
             >
-                <div className = "flex flex-col h-full">
-                    <div className = "flex-none text-xl px-2 pb-1 text-white">Id {WSNodeInput.id} - {title}</div>
-                    <div className = "grow bg-slate-600">
-                    </div>
-                </div>
+                
                 
                 {listOfPorts.map((curPort) => (
                     <WSNodePort
@@ -153,12 +149,18 @@ export default function WSNode ({type, title, listOfPorts}:WSNodeParentProps): W
 
                 {listOfPorts.map((curPort) => (
                     <div 
-                        className = "absolute z-10 text-white px-1"
+                        className = "absolute text-white px-1"
                         style = {convertPositionToStyle("description", curPort.position)}
                         >
                         {curPort.jsxInput}
                     </div>
                 ))}
+
+                <div className = "flex flex-col h-full">
+                    <div className = "flex-none text-xl px-2 pb-1 text-white">Id {WSNodeInput.id} - {title}</div>
+                    <div className = "grow bg-slate-600">
+                    </div>
+                </div>
             </article>
         )
     }
