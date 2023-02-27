@@ -5,10 +5,7 @@ import WSNode from "./ws-node"
 import { BackCanvas } from "./background-canvas"
 import { useAppDispatch, useAppSelector } from "../store/index"
 import { workfieldDragActions } from "../store/workfield-drag"
-
-const WSNodeHello = WSNode({wrappedComponent: (
-    <div>Hello world</div>
-)})
+import { WSNodeAddition, WSNodeDivision, WSNodeMultiplication, WSNodeSubtraction } from "./ws-node-comp"
 
 export const WorkspaceField: React.FC = () => {
 
@@ -19,9 +16,6 @@ export const WorkspaceField: React.FC = () => {
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
 
     const workspacesStatus = useAppSelector((state) => state.workspaceStateReducers.workspaces)
-
-    
-
     const dispatch = useAppDispatch()
 
     const listOfNodes: WSNodeType[] = useAppSelector((state) => {
@@ -76,7 +70,18 @@ export const WorkspaceField: React.FC = () => {
             >
                 <ControlBar/>
                 
-                {listOfNodes.map((curNode) => <WSNodeHello WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>)}
+                {listOfNodes.map((curNode) => {
+                    switch (curNode.type) {
+                        case "addition":
+                            return <WSNodeAddition WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                        case "substraction":
+                            return <WSNodeSubtraction WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                        case "multiplication":
+                            return <WSNodeMultiplication WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                        case "division":
+                            return <WSNodeDivision WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                    }
+                })}
                 <BackCanvas mousePosition = {mousePosition}/>
             </div>
         </section>

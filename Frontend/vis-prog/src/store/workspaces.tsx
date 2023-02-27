@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 export interface WSNodeType {
     id: number,
-    type: "constant" | "addition" | "substraktion" | "multiplication" | "division",
+    type: "constant" | "addition" | "substraction" | "multiplication" | "division" | "output",
     connections: {portSelf: number, portOther: number, otherNodeId: number}[],
     position: {x: number, y: number}
 }
@@ -20,22 +20,26 @@ export interface Workspaces {
 }
 
 const initNode1: WSNodeType = {
-    id: 0, type: "constant", connections: [], position: {x: 50, y: 130}
+    id: 0, type: "division", connections: [], position: {x: 50, y: 130}
 }
 const initNode2: WSNodeType = {
-    id: 1, type: "constant", connections: [], position: {x: 200, y: 50}
+    id: 1, type: "addition", connections: [], position: {x: 200, y: 50}
 }
 const initNode3: WSNodeType = {
-    id: 2, type: "constant", connections: [], position: {x: 300, y: 300}
+    id: 2, type: "substraction", connections: [], position: {x: 400, y: 400}
 }
-initNode1.connections[0] = {portSelf: 3, portOther: 0, otherNodeId: 1}
-initNode1.connections[1] = {portSelf: 4, portOther: 1, otherNodeId: 0}
+const initNode4: WSNodeType = {
+    id: 3, type: "multiplication", connections: [], position: {x: 300, y: 400}
+}
+const initNode5: WSNodeType = {
+    id: 4, type: "division", connections: [], position: {x: 400, y: 300}
+}
 
 
 const initWorkspace: Workspace = {
     name: "First workspace",
     id: 0,
-    nodes: [initNode1, initNode2, initNode3],
+    nodes: [initNode1, initNode2, initNode3, initNode4, initNode5],
 }
 
 const workspacesInitValues: Workspaces = {

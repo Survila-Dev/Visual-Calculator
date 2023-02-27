@@ -8,12 +8,12 @@ import { workspacesStateActions } from "../store/workspaces";
 interface WSNodePortProps {
     id: number,
     parentNodeId: number,
-    position: {side: "left" | "right", row: number},
+    positionStyle: {top: string, left: string } | {top: string, right: string},
     parentBeingDragged: boolean,
     mousePosition: {x: number, y: number},
 }
 
-export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mousePosition} :WSNodePortProps): JSX.Element {
+export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged, mousePosition} :WSNodePortProps): JSX.Element {
 
     const portRef = React.useRef<HTMLDivElement | null>(null)
     const dispatch = useAppDispatch();
@@ -22,6 +22,9 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
     const workfieldIsDragged = useAppSelector((state) => state.workfieldDragReducer.dragged)
 
     const [connected, changeConnected] = React.useState<boolean>(false)
+
+    // console.log("Node "+id)
+    // console.log(positionStyle)
 
     React.useEffect(() => {
         // Check if the port is connected via click on the connected port
@@ -57,24 +60,7 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
         }
     }, [mousePosition])
 
-    function convertPositionToStyle(position : {side: "left" | "right", row: number}) {
-        const portLateralOffset = 18
-        const portRowOffset = 20
-        const portRowStartOffset = 40
-        const vertOffset = portRowStartOffset + portRowOffset * position.row;
-
-        if (position.side === "left") {
-            return ({
-                top: vertOffset + "px",
-                left: (-portLateralOffset) + "px"
-            })
-        } else {
-            return ({
-                top: vertOffset + "px",
-                right: (-portLateralOffset) + "px"
-            })
-        }
-    }
+    
 
     function preventDefaultReaction(e: React.FormEvent) {
         e.preventDefault();
@@ -146,7 +132,7 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
             id = {id as any as string}
             ref = {portRef}
             className = {"absolute w-3 h-3 border-[1px] rounded-full shadow-2xl bg-gray-800 border-white cursor-pointer hover:bg-white"}
-            style = {convertPositionToStyle(position)}
+            style = {positionStyle}
             onMouseDown = {handleClick}
             onMouseUp = {preventDefaultReaction}
         >
@@ -157,7 +143,7 @@ export function WSNodePort({id, parentNodeId, position, parentBeingDragged, mous
             id = {id as any as string}
             ref = {portRef}
             className = {"absolute w-3 h-3 border-[1px] rounded-full shadow-2xl border-white cursor-pointer hover:bg-white"}
-            style = {convertPositionToStyle(position)}
+            style = {positionStyle}
             onMouseDown = {handleClick}
             onMouseUp = {preventDefaultReaction}
         >

@@ -5,7 +5,13 @@ import { useAppDispatch } from "../store"
 import { workspacesStateActions } from ".././store/workspaces"
 
 interface WSNodeParentProps {
-    wrappedComponent: JSX.Element,
+    type: "constant" | "addition" | "substraction" | "multiplication" | "division" | "output",
+    title: string,
+    listOfPorts: {
+        id: number,
+        position: {side: "left" | "right", row: number},
+        jsxInput: JSX.Element
+    }[]
 }
 
 interface WSNodeChildProps {
@@ -16,7 +22,7 @@ interface WSNodeChildProps {
 
 type WSNodeChildElement = ({ WSNodeInput, mousePosition, fieldCOS }: WSNodeChildProps) => JSX.Element
 
-export default function WSNode ({wrappedComponent}:WSNodeParentProps): WSNodeChildElement {
+export default function WSNode ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChildElement {
 
     const ChildComponent = ({WSNodeInput, mousePosition, fieldCOS}: WSNodeChildProps): JSX.Element => {
 
@@ -61,13 +67,63 @@ export default function WSNode ({wrappedComponent}:WSNodeParentProps): WSNodeChi
             dispatch(workspacesStateActions.updateWSNodePosition({nodeId: WSNodeInput.id, newPosition: curPos}))
         }
 
-        const listOfPorts: {id: number, position: {side: "left" | "right", row: number}}[] = [
-            {id: 0, position: {side: "left", row: 0}},
-            {id: 1, position: {side: "left", row: 1}},
-            {id: 2, position: {side: "left", row: 2}},
-            {id: 3, position: {side: "right", row: 0}},
-            {id: 4, position: {side: "right", row: 1}},
-        ]
+        function convertPositionToStyle(
+            portOrDesc: "port" | "description",
+            position : {side: "left" | "right", row: number}) {
+
+            const portRowOffset = 20
+            const portRowStartOffsetPort = 40
+            const portRowStartOffsetDesc = 33
+            
+
+            if (portOrDesc === "port") {
+                const portLateralOffset = 18
+                const vertOffset = portRowStartOffsetPort + portRowOffset * position.row;
+        
+                if (position.side === "left") {
+                    
+                    return ({
+                        top: vertOffset + "px",
+                        left: (-portLateralOffset) + "px"
+                    })
+                } else {
+                    
+                    return ({
+                        top: vertOffset + "px",
+                        right: (-portLateralOffset) + "px"
+                    })
+                }
+
+            } else if (portOrDesc === "description") {
+                const portLateralOffset = 0
+                const vertOffset = portRowStartOffsetDesc + portRowOffset * position.row;
+
+                if (position.side === "left") {
+                    
+                    return ({
+                        top: vertOffset + "px",
+                        left: (portLateralOffset) + "px"
+                    })
+                } else {
+                    
+                    return ({
+                        top: vertOffset + "px",
+                        right: (portLateralOffset) + "px"
+                    })
+                }
+            } else {
+                console.error("Wrong position for the port.")
+                return {top: "0px", right: "0px"}
+            }
+        }
+
+        // const listOfPorts: {id: number, position: {side: "left" | "right", row: number}}[] = [
+        //     {id: 0, position: {side: "left", row: 0}},
+        //     {id: 1, position: {side: "left", row: 1}},
+        //     {id: 2, position: {side: "left", row: 2}},
+        //     {id: 3, position: {side: "right", row: 0}},
+        //     {id: 4, position: {side: "right", row: 1}},
+        // ]
 
         return (
             <article
@@ -78,9 +134,8 @@ export default function WSNode ({wrappedComponent}:WSNodeParentProps): WSNodeChi
                 onMouseUp = {handleMouseUp}
             >
                 <div className = "flex flex-col h-full">
-                    <div className = "flex-none text-xl px-2 pb-1 text-white">Id {WSNodeInput.id}</div>
+                    <div className = "flex-none text-xl px-2 pb-1 text-white">Id {WSNodeInput.id} - {title}</div>
                     <div className = "grow bg-slate-600">
-                        {wrappedComponent}
                     </div>
                 </div>
                 
@@ -88,12 +143,22 @@ export default function WSNode ({wrappedComponent}:WSNodeParentProps): WSNodeChi
                     <WSNodePort
                         id = {curPort.id}
                         parentNodeId = {WSNodeInput.id}
-                        position = {curPort.position}
+                        positionStyle = {convertPositionToStyle("port", curPort.position)}
                         parentBeingDragged = {isBeingDragged}
                         mousePosition = {mousePosition}
                         />
+                    
                     )
                 )}
+
+                {listOfPorts.map((curPort) => (
+                    <div 
+                        className = "absolute z-10 text-white px-1"
+                        style = {convertPositionToStyle("description", curPort.position)}
+                        >
+                        {curPort.jsxInput}
+                    </div>
+                ))}
             </article>
         )
     }
