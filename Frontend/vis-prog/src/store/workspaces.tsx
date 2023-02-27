@@ -1,6 +1,13 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
-export type TypesOfWSNodes = "constant" | "addition" | "substraction" | "multiplication" | "division" | "output"
+export type TypesOfWSNodes =
+    "constant"
+    | "addition"
+    | "substraction"
+    | "multiplication"
+    | "division"
+    | "output"
+    | "fork"
 
 export interface WSNodeType {
     id: number,
@@ -25,7 +32,7 @@ const initNode1: WSNodeType = {
     id: 0, type: "division", connections: [], position: {x: 50, y: 180}
 }
 const initNode2: WSNodeType = {
-    id: 1, type: "addition", connections: [], position: {x: 200, y: 50}
+    id: 1, type: "fork", connections: [], position: {x: 200, y: 50}
 }
 const initNode3: WSNodeType = {
     id: 2, type: "substraction", connections: [], position: {x: 400, y: 400}
@@ -40,7 +47,7 @@ const initNode6: WSNodeType = {
     id: 5, type: "output", connections: [], position: {x: 0, y: 300}
 }
 const initNode7: WSNodeType = {
-    id: 6, type: "output", connections: [], position: {x: 50, y: 130}
+    id: 6, type: "constant", connections: [], position: {x: 50, y: 130}
 }
 
 

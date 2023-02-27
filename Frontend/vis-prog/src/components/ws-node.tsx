@@ -140,7 +140,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                             key = {curPort.id}
                             style = {convertPositionToStyleForPort("description", curPort.position)}
                         >
-                            <input type = "text" className = "w-full" />
+                            <input type = "text" className = "w-1/2" />
                         </div>
                     ))}
                 </div>

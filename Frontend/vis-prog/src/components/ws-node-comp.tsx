@@ -40,6 +40,16 @@ export const WSNodeDivision = WSNode({
     ]
 })
 
+export const WSNodeFork = WSNode({
+    type: "fork",
+    title: "Fork",
+    listOfPorts: [
+        {id: 0, position: {side: "left", row: 0}, jsxInput: <div>A</div>},
+        {id: 1, position: {side: "right", row: 0}, jsxInput: <div>A</div>},
+        {id: 2, position: {side: "right", row: 1}, jsxInput: <div>A</div>}
+    ]
+})
+
 export const WSNodeConstant = WSNode({
     type: "constant",
     title: "Variable",
