@@ -6,6 +6,10 @@ import { BackCanvas } from "./background-canvas"
 import { useAppDispatch, useAppSelector } from "../store/index"
 import { workfieldDragActions } from "../store/workfield-drag"
 
+const WSNodeHello = WSNode({wrappedComponent: (
+    <div>Hello world</div>
+)})
+
 export const WorkspaceField: React.FC = () => {
 
     const [fieldCOS, changeFieldCOS] = React.useState<{x: number, y: number}>({x: 0, y:0})
@@ -15,6 +19,8 @@ export const WorkspaceField: React.FC = () => {
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
 
     const workspacesStatus = useAppSelector((state) => state.workspaceStateReducers.workspaces)
+
+    
 
     const dispatch = useAppDispatch()
 
@@ -69,9 +75,8 @@ export const WorkspaceField: React.FC = () => {
                 onMouseUp = {handleMouseUp}
             >
                 <ControlBar/>
-                <div>{JSON.stringify(workspacesStatus, null, "\t")}</div>
                 
-                {listOfNodes.map((curNode) => <WSNode WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>)}
+                {listOfNodes.map((curNode) => <WSNodeHello WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>)}
                 <BackCanvas mousePosition = {mousePosition}/>
             </div>
         </section>
