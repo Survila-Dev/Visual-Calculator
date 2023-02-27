@@ -12,8 +12,23 @@ export interface UserInfo {
     userName: string,
 }
 
+export const store = configureStore({
+    reducer: {
+        workspaceStateReducers: workspacesSlice.reducer,
+        canvasStateReducers: curveConnectionsSlice.reducer,
+        mouseConnectReducer: mouseConnectSlice.reducer,
+        mouseTrackReducer: mouseCurveTrackSlice.reducer,
+        workfieldDragReducer: workfieldDragSlice.reducer
+    }
+})
 
+export type DispatchType = typeof store.dispatch
+export type RootState = ReturnType<typeof store.getState>
 
+export const useAppDispatch = useDispatch<DispatchType>;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+//! Example of redux syntax
 // A mock function to mimic making an async request for data
 // function fetchCount(amount = 1) {
 //     return new Promise<{ data: number }>((resolve) =>
@@ -53,19 +68,5 @@ export interface UserInfo {
 //     }
 // })
 
-export const store = configureStore({
-    reducer: {
-        workspaceStateReducers: workspacesSlice.reducer,
-        canvasStateReducers: curveConnectionsSlice.reducer,
-        mouseConnectReducer: mouseConnectSlice.reducer,
-        mouseTrackReducer: mouseCurveTrackSlice.reducer,
-        workfieldDragReducer: workfieldDragSlice.reducer
-    }
-})
 
-export type DispatchType = typeof store.dispatch
-export type RootState = ReturnType<typeof store.getState>
-
-export const useAppDispatch = useDispatch<DispatchType>;
-export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 

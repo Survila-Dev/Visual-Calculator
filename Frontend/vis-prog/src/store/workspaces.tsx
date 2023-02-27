@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
+export type TypesOfWSNodes = "constant" | "addition" | "substraction" | "multiplication" | "division" | "output"
+
 export interface WSNodeType {
     id: number,
-    type: "constant" | "addition" | "substraction" | "multiplication" | "division" | "output",
+    type: TypesOfWSNodes,
     connections: {portSelf: number, portOther: number, otherNodeId: number}[],
     position: {x: number, y: number}
 }

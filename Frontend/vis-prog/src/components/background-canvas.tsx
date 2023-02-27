@@ -9,9 +9,12 @@ interface BackCanvasInteface {
 export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
 
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
+
     const listOfCurves = useAppSelector((state) => state.canvasStateReducers)
     const trackMouse = useAppSelector((state) => state.mouseTrackReducer.track)
     const trackMouseFromPoint = useAppSelector((state) => state.mouseTrackReducer.startPoint)
+
+    const defaultLineColor = '#1f2937'
 
     function draw(drawToMouse: boolean = false, pointToDrawToMouse?: {x: number, y: number}) {
 
@@ -20,7 +23,6 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
         
         if (canvasRef.current) {
             const rect = canvasRef.current.getBoundingClientRect()
-            // const newPosInput = {x: (rect.left + rect.right)/2, y: (rect.top + rect.bottom)/2}
             xOffset = -rect.left
             yOffset = -rect.top
         }
@@ -29,9 +31,8 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
             ctx: CanvasRenderingContext2D,
             point1: {x: number, y: number},
             point2: {x: number, y:number},
-            color: string = '#1f2937') {
+            color: string = defaultLineColor) {
 
-            
             ctx.strokeStyle = color;
             ctx.moveTo(point1.x + xOffset, point1.y + yOffset);
             ctx.bezierCurveTo(
@@ -60,7 +61,6 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
                 drawSingleConnection(ctx, pointToDrawToMouse, mousePosition)
             }
             ctx.stroke();
-            
         }
     }
 

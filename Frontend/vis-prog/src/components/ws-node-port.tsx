@@ -16,15 +16,13 @@ interface WSNodePortProps {
 export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged, mousePosition} :WSNodePortProps): JSX.Element {
 
     const portRef = React.useRef<HTMLDivElement | null>(null)
-    const dispatch = useAppDispatch();
+    const [connected, changeConnected] = React.useState<boolean>(false)
+
     const mouseConnectStatus = useAppSelector((state) => state.mouseConnectReducer)
     const listOfConnections = useAppSelector((state) => state.canvasStateReducers)
     const workfieldIsDragged = useAppSelector((state) => state.workfieldDragReducer.dragged)
 
-    const [connected, changeConnected] = React.useState<boolean>(false)
-
-    // console.log("Node "+id)
-    // console.log(positionStyle)
+    const dispatch = useAppDispatch();
 
     React.useEffect(() => {
         // Check if the port is connected via click on the connected port
@@ -37,11 +35,11 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                 notConnected = false
             }
         }
-        if (notConnected) {
-            changeConnected(false)
-        } else {
-            changeConnected(true)
-        }
+        changeConnected(!notConnected)
+        // if (notConnected) {
+        //     changeConnected(false)
+        // } else {
+        //     changeConnected(true)
         // }
     })
 
@@ -59,8 +57,6 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
             ))
         }
     }, [mousePosition])
-
-    
 
     function preventDefaultReaction(e: React.FormEvent) {
         e.preventDefault();
@@ -82,7 +78,6 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                 portId: id
             }))
 
-            console.log("Disconnected")
         } else {
             changeConnected(true)
 
@@ -95,12 +90,10 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                         nodeId: parentNodeId, portId: id, portPosition: newPosInput
                     }))
                     dispatch(mouseCurveTrackActions.startTracking(newPosInput))
-                    
 
                 } else {
                     // create new connection
                     if (mouseConnectStatus.firstNodeId !== parentNodeId) {
-                        console.log("Second selected")
                         dispatch(canvasCurveActions.addNewConnection({
                             firstNodeId: mouseConnectStatus.firstNodeId,
                             firstPortId: mouseConnectStatus.firstPortId,
@@ -109,11 +102,8 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                             firstPortPos: mouseConnectStatus.firstPortPosition,
                             secondPortPos: newPosInput}
                         ))
-                        
                         dispatch(mouseConnectActions.clickSecond())
                         dispatch(mouseCurveTrackActions.stopTracking())
-                        //ToDo dispatch to state that new connection was created
-
                         dispatch(workspacesStateActions.addNewPortConnection({
                             firstNodeId: mouseConnectStatus.firstNodeId,
                             firstPortId: mouseConnectStatus.firstPortId,

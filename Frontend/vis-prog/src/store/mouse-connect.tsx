@@ -14,8 +14,6 @@ const initValue: MouseConnectInterface = {
     firstPortPosition: {x: 0, y: 0}
 }
 
-
-
 export const mouseConnectSlice = createSlice({
     name: "mouseConnectSlice",
     initialState: initValue,
@@ -30,7 +28,6 @@ export const mouseConnectSlice = createSlice({
             state.firstClicked = false
         }
     }
-}
-)
+})
 
 export const mouseConnectActions = mouseConnectSlice.actions;

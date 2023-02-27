@@ -1,7 +1,6 @@
 import React from "react"
 import { ControlBar } from "../components/controlbar"
 import { WSNodeType } from "../store/workspaces"
-import WSNode from "./ws-node"
 import { BackCanvas } from "./background-canvas"
 import { useAppDispatch, useAppSelector } from "../store/index"
 import { workfieldDragActions } from "../store/workfield-drag"
@@ -15,9 +14,9 @@ export const WorkspaceField: React.FC = () => {
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
 
-    const workspacesStatus = useAppSelector((state) => state.workspaceStateReducers.workspaces)
     const dispatch = useAppDispatch()
 
+    const workspacesStatus = useAppSelector((state) => state.workspaceStateReducers.workspaces)
     const listOfNodes: WSNodeType[] = useAppSelector((state) => {
         if (state.workspaceStateReducers.currentWS) {
             return state.workspaceStateReducers.currentWS.nodes
@@ -52,13 +51,11 @@ export const WorkspaceField: React.FC = () => {
         changeMousePosBeforeDrag(mousePosition)
         changeFieldCOSBeforeDrag(fieldCOS)
         dispatch(workfieldDragActions.isBeingDragged())
-
-
     }
+
     function handleMouseUp(e: React.FormEvent) {
         changeFieldOnDrag(false)
         dispatch(workfieldDragActions.isNotBeingDragged())
-
     }
 
     return (
@@ -73,13 +70,13 @@ export const WorkspaceField: React.FC = () => {
                 {listOfNodes.map((curNode) => {
                     switch (curNode.type) {
                         case "addition":
-                            return <WSNodeAddition WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeAddition WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
                         case "substraction":
-                            return <WSNodeSubtraction WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeSubtraction WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
                         case "multiplication":
-                            return <WSNodeMultiplication WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeMultiplication WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
                         case "division":
-                            return <WSNodeDivision WSNodeInput = {curNode} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeDivision WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
                     }
                 })}
                 <BackCanvas mousePosition = {mousePosition}/>

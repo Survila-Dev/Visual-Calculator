@@ -1,5 +1,4 @@
-import React from "react"
-import WSNode from "./ws-node"
+import { WSNode } from "./ws-node"
 
 export const WSNodeAddition = WSNode({
     type: "addition",

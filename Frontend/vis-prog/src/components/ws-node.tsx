@@ -3,9 +3,12 @@ import { WSNodeType } from ".././store/workspaces"
 import { WSNodePort } from "./ws-node-port"
 import { useAppDispatch } from "../store"
 import { workspacesStateActions } from ".././store/workspaces"
+import { TypesOfWSNodes } from ".././store/workspaces"
+
+type WSNodeChildElement = ({ WSNodeInput, mousePosition, fieldCOS }: WSNodeChildProps) => JSX.Element
 
 interface WSNodeParentProps {
-    type: "constant" | "addition" | "substraction" | "multiplication" | "division" | "output",
+    type: TypesOfWSNodes,
     title: string,
     listOfPorts: {
         id: number,
@@ -20,9 +23,8 @@ interface WSNodeChildProps {
     fieldCOS: {x: number, y: number}
 }
 
-type WSNodeChildElement = ({ WSNodeInput, mousePosition, fieldCOS }: WSNodeChildProps) => JSX.Element
-
-export default function WSNode ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChildElement {
+// HOC to create different types of wsnode elements
+export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChildElement => {
 
     const ChildComponent = ({WSNodeInput, mousePosition, fieldCOS}: WSNodeChildProps): JSX.Element => {
 
@@ -42,7 +44,7 @@ export default function WSNode ({type, title, listOfPorts}:WSNodeParentProps): W
             }
         }, [mousePosition, fieldCOS])
 
-        function transformPositionToStyle(position: {x: number, y: number}) : {top: string, left: string} {
+        function transformPositionToStyleForNode(position: {x: number, y: number}) : {top: string, left: string} {
             return {
                 top: (position.y - fieldCOS.y) as any as string + "px",
                 left: (position.x - fieldCOS.x) as any as string + "px"
@@ -67,31 +69,22 @@ export default function WSNode ({type, title, listOfPorts}:WSNodeParentProps): W
             dispatch(workspacesStateActions.updateWSNodePosition({nodeId: WSNodeInput.id, newPosition: curPos}))
         }
 
-        function convertPositionToStyle(
+        function convertPositionToStyleForPort(
             portOrDesc: "port" | "description",
             position : {side: "left" | "right", row: number}) {
 
             const portRowOffset = 20
             const portRowStartOffsetPort = 40
             const portRowStartOffsetDesc = 33
-            
 
             if (portOrDesc === "port") {
                 const portLateralOffset = 18
                 const vertOffset = portRowStartOffsetPort + portRowOffset * position.row;
         
                 if (position.side === "left") {
-                    
-                    return ({
-                        top: vertOffset + "px",
-                        left: (-portLateralOffset) + "px"
-                    })
+                    return ({ top: vertOffset + "px", left: (-portLateralOffset) + "px"})
                 } else {
-                    
-                    return ({
-                        top: vertOffset + "px",
-                        right: (-portLateralOffset) + "px"
-                    })
+                    return ({ top: vertOffset + "px", right: (-portLateralOffset) + "px"})
                 }
 
             } else if (portOrDesc === "description") {
@@ -99,59 +92,43 @@ export default function WSNode ({type, title, listOfPorts}:WSNodeParentProps): W
                 const vertOffset = portRowStartOffsetDesc + portRowOffset * position.row;
 
                 if (position.side === "left") {
-                    
-                    return ({
-                        top: vertOffset + "px",
-                        left: (portLateralOffset) + "px"
-                    })
+                    return ({ top: vertOffset + "px", left: (portLateralOffset) + "px" })
                 } else {
-                    
-                    return ({
-                        top: vertOffset + "px",
-                        right: (portLateralOffset) + "px"
-                    })
+                    return ({ top: vertOffset + "px", right: (portLateralOffset) + "px" })
                 }
             } else {
                 console.error("Wrong position for the port.")
-                return {top: "0px", right: "0px"}
+                return { top: "0px", right: "0px" }
             }
         }
-
-        // const listOfPorts: {id: number, position: {side: "left" | "right", row: number}}[] = [
-        //     {id: 0, position: {side: "left", row: 0}},
-        //     {id: 1, position: {side: "left", row: 1}},
-        //     {id: 2, position: {side: "left", row: 2}},
-        //     {id: 3, position: {side: "right", row: 0}},
-        //     {id: 4, position: {side: "right", row: 1}},
-        // ]
 
         return (
             <article
                 id = {WSNodeInput.id as any as string}
                 className = "absolute h-20 w-40 bg-gray-800 shadow-2xl border-[1px] border-gray-500 hover:bg-gray-900 hover:cursor-grab active:cursor-grabbing"
-                style = {transformPositionToStyle(curPos)}
+                style = {transformPositionToStyleForNode(curPos)}
                 onMouseDown = {handleMouseDown}
                 onMouseUp = {handleMouseUp}
             >
                 
-                
                 {listOfPorts.map((curPort) => (
                     <WSNodePort
                         id = {curPort.id}
+                        key = {curPort.id}
                         parentNodeId = {WSNodeInput.id}
-                        positionStyle = {convertPositionToStyle("port", curPort.position)}
+                        positionStyle = {convertPositionToStyleForPort("port", curPort.position)}
                         parentBeingDragged = {isBeingDragged}
                         mousePosition = {mousePosition}
-                        />
-                    
+                    />
                     )
                 )}
 
                 {listOfPorts.map((curPort) => (
                     <div 
                         className = "absolute text-white px-1"
-                        style = {convertPositionToStyle("description", curPort.position)}
-                        >
+                        key = {curPort.id}
+                        style = {convertPositionToStyleForPort("description", curPort.position)}
+                    >
                         {curPort.jsxInput}
                     </div>
                 ))}

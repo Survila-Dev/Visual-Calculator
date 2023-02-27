@@ -22,7 +22,6 @@ export const mouseCurveTrackSlice = createSlice({
             state.track = false
         }
     }
-}
-)
+})
 
 export const mouseCurveTrackActions = mouseCurveTrackSlice.actions;

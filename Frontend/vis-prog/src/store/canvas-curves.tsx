@@ -66,7 +66,6 @@ export const curveConnectionsSlice = createSlice({
                     state.splice(i, 1)
                 }
             }
-
         }
     }
 })
