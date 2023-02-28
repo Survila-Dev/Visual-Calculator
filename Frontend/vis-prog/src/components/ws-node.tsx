@@ -1,9 +1,10 @@
 import React from "react"
 import { WSNodeType } from ".././store/workspaces"
 import { WSNodePort } from "./ws-node-port"
-import { useAppDispatch } from "../store"
+import { useAppDispatch, useAppSelector } from "../store"
 import { workspacesStateActions } from ".././store/workspaces"
 import { TypesOfWSNodes } from ".././store/workspaces"
+import { calculationSliceActions } from "../store/calculation"
 
 type WSNodeChildElement = ({ WSNodeInput, mousePosition, fieldCOS }: WSNodeChildProps) => JSX.Element
 
@@ -66,7 +67,14 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
         const [isBeingDragged, changeBeingDragged] = React.useState<boolean>(false)
         const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y:number}>({x: 0, y: 0})
         const dispatch = useAppDispatch()
-        
+
+        const [inputField, updateInputField] = React.useState<number>(12)
+        const [outputFieldValue, updateOutputFieldValue] = React.useState<number>(0)
+
+        const calculationTrigger = useAppSelector((state) => state.calculationReducer.calculationTrigger)
+        const wsNodeValues = useAppSelector((state) => state.calculationReducer.wsNodeValues[WSNodeInput.id])
+        const wsNodeCalcValue = wsNodeValues
+
         React.useEffect(() => {
             if (isBeingDragged) {
                 changeCurPos({
@@ -76,11 +84,27 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             }
         }, [mousePosition, fieldCOS])
 
+        // React.useEffect(() => {
+        //     if (type === "output") {
+                
+        //     }
+        // }, [calculationTrigger])
+
+        function handleInputFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
+            updateInputField(e.currentTarget.value as any as number)
+
+            //ToDo Dispatch change to state
+        }
+
         function transformPositionToStyleForNode(position: {x: number, y: number}) : {top: string, left: string} {
             return {
                 top: (position.y - fieldCOS.y) as any as string + "px",
                 left: (position.x - fieldCOS.x) as any as string + "px"
             }
+        }
+
+        function preventDefaultClick(e: React.FormEvent) {
+            e.stopPropagation()
         }
 
         function handleMouseDown(e: React.FormEvent) {
@@ -125,7 +149,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                             key = {curPort.id}
                             style = {convertPositionToStyleForPort("description", curPort.position)}
                         >
-                            12
+                            {wsNodeCalcValue}
                         </div>
                     ))}
                 </div>
@@ -136,11 +160,19 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                 <div>
                     {listOfPorts.map((curPort) => (
                         <div 
-                            className = "absolute text-white px-1"
+                            className = "absolute text-white px-1 w-1/2"
                             key = {curPort.id}
                             style = {convertPositionToStyleForPort("description", curPort.position)}
                         >
-                            <input type = "text" className = "w-1/2" />
+                            <input
+                                className = "w-full mt-1 bg-slate-500"
+                                type = "text"
+                                id = "input"
+                                name = "input"
+                                value = {inputField}
+                                onChange = {handleInputFieldChange}
+                                onMouseDown = {preventDefaultClick}
+                                 />
                         </div>
                     ))}
                 </div>
