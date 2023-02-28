@@ -100,7 +100,7 @@ export const WorkspaceField: React.FC = () => {
                             return <WSNodeFork WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
                     }
                 })}
-                <BackCanvas mousePosition = {mousePosition}/>
+                <BackCanvas mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
             </div>
         </section>
     )

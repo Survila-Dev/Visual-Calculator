@@ -4,9 +4,10 @@ import { canvasCurveActions } from "../store/canvas-curves"
 
 interface BackCanvasInteface {
     mousePosition: {x: number, y: number},
+    fieldCOS: {x: number, y: number}
 }
 
-export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
+export function BackCanvas({mousePosition, fieldCOS} :BackCanvasInteface):JSX.Element {
 
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
 
@@ -14,12 +15,16 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
     const trackMouse = useAppSelector((state) => state.mouseTrackReducer.track)
     const trackMouseFromPoint = useAppSelector((state) => state.mouseTrackReducer.startPoint)
 
-    const defaultLineColor = '#1f2937'
+    const defaultConnectionLineColor = '#1f2937'
+    const gridLineColor = '#1f2937'
+    const connectionLineThickness = 7.5
+    const gridLineThickness = 1
 
     function draw(drawToMouse: boolean = false, pointToDrawToMouse?: {x: number, y: number}) {
 
         let xOffset = 0
         let yOffset = 0
+        
         
         if (canvasRef.current) {
             const rect = canvasRef.current.getBoundingClientRect()
@@ -27,11 +32,25 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
             yOffset = -rect.top
         }
 
+        function drawGrid(
+            ctx: CanvasRenderingContext2D,
+            fieldCOS: {x: number, y: number}) {
+            
+            for (let i = 0; i<5; i++) {
+                ctx.moveTo(0 - fieldCOS.x + i * 100, 0)
+                ctx.lineTo(0 - fieldCOS.x + i * 100, 500)
+            }
+            for (let i = 0; i<5; i++) {
+                ctx.moveTo(0, 0 - fieldCOS.y + i * 100)
+                ctx.lineTo(500, 0 - fieldCOS.y + i * 100)
+            }
+        }
+
         function drawSingleConnection(
             ctx: CanvasRenderingContext2D,
             point1: {x: number, y: number},
             point2: {x: number, y:number},
-            color: string = defaultLineColor) {
+            color: string = defaultConnectionLineColor) {
 
             ctx.strokeStyle = color;
             ctx.moveTo(point1.x + xOffset, point1.y + yOffset);
@@ -50,8 +69,14 @@ export function BackCanvas({mousePosition} :BackCanvasInteface):JSX.Element {
         if (ctx && canvas) {
             // drawing everything here
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             ctx.beginPath()
-            ctx.lineWidth = 4;
+            ctx.lineWidth = gridLineThickness;
+            drawGrid(ctx, fieldCOS)
+            ctx.stroke();
+
+            ctx.beginPath()
+            ctx.lineWidth = connectionLineThickness;
             
             listOfCurves.forEach((curCurve) => {
                 if (ctx) drawSingleConnection(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
