@@ -4,6 +4,7 @@ import { canvasCurveActions } from "../store/canvas-curves"
 import { mouseConnectActions } from "../store/mouse-connect";
 import { mouseCurveTrackActions } from "../store/mouse-curve-track";
 import { workspacesStateActions } from "../store/workspaces";
+import { firstRightPortId } from "./ws-node-comp";
 
 interface WSNodePortProps {
     id: number,
@@ -93,7 +94,20 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
 
                 } else {
                     // create new connection
-                    if (mouseConnectStatus.firstNodeId !== parentNodeId) {
+                    // check if connection not to self and if the right side connects
+                    let shouldConnect = true
+                    shouldConnect = mouseConnectStatus.firstNodeId !== parentNodeId
+                    if (id < firstRightPortId) {
+                        if (mouseConnectStatus.firstPortId < firstRightPortId) {
+                            shouldConnect = false
+                        }
+                    } else {
+                        if (mouseConnectStatus.firstPortId >= firstRightPortId) {
+                            shouldConnect = false
+                        }
+                    }
+
+                    if (shouldConnect) {
                         dispatch(canvasCurveActions.addNewConnection({
                             firstNodeId: mouseConnectStatus.firstNodeId,
                             firstPortId: mouseConnectStatus.firstPortId,

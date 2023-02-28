@@ -4,6 +4,8 @@ import { WSNodeType } from "../store/workspaces"
 import { BackCanvas } from "./background-canvas"
 import { useAppDispatch, useAppSelector } from "../store/index"
 import { workfieldDragActions } from "../store/workfield-drag"
+import { mouseCurveTrackActions } from "../store/mouse-curve-track"
+import { mouseConnectActions } from "../store/mouse-connect"
 import {
     WSNodeAddition, WSNodeDivision, WSNodeMultiplication,
     WSNodeSubtraction, WSNodeConstant, WSNodeOutput, WSNodeFork } from "./ws-node-comp"
@@ -32,11 +34,22 @@ export const WorkspaceField: React.FC = () => {
         function handleMouseMove(this: Window, e: MouseEvent) {
             changeMousePosition({x: e.clientX, y: e.clientY})
         }
+        function handleCurveDragDrop(this: Window, e: KeyboardEvent) {
+            if (e.code === "Escape") {
+                dispatch(mouseCurveTrackActions.stopTracking())
+                dispatch(mouseConnectActions.clickSecond)
+            }
+        }
+
+        window.addEventListener("keyup", handleCurveDragDrop)
         window.addEventListener("mousemove", handleMouseMove)
         return () => {
+            window.removeEventListener("keyup", handleCurveDragDrop)
             window.removeEventListener("mousemove", handleMouseMove)
         }
     },[])
+
+    
 
     React.useEffect(() => {
         if (fieldOnDrag) {

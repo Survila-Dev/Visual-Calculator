@@ -1,5 +1,7 @@
 import { WSNode } from "./ws-node"
 
+export const firstRightPortId = 2
+
 export const WSNodeAddition = WSNode({
     type: "addition",
     title: "Add",
@@ -45,8 +47,8 @@ export const WSNodeFork = WSNode({
     title: "Fork",
     listOfPorts: [
         {id: 0, position: {side: "left", row: 0}, jsxInput: <div>A</div>},
-        {id: 1, position: {side: "right", row: 0}, jsxInput: <div>A</div>},
-        {id: 2, position: {side: "right", row: 1}, jsxInput: <div>A</div>}
+        {id: 2, position: {side: "right", row: 0}, jsxInput: <div>A</div>},
+        {id: 3, position: {side: "right", row: 1}, jsxInput: <div>A</div>}
     ]
 })
 
@@ -54,7 +56,7 @@ export const WSNodeConstant = WSNode({
     type: "constant",
     title: "Variable",
     listOfPorts: [
-        {id: 0, position: {side: "right", row: 0}, jsxInput: <div>empty</div>},
+        {id: 2, position: {side: "right", row: 0}, jsxInput: <div>empty</div>},
     ]
 })
 
