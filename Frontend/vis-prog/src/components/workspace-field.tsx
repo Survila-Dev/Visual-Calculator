@@ -37,7 +37,7 @@ export const WorkspaceField: React.FC = () => {
         function handleCurveDragDrop(this: Window, e: KeyboardEvent) {
             if (e.code === "Escape") {
                 dispatch(mouseCurveTrackActions.stopTracking())
-                dispatch(mouseConnectActions.clickSecond)
+                dispatch(mouseConnectActions.clickSecond())
             }
         }
 

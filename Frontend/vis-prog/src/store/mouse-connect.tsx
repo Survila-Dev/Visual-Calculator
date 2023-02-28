@@ -26,6 +26,7 @@ export const mouseConnectSlice = createSlice({
         },
         clickSecond(state) {
             state.firstClicked = false
+            console.log("Second clicked")
         }
     }
 })
