@@ -7,6 +7,7 @@ import { workspacesSlice } from "./workspaces"
 import { mouseCurveTrackSlice } from "./mouse-curve-track";
 import { workfieldDragSlice } from "./workfield-drag";
 import { calculationSlice } from "./calculation";
+import { addNodesMenuSlice } from "./add-nodes-menu";
 
 export interface UserInfo {
     isLoggedIn: boolean,
@@ -20,7 +21,8 @@ export const store = configureStore({
         mouseConnectReducer: mouseConnectSlice.reducer,
         mouseTrackReducer: mouseCurveTrackSlice.reducer,
         workfieldDragReducer: workfieldDragSlice.reducer,
-        calculationReducer: calculationSlice.reducer
+        calculationReducer: calculationSlice.reducer,
+        addNodesMenuReducer: addNodesMenuSlice.reducer
     }
 })
 
