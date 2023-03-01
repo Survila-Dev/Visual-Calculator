@@ -144,12 +144,13 @@ export const workspacesSlice = createSlice({
         },
         addWSNode(state, action: PayloadAction<{
             inputWSNode: WSNodeType,
+            positionForNode: {x: number, y: number},
             fieldCOS: {x: number, y: number},
-            dropDownPos: {x: number,y: number}}>) {
+            posInDropDownMenu: {x: number,y: number}}>) {
 
             const newPosition = {
-                x: action.payload.inputWSNode.position.x,
-                y: action.payload.inputWSNode.position.y
+                x: action.payload.positionForNode.x,
+                y: action.payload.positionForNode.y
             }
 
             if (state.currentWS) {

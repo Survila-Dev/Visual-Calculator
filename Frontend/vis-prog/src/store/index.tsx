@@ -8,6 +8,7 @@ import { mouseCurveTrackSlice } from "./mouse-curve-track";
 import { workfieldDragSlice } from "./workfield-drag";
 import { calculationSlice } from "./calculation";
 import { addNodesMenuSlice } from "./add-nodes-menu";
+import { navbarSizeSlice } from "./navbar-size";
 
 export interface UserInfo {
     isLoggedIn: boolean,
@@ -22,7 +23,8 @@ export const store = configureStore({
         mouseTrackReducer: mouseCurveTrackSlice.reducer,
         workfieldDragReducer: workfieldDragSlice.reducer,
         calculationReducer: calculationSlice.reducer,
-        addNodesMenuReducer: addNodesMenuSlice.reducer
+        addNodesMenuReducer: addNodesMenuSlice.reducer,
+        navbarSizeReducer: navbarSizeSlice.reducer
     }
 })
 

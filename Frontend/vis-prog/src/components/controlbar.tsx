@@ -8,9 +8,10 @@ import { WSNodeType } from "../store/workspaces"
 
 interface ControlBarProps {
     mousePosition: {x: number, y: number}
+    fieldCOS: {x: number, y: number}
 }
 
-export const ControlBar = ({mousePosition}: ControlBarProps) => {
+export const ControlBar = ({mousePosition, fieldCOS}: ControlBarProps) => {
 
     const dispatch = useAppDispatch()
     const isOpen = useAppSelector((state) => state.addNodesMenuReducer.open)
@@ -68,7 +69,7 @@ export const ControlBar = ({mousePosition}: ControlBarProps) => {
                                     WSNodeInput = {curNode}
                                     key = {curNode.id}
                                     mousePosition = {mousePosition}
-                                    fieldCOS = {{x: 0, y: 0}}
+                                    fieldCOS = {fieldCOS}
                                     inDropDown = {true}
                                     />
                                 break
@@ -77,7 +78,7 @@ export const ControlBar = ({mousePosition}: ControlBarProps) => {
                                     WSNodeInput = {curNode}
                                     key = {curNode.id}
                                     mousePosition = {mousePosition}
-                                    fieldCOS = {{x: 0, y: 0}}
+                                    fieldCOS = {fieldCOS}
                                     inDropDown = {true}
                                     />
                                 break
@@ -86,7 +87,7 @@ export const ControlBar = ({mousePosition}: ControlBarProps) => {
                                     WSNodeInput = {curNode}
                                     key = {curNode.id}
                                     mousePosition = {mousePosition}
-                                    fieldCOS = {{x: 0, y: 0}}
+                                    fieldCOS = {fieldCOS}
                                     inDropDown = {true}
                                     />
                                 break
@@ -95,7 +96,7 @@ export const ControlBar = ({mousePosition}: ControlBarProps) => {
                                     WSNodeInput = {curNode}
                                     key = {curNode.id}
                                     mousePosition = {mousePosition}
-                                    fieldCOS = {{x: 0, y: 0}}
+                                    fieldCOS = {fieldCOS}
                                     inDropDown = {true}
                                     />
                                 break
@@ -104,7 +105,7 @@ export const ControlBar = ({mousePosition}: ControlBarProps) => {
                                     WSNodeInput = {curNode}
                                     key = {curNode.id}
                                     mousePosition = {mousePosition}
-                                    fieldCOS = {{x: 0, y: 0}}
+                                    fieldCOS = {fieldCOS}
                                     inDropDown = {true}
                                     />
                                 break
@@ -113,7 +114,7 @@ export const ControlBar = ({mousePosition}: ControlBarProps) => {
                                     WSNodeInput = {curNode}
                                     key = {curNode.id}
                                     mousePosition = {mousePosition}
-                                    fieldCOS = {{x: 0, y: 0}}
+                                    fieldCOS = {fieldCOS}
                                     inDropDown = {true}
                                     />
                                 break
@@ -122,7 +123,7 @@ export const ControlBar = ({mousePosition}: ControlBarProps) => {
                                     WSNodeInput = {curNode}
                                     key = {curNode.id}
                                     mousePosition = {mousePosition}
-                                    fieldCOS = {{x: 0, y: 0}}
+                                    fieldCOS = {fieldCOS}
                                     inDropDown = {true}
                                     />}
                         

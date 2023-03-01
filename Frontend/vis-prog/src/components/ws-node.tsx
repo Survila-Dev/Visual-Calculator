@@ -70,6 +70,10 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
         const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y:number}>({x: 0, y: 0})
         const dispatch = useAppDispatch()
 
+        const refNode = React.useRef<HTMLElement>(null)
+
+        const navbarHeight = useAppSelector((state) => state.navbarSizeReducer.height)
+
         const [inputField, updateInputField] = React.useState<number>(12)
         const [outputFieldValue, updateOutputFieldValue] = React.useState<number>(0)
 
@@ -141,10 +145,19 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                 changeBeingDragged(false)
                 changeCurPos(initRelativePosition)
 
+                let newPosition: {x: number, y: number} = {x: 0, y: 0}
+                if (refNode.current) {
+                    newPosition = {
+                        x: Number(refNode.current.getBoundingClientRect().left) + fieldCOS.x, 
+                        y: Number(refNode.current.getBoundingClientRect().top) + fieldCOS.y - navbarHeight
+                    }
+                }
+
                 dispatch(workspacesStateActions.addWSNode({
                     inputWSNode: WSNodeInput,
+                    positionForNode: newPosition,
                     fieldCOS: fieldCOS,
-                    dropDownPos: {x: 0, y: 0}
+                    posInDropDownMenu: posBeforeDrag
                 }))
 
             } else {
@@ -217,6 +230,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                 style = {transformPositionToStyleForNode(curPos)}
                 onMouseDown = {handleMouseDown}
                 onMouseUp = {handleMouseUp}
+                ref = {refNode}
             >
                 {listOfPorts.map((curPort) => (
                         <WSNodePort

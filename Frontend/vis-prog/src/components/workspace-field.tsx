@@ -82,7 +82,7 @@ export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
                 onMouseDown = {handleMouseDown}
                 onMouseUp = {handleMouseUp}
             >
-                <ControlBar mousePosition={mousePosition}/>
+                <ControlBar mousePosition={mousePosition} fieldCOS = {fieldCOS}/>
                 
                 {listOfNodes.map((curNode) => {
                     switch (curNode.type) {
