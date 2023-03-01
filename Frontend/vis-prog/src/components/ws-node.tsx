@@ -142,7 +142,9 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                 changeCurPos(initRelativePosition)
 
                 dispatch(workspacesStateActions.addWSNode({
-                    inputWSNode: WSNodeInput
+                    inputWSNode: WSNodeInput,
+                    fieldCOS: fieldCOS,
+                    dropDownPos: {x: 0, y: 0}
                 }))
 
             } else {

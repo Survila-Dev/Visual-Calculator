@@ -142,14 +142,23 @@ export const workspacesSlice = createSlice({
                 action.payload.nodeToDelete.id, 1
             )
         },
-        addWSNode(state, action: PayloadAction<{inputWSNode: WSNodeType}>) {
+        addWSNode(state, action: PayloadAction<{
+            inputWSNode: WSNodeType,
+            fieldCOS: {x: number, y: number},
+            dropDownPos: {x: number,y: number}}>) {
+
+            const newPosition = {
+                x: action.payload.inputWSNode.position.x,
+                y: action.payload.inputWSNode.position.y
+            }
+
             if (state.currentWS) {
                 const newId = state.currentWS.nodes.length
                 state.currentWS.nodes.push({
                     id: newId,
                     type: action.payload.inputWSNode.type,
                     connections: [],
-                    position: action.payload.inputWSNode.position
+                    position: newPosition
                 })
             }
         },
