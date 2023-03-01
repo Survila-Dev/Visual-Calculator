@@ -121,6 +121,17 @@ export const getSingleWorkspace = createAsyncThunk(
     }
 )
 
+function findIdInNodeList(nodeList: WSNodeType[], idToFind: number) {
+    let foundNode: (number | null) = null
+    for (let i = 0; i < nodeList.length; i++) {
+        if (nodeList[i].id === idToFind) {
+            console.log("Found it is " + i as any as string)
+            return i
+        }
+    }
+    throw "node id not found"
+}
+
 export const workspacesSlice = createSlice({
     name: "workspaces",
     initialState: workspacesInitValues,
@@ -137,11 +148,17 @@ export const workspacesSlice = createSlice({
             state.workspaces.splice(action.payload.id, 1)
         },
 
-        removeWSNode(state, action: PayloadAction<{curWS: Workspace, nodeToDelete: WSNodeType}>) {
-            state.workspaces[action.payload.curWS.id].nodes.splice(
-                action.payload.nodeToDelete.id, 1
-            )
+        removeWSNode(state, action: PayloadAction<{nodeId: number}>) {
+            
+            if (state.currentWS) {
+                const nodeList = state.currentWS.nodes
+                const nodeIdToDelete: number = findIdInNodeList(state.currentWS.nodes, action.payload.nodeId)
+                if (nodeIdToDelete !== null) {
+                    state.currentWS.nodes.splice(nodeIdToDelete, 1)
+                }
+            }
         },
+
         addWSNode(state, action: PayloadAction<{
             inputWSNode: WSNodeType,
             positionForNode: {x: number, y: number},
@@ -154,7 +171,15 @@ export const workspacesSlice = createSlice({
             }
 
             if (state.currentWS) {
-                const newId = state.currentWS.nodes.length
+                //ToDo add not the length but the largest id + 1
+                let maxId = 0;
+                for (let i = 0; i < state.currentWS.nodes.length; i++) {
+                    if (state.currentWS.nodes[i].id > maxId) {
+                        maxId = state.currentWS.nodes[i].id
+                    }
+                }
+
+                const newId = maxId + 1
                 state.currentWS.nodes.push({
                     id: newId,
                     type: action.payload.inputWSNode.type,
@@ -165,7 +190,8 @@ export const workspacesSlice = createSlice({
         },
         updateWSNodePosition(state, action: PayloadAction<{nodeId: number, newPosition: {x: number, y: number}}>) {
             if (state.currentWS) {
-                state.currentWS.nodes[action.payload.nodeId].position = action.payload.newPosition
+                const actualNodeId: number = findIdInNodeList(state.currentWS.nodes, action.payload.nodeId)
+                state.currentWS.nodes[actualNodeId].position = action.payload.newPosition
                 state.workspaces[state.currentWS.id] = state.currentWS
             }
         },
@@ -175,19 +201,20 @@ export const workspacesSlice = createSlice({
                 firstNodeId: number, firstPortId: number,
                 secondNodeId: number, secondPortId: number
             }>) {
-
             if (state.currentWS) {
+                const actualFirstNodeId: number = findIdInNodeList(state.currentWS.nodes, action.payload.firstNodeId)
+                const actualSecondNodeId: number = findIdInNodeList(state.currentWS.nodes, action.payload.secondNodeId)
 
-                state.currentWS.nodes[action.payload.firstNodeId].connections.push({
+                state.currentWS.nodes[actualFirstNodeId].connections.push({
                     portSelf: action.payload.firstPortId,
                     portOther: action.payload.secondPortId,
-                    otherNodeId: action.payload.secondNodeId
+                    otherNodeId: actualSecondNodeId
                 })
 
-                state.currentWS.nodes[action.payload.secondNodeId].connections.push({
+                state.currentWS.nodes[actualSecondNodeId].connections.push({
                     portSelf: action.payload.secondPortId,
                     portOther: action.payload.firstPortId,
-                    otherNodeId: action.payload.firstNodeId
+                    otherNodeId: actualFirstNodeId
                 })
                 state.workspaces[state.currentWS.id] = state.currentWS
             }
@@ -197,17 +224,23 @@ export const workspacesSlice = createSlice({
             // find the other node
             let otherNodeId: number | null = null
             let otherPortId: number | null = null
-            const curNodeId = action.payload.nodeId
             const curPortId = action.payload.portId
+
+            
+            // const otherNodeId: number = findIdInNodeList(state.currentWS.nodes, action.payload.secondNodeId)
+
             if (state.currentWS) {
-                for (let i = 0; i < state.currentWS.nodes[curNodeId].connections.length; i++) {
-                    if (state.currentWS.nodes[curNodeId].connections[i].portSelf === curPortId) {
-                        otherNodeId = state.currentWS.nodes[curNodeId].connections[i].otherNodeId
-                        otherPortId = state.currentWS.nodes[curNodeId].connections[i].portOther
-                        state.currentWS.nodes[curNodeId].connections.splice(i, 1)
+                const actualCurNodeId: number = findIdInNodeList(state.currentWS.nodes, action.payload.nodeId)
+                for (let i = 0; i < state.currentWS.nodes[actualCurNodeId].connections.length; i++) {
+                    if (state.currentWS.nodes[actualCurNodeId].connections[i].portSelf === curPortId) {
+                        otherNodeId = state.currentWS.nodes[actualCurNodeId].connections[i].otherNodeId
+                        otherPortId = state.currentWS.nodes[actualCurNodeId].connections[i].portOther
+                        state.currentWS.nodes[actualCurNodeId].connections.splice(i, 1)
                     }   
                 }
+
                 if (otherNodeId !== null && otherPortId !== null) {
+                    const actualOtherNodeId: number = findIdInNodeList(state.currentWS.nodes, otherNodeId)
                     for (let i = 0; i < state.currentWS.nodes[otherNodeId].connections.length; i++) {
                         if (state.currentWS.nodes[otherNodeId].connections[i].portSelf === otherPortId) {
                             state.currentWS.nodes[otherNodeId].connections.splice(i, 1)

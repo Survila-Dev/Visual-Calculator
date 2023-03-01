@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from "../store"
 import { workspacesStateActions } from ".././store/workspaces"
 import { TypesOfWSNodes } from ".././store/workspaces"
 import { calculationSliceActions } from "../store/calculation"
+import { canvasCurveActions } from "../store/canvas-curves"
 
 
 type WSNodeChildElement = ({ WSNodeInput, mousePosition, fieldCOS }: WSNodeChildProps) => JSX.Element
@@ -167,6 +168,19 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             }
         }
 
+        function handleClickDelete(e: React.FormEvent) {
+            e.stopPropagation()
+            e.preventDefault()
+
+            // Dispatch delete connections with node
+            for (let i = 0; i < 4; i++) {
+                dispatch(canvasCurveActions.deleteConnection({nodeId: WSNodeInput.id, portId: i}))
+                dispatch(workspacesStateActions.deletePortConnection({nodeId: WSNodeInput.id, portId: i}))
+            }
+            // Dispatch delete node
+            dispatch(workspacesStateActions.removeWSNode({nodeId: WSNodeInput.id}))
+        }
+
         let elementContent : JSX.Element | null = <div>empty</div>
 
         if (type !== "output" && type !== "constant") {
@@ -246,7 +260,15 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                 {elementContent}
 
                 <div className = "flex flex-col h-full">
-                    <div className = "flex-none text-xl px-2 pb-1 text-white">{title}</div>
+                    <div className = "flex flex-row justify-between flex-none text-xl px-2 pb-1 text-white">
+                        <div>{title}</div>
+                        <div
+                            onMouseDown = {handleClickDelete}
+                            className = "cursor-default"
+                        >
+                            X
+                        </div> 
+                    </div>
                     <div className = "grow bg-slate-600">
                     </div>
                 </div>
