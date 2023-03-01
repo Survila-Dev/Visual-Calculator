@@ -87,11 +87,12 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                 const newPosInput = {x: (rect.left + rect.right)/2, y: (rect.top + rect.bottom)/2}
 
                 if (!mouseConnectStatus.firstClicked) {
-                    dispatch(mouseConnectActions.clickFirst({
-                        nodeId: parentNodeId, portId: id, portPosition: newPosInput
-                    }))
-                    dispatch(mouseCurveTrackActions.startTracking(newPosInput))
-
+                    if (parentNodeId < 1000) {
+                        dispatch(mouseConnectActions.clickFirst({
+                            nodeId: parentNodeId, portId: id, portPosition: newPosInput
+                        }))
+                        dispatch(mouseCurveTrackActions.startTracking(newPosInput))
+                    }
                 } else {
                     // create new connection
                     // check if connection not to self and if the right side connects
@@ -105,6 +106,9 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                         if (mouseConnectStatus.firstPortId >= firstRightPortId) {
                             shouldConnect = false
                         }
+                    }
+                    if (parentNodeId >= 1000) {
+                        shouldConnect = false
                     }
 
                     if (shouldConnect) {

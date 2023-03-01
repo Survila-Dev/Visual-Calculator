@@ -1,10 +1,11 @@
 import React from "react"
-import { WSNodeType } from ".././store/workspaces"
+import { WSNodeType, initRelativePosition } from "../store/workspaces" 
 import { WSNodePort } from "./ws-node-port"
 import { useAppDispatch, useAppSelector } from "../store"
 import { workspacesStateActions } from ".././store/workspaces"
 import { TypesOfWSNodes } from ".././store/workspaces"
 import { calculationSliceActions } from "../store/calculation"
+
 
 type WSNodeChildElement = ({ WSNodeInput, mousePosition, fieldCOS }: WSNodeChildProps) => JSX.Element
 
@@ -21,7 +22,8 @@ interface WSNodeParentProps {
 interface WSNodeChildProps {
     WSNodeInput: WSNodeType,
     mousePosition: {x: number, y: number},
-    fieldCOS: {x: number, y: number}
+    fieldCOS: {x: number, y: number},
+    inDropDown: boolean
 }
 
 function convertPositionToStyleForPort(
@@ -60,7 +62,7 @@ function convertPositionToStyleForPort(
 // HOC to create different types of wsnode elements
 export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChildElement => {
 
-    const ChildComponent = ({WSNodeInput, mousePosition, fieldCOS}: WSNodeChildProps): JSX.Element => {
+    const ChildComponent = ({WSNodeInput, mousePosition, fieldCOS, inDropDown}: WSNodeChildProps): JSX.Element => {
 
         const [curPos, changeCurPos] = React.useState<{x: number, y:number}>(WSNodeInput.position)
         const [posBeforeDrag, changePosBeforeDrag] = React.useState<{x: number, y:number}>(WSNodeInput.position)
@@ -73,7 +75,13 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
 
         const calculationTrigger = useAppSelector((state) => state.calculationReducer.calculationTrigger)
         const wsNodeValues = useAppSelector((state) => state.calculationReducer.wsNodeValues[WSNodeInput.id])
-        const wsNodeCalcValue = wsNodeValues
+        const wsNodeInDropDownValue = useAppSelector((state) => state.calculationReducer.defaultOutputText)
+        let wsNodeCalcValue: string = ""
+        if (!inDropDown) {
+            wsNodeCalcValue = wsNodeValues as any as string
+        } else {
+            wsNodeCalcValue = wsNodeInDropDownValue
+        }
 
         React.useEffect(() => {
             if (isBeingDragged) {
@@ -97,9 +105,17 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
         }
 
         function transformPositionToStyleForNode(position: {x: number, y: number}) : {top: string, left: string} {
-            return {
-                top: (position.y - fieldCOS.y) as any as string + "px",
-                left: (position.x - fieldCOS.x) as any as string + "px"
+            if (inDropDown) {
+                return {
+                    top: (position.y) as any as string + "px",
+                    left: (position.x) as any as string + "px"
+                }
+            } else {
+            
+                return {
+                    top: (position.y - fieldCOS.y) as any as string + "px",
+                    left: (position.x - fieldCOS.x) as any as string + "px"
+                }
             }
         }
 
@@ -119,9 +135,21 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
         function handleMouseUp(e: React.FormEvent) {
             e.stopPropagation()
             e.preventDefault()
+            
+            //ToDo if in drop down dont update the position and trigger create new node with current position
+            if (inDropDown) {
+                changeBeingDragged(false)
+                changeCurPos(initRelativePosition)
 
-            changeBeingDragged(false)
-            dispatch(workspacesStateActions.updateWSNodePosition({nodeId: WSNodeInput.id, newPosition: curPos}))
+                dispatch(workspacesStateActions.addWSNode({
+                    inputWSNode: WSNodeInput
+                }))
+
+            } else {
+                changeBeingDragged(false)
+        
+                dispatch(workspacesStateActions.updateWSNodePosition({nodeId: WSNodeInput.id, newPosition: curPos}))
+            }
         }
 
         let elementContent : JSX.Element | null = <div>empty</div>
@@ -183,7 +211,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
         return (
             <article
                 id = {WSNodeInput.id as any as string}
-                className = "absolute h-20 w-40 bg-gray-800 shadow-2xl border-[1px] border-gray-500 hover:bg-gray-900 hover:cursor-grab active:cursor-grabbing"
+                className = "absolute h-20 w-[8rem] bg-gray-800 shadow-2xl border-[1px] border-gray-500 hover:bg-gray-900 hover:cursor-grab active:cursor-grabbing"
                 style = {transformPositionToStyleForNode(curPos)}
                 onMouseDown = {handleMouseDown}
                 onMouseUp = {handleMouseUp}
@@ -202,7 +230,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                 {elementContent}
 
                 <div className = "flex flex-col h-full">
-                    <div className = "flex-none text-xl px-2 pb-1 text-white">Id {WSNodeInput.id} - {title}</div>
+                    <div className = "flex-none text-xl px-2 pb-1 text-white">{title}</div>
                     <div className = "grow bg-slate-600">
                     </div>
                 </div>

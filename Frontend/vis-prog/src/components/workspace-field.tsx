@@ -10,10 +10,14 @@ import {
     WSNodeAddition, WSNodeDivision, WSNodeMultiplication,
     WSNodeSubtraction, WSNodeConstant, WSNodeOutput, WSNodeFork } from "./ws-node-comp"
 
-export const WorkspaceField: React.FC = () => {
+interface WorkspaceFieldProps {
+    mousePosition: {x: number, y: number}
+}
+
+export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
 
     const [fieldCOS, changeFieldCOS] = React.useState<{x: number, y: number}>({x: 0, y:0})
-    const [mousePosition, changeMousePosition] = React.useState<{x: number, y: number}>({x:0, y:0})
+    
     const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
@@ -31,9 +35,7 @@ export const WorkspaceField: React.FC = () => {
 
     // Create event listener for moving mouce and give this info to children
     React.useEffect(()=>{
-        function handleMouseMove(this: Window, e: MouseEvent) {
-            changeMousePosition({x: e.clientX, y: e.clientY})
-        }
+        
         function handleCurveDragDrop(this: Window, e: KeyboardEvent) {
             if (e.code === "Escape") {
                 dispatch(mouseCurveTrackActions.stopTracking())
@@ -42,10 +44,10 @@ export const WorkspaceField: React.FC = () => {
         }
 
         window.addEventListener("keyup", handleCurveDragDrop)
-        window.addEventListener("mousemove", handleMouseMove)
+        
         return () => {
             window.removeEventListener("keyup", handleCurveDragDrop)
-            window.removeEventListener("mousemove", handleMouseMove)
+            
         }
     },[])
 
@@ -80,24 +82,66 @@ export const WorkspaceField: React.FC = () => {
                 onMouseDown = {handleMouseDown}
                 onMouseUp = {handleMouseUp}
             >
-                <ControlBar/>
+                <ControlBar mousePosition={mousePosition}/>
                 
                 {listOfNodes.map((curNode) => {
                     switch (curNode.type) {
                         case "addition":
-                            return <WSNodeAddition WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeAddition
+                                WSNodeInput = {curNode}
+                                key = {curNode.id}
+                                mousePosition = {mousePosition}
+                                fieldCOS = {fieldCOS}
+                                inDropDown = {false}
+                                />
                         case "substraction":
-                            return <WSNodeSubtraction WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeSubtraction
+                                WSNodeInput = {curNode}
+                                key = {curNode.id}
+                                mousePosition = {mousePosition}
+                                fieldCOS = {fieldCOS}
+                                inDropDown = {false}
+                                />
                         case "multiplication":
-                            return <WSNodeMultiplication WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeMultiplication
+                                WSNodeInput = {curNode}
+                                key = {curNode.id}
+                                mousePosition = {mousePosition}
+                                fieldCOS = {fieldCOS}
+                                inDropDown = {false}
+                                />
                         case "division":
-                            return <WSNodeDivision WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeDivision
+                                WSNodeInput = {curNode}
+                                key = {curNode.id}
+                                mousePosition = {mousePosition}
+                                fieldCOS = {fieldCOS}
+                                inDropDown = {false}
+                                />
                         case "constant":
-                            return <WSNodeConstant WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeConstant
+                                WSNodeInput = {curNode}
+                                key = {curNode.id}
+                                mousePosition = {mousePosition}
+                                fieldCOS = {fieldCOS}
+                                inDropDown = {false}
+                                />
                         case "output":
-                            return <WSNodeOutput WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeOutput
+                                WSNodeInput = {curNode}
+                                key = {curNode.id}
+                                mousePosition = {mousePosition}
+                                fieldCOS = {fieldCOS}
+                                inDropDown = {false}
+                                />
                         case "fork":
-                            return <WSNodeFork WSNodeInput = {curNode} key = {curNode.id} mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                            return <WSNodeFork
+                                WSNodeInput = {curNode}
+                                key = {curNode.id}
+                                mousePosition = {mousePosition}
+                                fieldCOS = {fieldCOS}
+                                inDropDown = {false}
+                                />
                     }
                 })}
                 <BackCanvas mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>

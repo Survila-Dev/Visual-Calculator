@@ -20,6 +20,7 @@ export interface Workspace {
     name: string,
     id: number,
     nodes: WSNodeType[],
+    initNodes: WSNodeType[],
 }
 
 export interface Workspaces {
@@ -50,16 +51,49 @@ const initNode7: WSNodeType = {
     id: 6, type: "constant", connections: [], position: {x: 50, y: 130}
 }
 
+export const initRelativePosition = {x: 50, y: 0}
+const initNodeConstant: WSNodeType = {
+    id: 1000, type: "constant", connections: [], position: initRelativePosition
+}
+const initNodeOutput: WSNodeType = {
+    id: 1001, type: "output", connections: [], position: initRelativePosition
+}
+const initNodeAdd: WSNodeType = {
+    id: 1002, type: "addition", connections: [], position: initRelativePosition
+}
+const initNodeSubstract: WSNodeType = {
+    id: 1003, type: "substraction", connections: [], position: initRelativePosition
+}
+const initNodeMultiply: WSNodeType = {
+    id: 1004, type: "multiplication", connections: [], position: initRelativePosition
+}
+const initNodeDivision: WSNodeType = {
+    id: 1004, type: "division", connections: [], position: initRelativePosition
+}
+const initNodeFork: WSNodeType = {
+    id: 1005, type: "fork", connections: [], position: initRelativePosition
+}
+
 
 const initWorkspace: Workspace = {
     name: "First workspace",
     id: 0,
     nodes: [initNode1, initNode2, initNode6, initNode7],
+    initNodes: [
+        initNodeConstant,
+        initNodeOutput,
+        initNodeAdd,
+        initNodeSubstract,
+        initNodeMultiply,
+        initNodeDivision,
+        initNodeFork
+    ]
 }
 
 const workspacesInitValues: Workspaces = {
     workspaces: [initWorkspace],
     currentWS: initWorkspace,
+    
     status: "idle"
 }
 
@@ -103,14 +137,21 @@ export const workspacesSlice = createSlice({
             state.workspaces.splice(action.payload.id, 1)
         },
 
-        addNewWSNode(state, action: PayloadAction<{curWS: Workspace, newNode: WSNodeType}>) {
-            state.workspaces[action.payload.curWS.id].nodes.push(action.payload.newNode)
-        },
-
         removeWSNode(state, action: PayloadAction<{curWS: Workspace, nodeToDelete: WSNodeType}>) {
             state.workspaces[action.payload.curWS.id].nodes.splice(
                 action.payload.nodeToDelete.id, 1
             )
+        },
+        addWSNode(state, action: PayloadAction<{inputWSNode: WSNodeType}>) {
+            if (state.currentWS) {
+                const newId = state.currentWS.nodes.length
+                state.currentWS.nodes.push({
+                    id: newId,
+                    type: action.payload.inputWSNode.type,
+                    connections: [],
+                    position: action.payload.inputWSNode.position
+                })
+            }
         },
         updateWSNodePosition(state, action: PayloadAction<{nodeId: number, newPosition: {x: number, y: number}}>) {
             if (state.currentWS) {

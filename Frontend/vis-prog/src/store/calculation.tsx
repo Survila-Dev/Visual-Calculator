@@ -17,12 +17,14 @@ const calculationSubroutines = {
 
 export interface CalculationStateInterface {
     calculationTrigger: boolean,
-    wsNodeValues: number[]
+    wsNodeValues: number[],
+    defaultOutputText: string
 }
 
 const initState: CalculationStateInterface = {
     calculationTrigger: true,
-    wsNodeValues: [0, 0, 0, 0, 0, 2016, 203, 204]
+    wsNodeValues: [0, 0, 0, 0, 0, 2016, 203, 204],
+    defaultOutputText: "20"
 }
 
 export const calculationSlice = createSlice({
@@ -30,10 +32,6 @@ export const calculationSlice = createSlice({
     initialState: initState,
     reducers: {
         setConstantValue(state, action: PayloadAction<{nodeId: number}>) {
-
-            //ToDo execute calculation here
-            //! Is access to other slices possible?
-
             state.calculationTrigger = !state.calculationTrigger
         }
     }

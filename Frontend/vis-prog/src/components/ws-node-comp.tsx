@@ -9,7 +9,7 @@ export const WSNodeAddition = WSNode({
         {id: 0, position: {side: "left", row: 0}, jsxInput: <div>A</div>},
         {id: 1, position: {side: "left", row: 1}, jsxInput: <div>B</div>},
         {id: 2, position: {side: "right", row: 0}, jsxInput: <div>A + B</div>}
-    ]
+    ],
 })
 
 export const WSNodeSubtraction = WSNode({
