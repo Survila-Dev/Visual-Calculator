@@ -18,7 +18,8 @@ export function BackCanvas({mousePosition, fieldCOS} :BackCanvasInteface):JSX.El
     const defaultConnectionLineColor = '#1f2937'
     const gridLineColor = '#1f2937'
     const connectionLineThickness = 7.5
-    const gridLineThickness = 1
+    const gridLineThickness = 0.5
+    const backgroundGridSpacing = 150
 
     function draw(drawToMouse: boolean = false, pointToDrawToMouse?: {x: number, y: number}) {
 
@@ -35,14 +36,19 @@ export function BackCanvas({mousePosition, fieldCOS} :BackCanvasInteface):JSX.El
         function drawGrid(
             ctx: CanvasRenderingContext2D,
             fieldCOS: {x: number, y: number}) {
-            
-            for (let i = 0; i<5; i++) {
-                ctx.moveTo(0 - fieldCOS.x + i * 100, 0)
-                ctx.lineTo(0 - fieldCOS.x + i * 100, 500)
-            }
-            for (let i = 0; i<5; i++) {
-                ctx.moveTo(0, 0 - fieldCOS.y + i * 100)
-                ctx.lineTo(500, 0 - fieldCOS.y + i * 100)
+            if (canvasRef.current) {
+
+                const noOfVerticalLines = Math.floor(canvasRef.current.width / backgroundGridSpacing)
+                const noOfHorizontalLines = Math.floor(canvasRef.current.height / backgroundGridSpacing)
+
+                for (let i = 0; i<noOfVerticalLines+2; i++) {
+                    ctx.moveTo(0 - (fieldCOS.x % backgroundGridSpacing) + i * backgroundGridSpacing, 0)
+                    ctx.lineTo(0 - (fieldCOS.x % backgroundGridSpacing) + i * backgroundGridSpacing, canvasRef.current.height)
+                }
+                for (let i = 0; i<noOfHorizontalLines+2; i++) {
+                    ctx.moveTo(0, 0 - (fieldCOS.y % backgroundGridSpacing) + i * backgroundGridSpacing)
+                    ctx.lineTo(canvasRef.current.width, 0 - (fieldCOS.y % backgroundGridSpacing) + i * backgroundGridSpacing)
+                }
             }
         }
 

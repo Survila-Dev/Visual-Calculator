@@ -80,7 +80,7 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
             }))
 
         } else {
-            changeConnected(true)
+            
 
             if (portRef.current) {
                 const rect = portRef.current.getBoundingClientRect()
@@ -124,6 +124,7 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                             secondNodeId: parentNodeId,
                             secondPortId: id,
                         }))
+                        changeConnected(true)
                     }
 
                 }
