@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 import { WSNodeType } from "./workspaces"
+import { TypesOfWSNodes } from "./workspaces"
 
-const calculationSubroutines = {
+export const calculationSubroutines = {
     "add": (a: number, b: number): number => a + b,
     "substract": (a: number, b: number): number => a - b,
     "multiply": (a: number, b: number): number => a * b,
@@ -13,17 +14,23 @@ const calculationSubroutines = {
             throw "Division by zero in calculation."
         }
         }),
+    "fork": (a: number): number => a
 }
 
 export interface CalculationStateInterface {
     calculationTrigger: boolean,
-    wsNodeValues: number[],
+    wsNodeValues: {nodeId: number, value: number}[],
     defaultOutputText: string
 }
 
 const initState: CalculationStateInterface = {
     calculationTrigger: true,
-    wsNodeValues: [0, 0, 0, 0, 0, 2016, 203, 204],
+    wsNodeValues: [
+        {nodeId: 0, value: 20},
+        {nodeId: 1, value: 21},
+        {nodeId: 3, value: 22},
+        {nodeId: 4, value: 23},
+    ],
     defaultOutputText: "20"
 }
 
@@ -33,6 +40,12 @@ export const calculationSlice = createSlice({
     reducers: {
         setConstantValue(state, action: PayloadAction<{nodeId: number}>) {
             state.calculationTrigger = !state.calculationTrigger
+        },
+        addNewNodeToCalculation(state, action: PayloadAction<{nodeId: number, nodeType: TypesOfWSNodes}>) {
+            state.wsNodeValues.push({
+                nodeId: action.payload.nodeId,
+                value: 0
+            })
         }
     }
 })

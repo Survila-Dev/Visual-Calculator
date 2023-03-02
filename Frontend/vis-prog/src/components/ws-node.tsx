@@ -79,7 +79,10 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
         const [outputFieldValue, updateOutputFieldValue] = React.useState<number>(0)
 
         const calculationTrigger = useAppSelector((state) => state.calculationReducer.calculationTrigger)
-        const wsNodeValues = useAppSelector((state) => state.calculationReducer.wsNodeValues[WSNodeInput.id])
+        const wsNodeValues = useAppSelector(
+            (state) => state.calculationReducer.wsNodeValues.find(
+                (cur) => cur.nodeId === WSNodeInput.id))
+
         const wsNodeInDropDownValue = useAppSelector((state) => state.calculationReducer.defaultOutputText)
         let wsNodeCalcValue: string = ""
         if (!inDropDown) {
@@ -105,8 +108,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
 
         function handleInputFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
             updateInputField(e.currentTarget.value as any as number)
-
-            //ToDo Dispatch change to state
+            dispatch(workspacesStateActions.changeVariableAndTriggerRecalc())
         }
 
         function transformPositionToStyleForNode(position: {x: number, y: number}) : {top: string, left: string} {
@@ -261,7 +263,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
 
                 <div className = "flex flex-col h-full">
                     <div className = "flex flex-row justify-between flex-none text-xl px-2 pb-1 text-white">
-                        <div>{title}</div>
+                        <div>{WSNodeInput.id} - {title}</div>
                         <div
                             onMouseDown = {handleClickDelete}
                             className = "cursor-default"
