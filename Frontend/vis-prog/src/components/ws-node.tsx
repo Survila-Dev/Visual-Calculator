@@ -79,9 +79,15 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
         const [outputFieldValue, updateOutputFieldValue] = React.useState<number>(0)
 
         const calculationTrigger = useAppSelector((state) => state.calculationReducer.calculationTrigger)
-        const wsNodeValues = useAppSelector(
-            (state) => state.calculationReducer.wsNodeValues.find(
-                (cur) => cur.nodeId === WSNodeInput.id))
+        const wsNodeValues = useAppSelector((state) => {
+            if (state.workspaceStateReducers.currentWS) {
+                const actualNode = state.workspaceStateReducers.currentWS.nodes.find((cur) => cur.id === WSNodeInput.id)
+                if (actualNode !== null && actualNode !== undefined) {
+                    const actualNodeId = actualNode.id
+                    return state.workspaceStateReducers.currentWS.nodes[actualNodeId].value
+                }
+            }
+        })
 
         const wsNodeInDropDownValue = useAppSelector((state) => state.calculationReducer.defaultOutputText)
         let wsNodeCalcValue: string = ""
@@ -108,7 +114,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
 
         function handleInputFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
             updateInputField(e.currentTarget.value as any as number)
-            dispatch(workspacesStateActions.changeVariableAndTriggerRecalc())
+            dispatch(workspacesStateActions.changeVariableAndTriggerRecalc({inputNodeId: WSNodeInput.id, value: e.currentTarget.value as any as number}))
         }
 
         function transformPositionToStyleForNode(position: {x: number, y: number}) : {top: string, left: string} {

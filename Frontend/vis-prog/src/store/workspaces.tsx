@@ -166,7 +166,7 @@ export const workspacesSlice = createSlice({
     name: "workspaces",
     initialState: workspacesInitValues,
     reducers: {
-        changeVariableAndTriggerRecalc(state) {
+        changeVariableAndTriggerRecalc(state, action: PayloadAction<{inputNodeId: number, value: number}>) {
 
             // recursive function to calculate the values
             function calculationPropagation(nodeId: number): number {
@@ -237,9 +237,14 @@ export const workspacesSlice = createSlice({
                 return -2000
             }
 
+            // update the value
+
             if (state.currentWS) {
                 state.currentWS.triggerCalc = !state.currentWS.triggerCalc
-
+                const accCurNodeId = findIdInNodeList(state.currentWS.nodes, action.payload.inputNodeId)
+                if (accCurNodeId !== null) {
+                    state.currentWS.nodes[accCurNodeId].value = action.payload.value
+                }
                 for (let i = 0; i < state.currentWS.nodes.length; i++) {
                     if (state.currentWS.nodes[i].type === "output") {
                         state.currentWS.nodes[i].value = calculationPropagation(state.currentWS.nodes[i].id)
@@ -325,13 +330,13 @@ export const workspacesSlice = createSlice({
                     state.currentWS.nodes[actualFirstNodeId].connections.push({
                         portSelf: action.payload.firstPortId,
                         portOther: action.payload.secondPortId,
-                        otherNodeId: actualSecondNodeId
+                        otherNodeId: action.payload.secondNodeId
                     })
 
                     state.currentWS.nodes[actualSecondNodeId].connections.push({
                         portSelf: action.payload.secondPortId,
                         portOther: action.payload.firstPortId,
-                        otherNodeId: actualFirstNodeId
+                        otherNodeId: action.payload.firstNodeId
                     })
                     state.workspaces[state.currentWS.id] = state.currentWS
                 }
