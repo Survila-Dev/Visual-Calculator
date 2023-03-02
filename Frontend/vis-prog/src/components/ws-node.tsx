@@ -84,13 +84,19 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                 const actualNode = state.workspaceStateReducers.currentWS.nodes.find((cur) => cur.id === WSNodeInput.id)
                 if (actualNode !== null && actualNode !== undefined) {
                     const actualNodeId = actualNode.id
-                    return state.workspaceStateReducers.currentWS.nodes[actualNodeId].value
+                    if (state.workspaceStateReducers.currentWS.nodes[actualNodeId]) {
+                        console.log("Value is there!!")
+                        console.log(state.workspaceStateReducers.currentWS.nodes[actualNodeId].value)
+                        return state.workspaceStateReducers.currentWS.nodes[actualNodeId].value
+                    }
+                } else {
+                    return -3000
                 }
             }
         })
 
         const wsNodeInDropDownValue = useAppSelector((state) => state.calculationReducer.defaultOutputText)
-        let wsNodeCalcValue: string = ""
+        let wsNodeCalcValue: string = "69"
         if (!inDropDown) {
             wsNodeCalcValue = wsNodeValues as any as string
         } else {
@@ -106,11 +112,11 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             }
         }, [mousePosition, fieldCOS])
 
-        // React.useEffect(() => {
-        //     if (type === "output") {
-                
-        //     }
-        // }, [calculationTrigger])
+        React.useEffect(() => {
+            if (type === "output") {
+                updateOutputFieldValue(wsNodeCalcValue as any as number)
+            }
+        }, [calculationTrigger])
 
         function handleInputFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
             updateInputField(e.currentTarget.value as any as number)
