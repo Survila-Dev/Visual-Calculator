@@ -29,18 +29,18 @@ export interface Workspace {
 
 export interface Workspaces {
     workspaces: Workspace[],
-    currentWS: Workspace | null,
+    currentWS: Workspace,
     status: "idle" | "loading" | "failed",
 }
 
 const initNode1: WSNodeType = {
-    id: 0, type: "division", connections: [], position: {x: 50, y: 180}, value: 0
+    id: 0, type: "constant", connections: [], position: {x: 50, y: 180}, value: 0
 }
 const initNode2: WSNodeType = {
-    id: 1, type: "fork", connections: [], position: {x: 200, y: 50}, value: 0
+    id: 1, type: "constant", connections: [], position: {x: 200, y: 50}, value: 0
 }
 const initNode3: WSNodeType = {
-    id: 2, type: "substraction", connections: [], position: {x: 400, y: 400}, value: 0
+    id: 2, type: "output", connections: [], position: {x: 400, y: 400}, value: 0
 }
 const initNode4: WSNodeType = {
     id: 3, type: "multiplication", connections: [], position: {x: 300, y: 400}, value: 0
@@ -82,7 +82,7 @@ const initNodeFork: WSNodeType = {
 const initWorkspace: Workspace = {
     name: "First workspace",
     id: 0,
-    nodes: [initNode1, initNode2, initNode6, initNode7],
+    nodes: [initNode1, initNode2, initNode3, initNode4],
     initNodes: [
         initNodeConstant,
         initNodeOutput,
@@ -142,12 +142,12 @@ function findIdInNodeList(nodeList: WSNodeType[], idToFind: number) {
 }
 
 const calculationSubroutines = {
-    "addition": (a: number, b: number): number => a + b,
-    "substraction": (a: number, b: number): number => a - b,
-    "multiplication": (a: number, b: number): number => a * b,
+    "addition": (a: number, b: number): number => Number(a) + Number(b),
+    "substraction": (a: number, b: number): number => Number(a) - Number(b),
+    "multiplication": (a: number, b: number): number => Number(a) * Number(b),
     "division": ((a: number, b: number): number => {
-        if (b !== 0) {
-            return a / b
+        if (Number(b) !== 0) {
+            return Number(a) / Number(b)
         } else {
             throw "Division by zero in calculation."
         }
@@ -248,6 +248,8 @@ export const workspacesSlice = createSlice({
                 for (let i = 0; i < state.currentWS.nodes.length; i++) {
                     if (state.currentWS.nodes[i].type === "output") {
                         state.currentWS.nodes[i].value = calculationPropagation(state.currentWS.nodes[i].id)
+                        console.log("output node id: " + state.currentWS.nodes[i].id)
+                        console.log("output value: " + state.currentWS.nodes[i].value)
                     }
                 }
             }

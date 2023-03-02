@@ -80,23 +80,24 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
 
         const calculationTrigger = useAppSelector((state) => state.calculationReducer.calculationTrigger)
         const wsNodeValues = useAppSelector((state) => {
-            if (state.workspaceStateReducers.currentWS) {
-                const actualNode = state.workspaceStateReducers.currentWS.nodes.find((cur) => cur.id === WSNodeInput.id)
-                if (actualNode !== null && actualNode !== undefined) {
-                    const actualNodeId = actualNode.id
-                    if (state.workspaceStateReducers.currentWS.nodes[actualNodeId]) {
-                        console.log("Value is there!!")
-                        console.log(state.workspaceStateReducers.currentWS.nodes[actualNodeId].value)
-                        return state.workspaceStateReducers.currentWS.nodes[actualNodeId].value
+            try {
+                let actualId: (number | null) = null
+                for (let i = 0; i < state.workspaceStateReducers.currentWS.nodes.length; i++) {
+                    if (state.workspaceStateReducers.currentWS.nodes[i].id === WSNodeInput.id) {
+                        actualId = i
                     }
-                } else {
-                    return -3000
                 }
+                if (actualId !== null) {
+                    return state.workspaceStateReducers.currentWS.nodes[WSNodeInput.id].value
+                }
+            } catch (e) {
+                console.log(e)
+                return 0
             }
         })
 
         const wsNodeInDropDownValue = useAppSelector((state) => state.calculationReducer.defaultOutputText)
-        let wsNodeCalcValue: string = "69"
+        let wsNodeCalcValue: string
         if (!inDropDown) {
             wsNodeCalcValue = wsNodeValues as any as string
         } else {
