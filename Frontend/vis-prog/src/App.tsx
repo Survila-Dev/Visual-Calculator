@@ -14,6 +14,8 @@ function App() {
 
   const { isLoading } = useAuth0();
 
+  // const isLoading = false
+
   if (isLoading) {
     return (
       <div>

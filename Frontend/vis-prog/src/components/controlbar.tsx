@@ -9,9 +9,10 @@ import { WSNodeType } from "../store/workspaces"
 interface ControlBarProps {
     mousePosition: {x: number, y: number}
     fieldCOS: {x: number, y: number}
+    clickable: boolean
 }
 
-export const ControlBar = ({mousePosition, fieldCOS}: ControlBarProps) => {
+export const ControlBar = ({mousePosition, fieldCOS, clickable}: ControlBarProps) => {
 
     const dispatch = useAppDispatch()
     const isOpen = useAppSelector((state) => state.addNodesMenuReducer.open)
@@ -38,10 +39,12 @@ export const ControlBar = ({mousePosition, fieldCOS}: ControlBarProps) => {
     function handleClickOnAddNodes(e: React.FormEvent) {
         e.preventDefault()
         e.stopPropagation()
-        if (isOpen) {
-            dispatch(addNodesMenuActions.closeMenu())
-        } else {
-            dispatch(addNodesMenuActions.openMenu())
+        if (clickable) {
+            if (isOpen) {
+                dispatch(addNodesMenuActions.closeMenu())
+            } else {
+                dispatch(addNodesMenuActions.openMenu())
+            }
         }
     }
     

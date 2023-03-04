@@ -5,10 +5,12 @@ import { Footer } from "../components/footer"
 import { WorkspaceField } from "../components/workspace-field"
 import { addNodesMenuActions } from "../store/add-nodes-menu"
 import { useAppDispatch } from "../store"
+import { WorkspaceLoader } from "../components/workspace-loader"
 
 export const WorkspaceEditor: React.FC = () => {
 
     const [mousePosition, changeMousePosition] = React.useState<{x: number, y: number}>({x:0, y:0})
+    const waitingForWorkfild = false
 
     React.useEffect(() => {
         function handleMouseMove(this: Window, e: MouseEvent) {
@@ -30,7 +32,8 @@ export const WorkspaceEditor: React.FC = () => {
     return (
         <section className="h-screen flex flex-col overflow-hidden" onMouseDown = {handleAddNotesMenuClose}>
             <Navbar/>
-            <WorkspaceField mousePosition = {mousePosition}/>
+            {(!waitingForWorkfild) && <WorkspaceField mousePosition = {mousePosition}/>}
+            {waitingForWorkfild && <WorkspaceLoader/>}
             <Footer/>
         </section>
     )
