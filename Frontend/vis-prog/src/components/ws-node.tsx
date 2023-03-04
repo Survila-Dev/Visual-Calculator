@@ -88,7 +88,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                     }
                 }
                 if (actualId !== null) {
-                    return state.workspaceStateReducers.currentWS.nodes[WSNodeInput.id].value
+                    return state.workspaceStateReducers.currentWS.nodes[actualId].value
                 }
             } catch (e) {
                 console.log(e)
@@ -276,7 +276,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
 
                 <div className = "flex flex-col h-full">
                     <div className = "flex flex-row justify-between flex-none text-xl px-2 pb-1 text-white">
-                        <div>{WSNodeInput.id} - {title}</div>
+                        <div>{title}</div>
                         <div
                             onMouseDown = {handleClickDelete}
                             className = "cursor-default"
