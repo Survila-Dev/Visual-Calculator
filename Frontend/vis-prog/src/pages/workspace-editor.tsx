@@ -28,7 +28,7 @@ export const WorkspaceEditor: React.FC = () => {
     }
 
     return (
-        <section className="h-screen flex flex-col overflow-hidden" onClick = {handleAddNotesMenuClose}>
+        <section className="h-screen flex flex-col overflow-hidden" onMouseDown = {handleAddNotesMenuClose}>
             <Navbar/>
             <WorkspaceField mousePosition = {mousePosition}/>
             <Footer/>

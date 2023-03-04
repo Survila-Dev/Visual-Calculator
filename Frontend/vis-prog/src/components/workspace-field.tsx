@@ -9,6 +9,7 @@ import { mouseConnectActions } from "../store/mouse-connect"
 import {
     WSNodeAddition, WSNodeDivision, WSNodeMultiplication,
     WSNodeSubtraction, WSNodeConstant, WSNodeOutput, WSNodeFork } from "./ws-node-comp"
+import { Spinner } from "./sync-spinner"
 
 interface WorkspaceFieldProps {
     mousePosition: {x: number, y: number}
@@ -145,6 +146,7 @@ export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
                     }
                 })}
                 <BackCanvas mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                <Spinner show = {true} status = {"failure"} />
             </div>
         </section>
     )
