@@ -3,7 +3,7 @@ import { ImSpinner2 } from "react-icons/im"
 
 interface SpinnerProps {
     show: boolean,
-    status: "success" | "idle" | "failure"
+    status: "success" | "idle" | "failure" | "not logged in"
 }
 
 export function Spinner({show, status}: SpinnerProps) {
@@ -25,6 +25,9 @@ export function Spinner({show, status}: SpinnerProps) {
                 break
             case "failure":
                 spinnerContent = <div className ="absolute bottom-0 px-2 right-0 text-white bg-red-600">Failed sync. to cloud</div>
+                break
+            case "not logged in":
+                spinnerContent = <div className ="absolute bottom-0 px-2 right-0 text-white bg-red-600">Log in to sync. to cloud</div>
                 break
             }
     } else {

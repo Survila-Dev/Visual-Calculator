@@ -146,7 +146,7 @@ export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
                     }
                 })}
                 <BackCanvas mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
-                <Spinner show = {true} status = {"idle"} />
+                <Spinner show = {true} status = {"not logged in"} />
             </div>
         </section>
     )

@@ -7,7 +7,8 @@ import { TypesOfWSNodes } from ".././store/workspaces"
 import { calculationSliceActions } from "../store/calculation"
 import { canvasCurveActions } from "../store/canvas-curves"
 import { TitleWithIcon } from "./text-with-icon"
-import { TiDeleteOutline } from "react-icons/ti"
+
+import { RxCross2 } from "react-icons/rx"
 
 
 type WSNodeChildElement = ({ WSNodeInput, mousePosition, fieldCOS }: WSNodeChildProps) => JSX.Element
@@ -260,14 +261,16 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
         if (allConnected) {
             backPanelJSX = (
                 <div className = "flex flex-col h-full">
-                    <div className = "flex flex-row justify-between bg-slate-800 flex-none text-xl px-2 pb-1 text-white">
-                        <TitleWithIcon title = {title}/>
-                        <div
-                            onMouseDown = {handleClickDelete}
-                            className = "cursor-default"
-                        >
-                            X
-                        </div> 
+                    <div className = "flex flex-row justify-between bg-slate-800 w-full flex-none text-xl text-white">
+                        <div className = "flex flex-row w-full justify-between pl-2">
+                            <TitleWithIcon title = {title}/>
+                            <div
+                                onMouseDown = {handleClickDelete}
+                                className = "cursor-default h-full w-[30px] flex justify-center items-center hover:bg-red-500"
+                            >
+                                <RxCross2 size = {25} color = {"white"}/>
+                            </div>
+                        </div>
                     </div>
                     <div className = "grow bg-slate-600">
                     </div>
@@ -276,14 +279,16 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
         } else {
             backPanelJSX = (
                 <div className = "flex flex-col h-full">
-                    <div className = "flex flex-row justify-between bg-red-500 flex-none text-xl px-2 pb-1 text-white">
-                        <TitleWithIcon title = {title}/>
-                        <div
-                            onMouseDown = {handleClickDelete}
-                            className = "cursor-default"
-                        >
-                            X
-                        </div> 
+                    <div className = "flex flex-row justify-between bg-red-500 w-full flex-none text-xl text-white">
+                        <div className = "flex flex-row w-full justify-between pl-2">
+                            <TitleWithIcon title = {title}/>
+                            <div
+                                onMouseDown = {handleClickDelete}
+                                className = "cursor-default h-full w-[30px] flex justify-center items-center hover:bg-red-700"
+                            >
+                                <RxCross2 size = {25} color = {"white"}/>
+                            </div>
+                        </div>
                     </div>
                     <div className = "grow bg-slate-600">
                     </div>

@@ -41,7 +41,7 @@ export function TitleWithIcon({title}: tittleWithIconInterface) {
     }
 
     return (
-        <div className = "flex flex-row gap-1 items-center ">
+        <div className = "flex flex-row gap-1 items-center pb-1">
             {iconJSX}
             <div className = "text-xl text-white">{title}</div>
         </div>
