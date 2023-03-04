@@ -78,6 +78,7 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                 nodeId: parentNodeId,
                 portId: id
             }))
+            dispatch(workspacesStateActions.changeVariableAndTriggerRecalc({}))
 
         } else {
             
@@ -129,6 +130,7 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                             secondPortId: id,
                         }))
                         changeConnected(true)
+                        dispatch(workspacesStateActions.changeVariableAndTriggerRecalc({}))
                     }
 
                 }

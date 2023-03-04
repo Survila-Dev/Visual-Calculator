@@ -91,7 +91,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                     return state.workspaceStateReducers.currentWS.nodes[actualId].value
                 }
             } catch (e) {
-                console.log(e)
+                console.error(e)
                 return 0
             }
         })
@@ -194,6 +194,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             }
             // Dispatch delete node
             dispatch(workspacesStateActions.removeWSNode({nodeId: WSNodeInput.id}))
+            dispatch(workspacesStateActions.changeVariableAndTriggerRecalc({}))
         }
 
         let elementContent : JSX.Element | null = <div>empty</div>

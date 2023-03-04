@@ -38,6 +38,7 @@ export function BackCanvas({mousePosition, fieldCOS} :BackCanvasInteface):JSX.El
             fieldCOS: {x: number, y: number}) {
             if (canvasRef.current) {
 
+                ctx.strokeStyle = gridLineColor
                 const noOfVerticalLines = Math.floor(canvasRef.current.width / backgroundGridSpacing)
                 const noOfHorizontalLines = Math.floor(canvasRef.current.height / backgroundGridSpacing)
 

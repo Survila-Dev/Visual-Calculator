@@ -34,10 +34,10 @@ export interface Workspaces {
 }
 
 const initNode1: WSNodeType = {
-    id: 0, type: "constant", connections: [], position: {x: 50, y: 180}, value: 0
+    id: 0, type: "constant", connections: [], position: {x: 50, y: 180}, value: 12
 }
 const initNode2: WSNodeType = {
-    id: 1, type: "constant", connections: [], position: {x: 200, y: 50}, value: 0
+    id: 1, type: "constant", connections: [], position: {x: 200, y: 50}, value: 12
 }
 const initNode3: WSNodeType = {
     id: 2, type: "output", connections: [], position: {x: 400, y: 400}, value: 0
@@ -57,7 +57,7 @@ const initNode7: WSNodeType = {
 
 export const initRelativePosition = {x: 50, y: 0}
 const initNodeConstant: WSNodeType = {
-    id: 1000, type: "constant", connections: [], position: initRelativePosition, value: 0
+    id: 1000, type: "constant", connections: [], position: initRelativePosition, value: 12
 }
 const initNodeOutput: WSNodeType = {
     id: 1001, type: "output", connections: [], position: initRelativePosition, value: 0
@@ -77,7 +77,6 @@ const initNodeDivision: WSNodeType = {
 const initNodeFork: WSNodeType = {
     id: 1005, type: "fork", connections: [], position: initRelativePosition, value: 0
 }
-
 
 const initWorkspace: Workspace = {
     name: "First workspace",
@@ -130,7 +129,6 @@ function findIdInNodeList(nodeList: WSNodeType[], idToFind: number) {
     let foundNode: (number | null) = null
     for (let i = 0; i < nodeList.length; i++) {
         if (nodeList[i].id === idToFind) {
-            console.log("Found it is " + i as any as string)
             foundNode = i
         }
     }
@@ -166,20 +164,17 @@ export const workspacesSlice = createSlice({
     name: "workspaces",
     initialState: workspacesInitValues,
     reducers: {
-        changeVariableAndTriggerRecalc(state, action: PayloadAction<{inputNodeId: number, value: number}>) {
+        changeVariableAndTriggerRecalc(state, action: PayloadAction<{inputNodeId?: number, value?: number}>) {
 
             // recursive function to calculate the values
             function calculationPropagation(nodeId: number): number {
 
+                const defaultOutputValue = 0
+
                 if (state.currentWS) {
                     const actualNodeId = findIdInNodeList(state.currentWS.nodes, nodeId)
-                    console.log("current WS found; actual node: ")
-                    console.log(actualNodeId)
-                    console.log("id to look for " + nodeId)
-                    console.log(state.currentWS.nodes)
 
                     if (actualNodeId !== null) {
-                        console.log("Actual node found")
                         // check if all connections there and get actual connections id
                         const nodeType = state.currentWS.nodes[actualNodeId].type
                         let otherFirstNodeForCalc: (number | null) = null
@@ -188,7 +183,6 @@ export const workspacesSlice = createSlice({
                             // should have connection with selfPort === 0
                             const connection = state.currentWS.nodes[actualNodeId].connections.find((cur) => cur.portSelf === 0)
                             if (connection) {
-                                console.log("Connection for output, fork found")
                                 otherFirstNodeForCalc = connection.otherNodeId
                             } else {
                                 console.error("Either output or fork node does not find connection")
@@ -198,7 +192,6 @@ export const workspacesSlice = createSlice({
                             const firstConnection = state.currentWS.nodes[actualNodeId].connections.find((cur) => cur.portSelf === 0)
                             const secondConnection = state.currentWS.nodes[actualNodeId].connections.find((cur) => cur.portSelf === 1)
                             if (firstConnection && secondConnection) {
-                                console.log("Connection for two input node found")
                                 otherFirstNodeForCalc = firstConnection.otherNodeId
                                 otherSecondNodeForCalc = secondConnection.otherNodeId
                             } else {
@@ -209,12 +202,9 @@ export const workspacesSlice = createSlice({
                         
                         switch (nodeType) {
                             case "constant":
-                                console.log("Constant value read")
                                 return state.currentWS.nodes[actualNodeId].value
                             case "output":
                                 if (otherFirstNodeForCalc !== null) {
-                                    console.log("Output calls its connection")
-                                    console.log(otherFirstNodeForCalc)
                                     return calculationPropagation(otherFirstNodeForCalc)
                                 }
                                 break
@@ -234,22 +224,24 @@ export const workspacesSlice = createSlice({
                         }}
                 }
                 console.error("Recalc went wrong.")
-                return -2000
+                return defaultOutputValue
             }
 
             // update the value
 
             if (state.currentWS) {
                 state.currentWS.triggerCalc = !state.currentWS.triggerCalc
-                const accCurNodeId = findIdInNodeList(state.currentWS.nodes, action.payload.inputNodeId)
-                if (accCurNodeId !== null) {
-                    state.currentWS.nodes[accCurNodeId].value = action.payload.value
+
+                if (action.payload.inputNodeId !== undefined && action.payload.value !== undefined) {
+                    const accCurNodeId = findIdInNodeList(state.currentWS.nodes, action.payload.inputNodeId)
+                    if (accCurNodeId !== null) {
+                        state.currentWS.nodes[accCurNodeId].value = action.payload.value
+                    }
                 }
+
                 for (let i = 0; i < state.currentWS.nodes.length; i++) {
                     if (state.currentWS.nodes[i].type === "output") {
                         state.currentWS.nodes[i].value = calculationPropagation(state.currentWS.nodes[i].id)
-                        console.log("output node id: " + state.currentWS.nodes[i].id)
-                        console.log("output value: " + state.currentWS.nodes[i].value)
                     }
                 }
             }
@@ -303,7 +295,7 @@ export const workspacesSlice = createSlice({
                     type: action.payload.inputWSNode.type,
                     connections: [],
                     position: newPosition,
-                    value: 0
+                    value: action.payload.inputWSNode.value
                 })
             }
         },
