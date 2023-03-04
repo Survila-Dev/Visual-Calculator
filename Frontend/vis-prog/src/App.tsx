@@ -12,8 +12,8 @@ function App() {
   // const count = useAppSelector((state) => state.counterRed.counter)
   // const dispatch = useAppDispatch();
 
-  // const { isLoading } = useAuth0();
-  const isLoading = true
+  const { isLoading } = useAuth0();
+  // const isLoading = true
 
   // const isLoading = false
 

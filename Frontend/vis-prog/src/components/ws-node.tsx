@@ -6,6 +6,8 @@ import { workspacesStateActions } from ".././store/workspaces"
 import { TypesOfWSNodes } from ".././store/workspaces"
 import { calculationSliceActions } from "../store/calculation"
 import { canvasCurveActions } from "../store/canvas-curves"
+import { TitleWithIcon } from "./text-with-icon"
+import { TiDeleteOutline } from "react-icons/ti"
 
 
 type WSNodeChildElement = ({ WSNodeInput, mousePosition, fieldCOS }: WSNodeChildProps) => JSX.Element
@@ -259,7 +261,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             backPanelJSX = (
                 <div className = "flex flex-col h-full">
                     <div className = "flex flex-row justify-between bg-slate-800 flex-none text-xl px-2 pb-1 text-white">
-                        <div>{title}</div>
+                        <TitleWithIcon title = {title}/>
                         <div
                             onMouseDown = {handleClickDelete}
                             className = "cursor-default"
@@ -275,7 +277,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             backPanelJSX = (
                 <div className = "flex flex-col h-full">
                     <div className = "flex flex-row justify-between bg-red-500 flex-none text-xl px-2 pb-1 text-white">
-                        <div>{title}</div>
+                        <TitleWithIcon title = {title}/>
                         <div
                             onMouseDown = {handleClickDelete}
                             className = "cursor-default"
@@ -292,7 +294,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
         return (
             <article
                 id = {WSNodeInput.id as any as string}
-                className = "absolute h-20 w-[8rem] bg-gray-800 shadow-2xl border-[1px] border-gray-500 hover:bg-gray-900 hover:cursor-grab active:cursor-grabbing"
+                className = "absolute h-20 w-[9rem] bg-gray-800 shadow-2xl border-[1px] border-gray-500 hover:bg-gray-900 hover:cursor-grab active:cursor-grabbing"
                 style = {transformPositionToStyleForNode(curPos)}
                 onMouseDown = {handleMouseDown}
                 onMouseUp = {handleMouseUp}
