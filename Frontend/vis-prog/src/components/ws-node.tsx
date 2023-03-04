@@ -253,6 +253,42 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
 
         }
 
+        const allConnected = WSNodeInput.fullyConnected
+        let backPanelJSX = <div></div>
+        if (allConnected) {
+            backPanelJSX = (
+                <div className = "flex flex-col h-full">
+                    <div className = "flex flex-row justify-between bg-slate-800 flex-none text-xl px-2 pb-1 text-white">
+                        <div>{title}</div>
+                        <div
+                            onMouseDown = {handleClickDelete}
+                            className = "cursor-default"
+                        >
+                            X
+                        </div> 
+                    </div>
+                    <div className = "grow bg-slate-600">
+                    </div>
+                </div>
+            )
+        } else {
+            backPanelJSX = (
+                <div className = "flex flex-col h-full">
+                    <div className = "flex flex-row justify-between bg-red-500 flex-none text-xl px-2 pb-1 text-white">
+                        <div>{title}</div>
+                        <div
+                            onMouseDown = {handleClickDelete}
+                            className = "cursor-default"
+                        >
+                            X
+                        </div> 
+                    </div>
+                    <div className = "grow bg-slate-600">
+                    </div>
+                </div> )
+        }
+
+
         return (
             <article
                 id = {WSNodeInput.id as any as string}
@@ -274,20 +310,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                         )
                     )}
                 {elementContent}
-
-                <div className = "flex flex-col h-full">
-                    <div className = "flex flex-row justify-between flex-none text-xl px-2 pb-1 text-white">
-                        <div>{title}</div>
-                        <div
-                            onMouseDown = {handleClickDelete}
-                            className = "cursor-default"
-                        >
-                            X
-                        </div> 
-                    </div>
-                    <div className = "grow bg-slate-600">
-                    </div>
-                </div>
+                {backPanelJSX}
             </article>
         )
     }

@@ -16,7 +16,8 @@ export interface WSNodeType {
     type: TypesOfWSNodes,
     connections: WSNodePortConnectionType[],
     position: {x: number, y: number},
-    value: number
+    value: number | string,
+    fullyConnected: boolean
 }
 
 export interface Workspace {
@@ -34,48 +35,48 @@ export interface Workspaces {
 }
 
 const initNode1: WSNodeType = {
-    id: 0, type: "constant", connections: [], position: {x: 50, y: 180}, value: 12
+    id: 0, type: "constant", connections: [], position: {x: 50, y: 180}, value: 12, fullyConnected: true
 }
 const initNode2: WSNodeType = {
-    id: 1, type: "constant", connections: [], position: {x: 200, y: 50}, value: 12
+    id: 1, type: "constant", connections: [], position: {x: 200, y: 50}, value: 12, fullyConnected: true
 }
 const initNode3: WSNodeType = {
-    id: 2, type: "output", connections: [], position: {x: 400, y: 400}, value: 0
+    id: 2, type: "output", connections: [], position: {x: 400, y: 400}, value: 0, fullyConnected: false
 }
 const initNode4: WSNodeType = {
-    id: 3, type: "multiplication", connections: [], position: {x: 300, y: 400}, value: 0
+    id: 3, type: "multiplication", connections: [], position: {x: 300, y: 400}, value: 0, fullyConnected: false
 }
 const initNode5: WSNodeType = {
-    id: 4, type: "division", connections: [], position: {x: 400, y: 300}, value: 0
+    id: 4, type: "division", connections: [], position: {x: 400, y: 300}, value: 0, fullyConnected: false
 }
 const initNode6: WSNodeType = {
-    id: 5, type: "output", connections: [], position: {x: 0, y: 300}, value: 0
+    id: 5, type: "output", connections: [], position: {x: 0, y: 300}, value: 0, fullyConnected: false
 }
 const initNode7: WSNodeType = {
-    id: 6, type: "constant", connections: [], position: {x: 50, y: 130}, value: 0
+    id: 6, type: "constant", connections: [], position: {x: 50, y: 130}, value: 0, fullyConnected: false
 }
 
 export const initRelativePosition = {x: 50, y: 0}
 const initNodeConstant: WSNodeType = {
-    id: 1000, type: "constant", connections: [], position: initRelativePosition, value: 12
+    id: 1000, type: "constant", connections: [], position: initRelativePosition, value: 12, fullyConnected: true
 }
 const initNodeOutput: WSNodeType = {
-    id: 1001, type: "output", connections: [], position: initRelativePosition, value: 0
+    id: 1001, type: "output", connections: [], position: initRelativePosition, value: "...", fullyConnected: true
 }
 const initNodeAdd: WSNodeType = {
-    id: 1002, type: "addition", connections: [], position: initRelativePosition, value: 0
+    id: 1002, type: "addition", connections: [], position: initRelativePosition, value: 0, fullyConnected: true
 }
 const initNodeSubstract: WSNodeType = {
-    id: 1003, type: "substraction", connections: [], position: initRelativePosition, value: 0
+    id: 1003, type: "substraction", connections: [], position: initRelativePosition, value: 0, fullyConnected: true
 }
 const initNodeMultiply: WSNodeType = {
-    id: 1004, type: "multiplication", connections: [], position: initRelativePosition, value: 0
+    id: 1004, type: "multiplication", connections: [], position: initRelativePosition, value: 0, fullyConnected: true
 }
 const initNodeDivision: WSNodeType = {
-    id: 1004, type: "division", connections: [], position: initRelativePosition, value: 0
+    id: 1004, type: "division", connections: [], position: initRelativePosition, value: 0, fullyConnected: true
 }
 const initNodeFork: WSNodeType = {
-    id: 1005, type: "fork", connections: [], position: initRelativePosition, value: 0
+    id: 1005, type: "fork", connections: [], position: initRelativePosition, value: 0, fullyConnected: true
 }
 
 const initWorkspace: Workspace = {
@@ -167,7 +168,7 @@ export const workspacesSlice = createSlice({
         changeVariableAndTriggerRecalc(state, action: PayloadAction<{inputNodeId?: number, value?: number}>) {
 
             // recursive function to calculate the values
-            function calculationPropagation(nodeId: number): number {
+            function calculationPropagation(nodeId: number): (number | null) {
 
                 const defaultOutputValue = 0
 
@@ -184,9 +185,11 @@ export const workspacesSlice = createSlice({
                             const connection = state.currentWS.nodes[actualNodeId].connections.find((cur) => cur.portSelf === 0)
                             if (connection) {
                                 otherFirstNodeForCalc = connection.otherNodeId
+                                state.currentWS.nodes[actualNodeId].fullyConnected = true
                             } else {
                                 console.error("Either output or fork node does not find connection")
                                 //! no connection there show it
+                                state.currentWS.nodes[actualNodeId].fullyConnected = false
                             }
                         } else if (nodeType !== "constant"){
                             const firstConnection = state.currentWS.nodes[actualNodeId].connections.find((cur) => cur.portSelf === 0)
@@ -194,37 +197,57 @@ export const workspacesSlice = createSlice({
                             if (firstConnection && secondConnection) {
                                 otherFirstNodeForCalc = firstConnection.otherNodeId
                                 otherSecondNodeForCalc = secondConnection.otherNodeId
+                                state.currentWS.nodes[actualNodeId].fullyConnected = true
                             } else {
                                 console.error("A node with two input ports does not find connection")
                                 //! no connection there show it
+                                state.currentWS.nodes[actualNodeId].fullyConnected = false
                             }
                         } 
                         
                         switch (nodeType) {
                             case "constant":
-                                return state.currentWS.nodes[actualNodeId].value
+                                return state.currentWS.nodes[actualNodeId].value as any as number
                             case "output":
                                 if (otherFirstNodeForCalc !== null) {
-                                    return calculationPropagation(otherFirstNodeForCalc)
+                                    const inputToNode = calculationPropagation(otherFirstNodeForCalc)
+                                    if (inputToNode !== null) {
+                                        return calculationPropagation(otherFirstNodeForCalc)
+                                    } else {
+                                        state.currentWS.nodes[actualNodeId].fullyConnected = false
+                                        return null
+                                    }
                                 }
                                 break
                             case "fork":
                                 if (otherFirstNodeForCalc !== null) {
-                                    return calculationPropagation(otherFirstNodeForCalc)
+                                    const inputToNode = calculationPropagation(otherFirstNodeForCalc)
+                                    if (inputToNode !== null) {
+                                        return calculationPropagation(otherFirstNodeForCalc)
+                                    } else {
+                                        state.currentWS.nodes[actualNodeId].fullyConnected = false
+                                        return null
+                                    }
+                                    // return calculationPropagation(otherFirstNodeForCalc)
                                 }
                                 break
                             default:
                                 if (otherFirstNodeForCalc !== null && otherSecondNodeForCalc !== null) {
-                                    return calculationSubroutines[nodeType](
-                                        calculationPropagation(otherFirstNodeForCalc),
-                                        calculationPropagation(otherSecondNodeForCalc)
-                                    )
+                                    const inputToNode1 = calculationPropagation(otherFirstNodeForCalc)
+                                    const inputToNode2 = calculationPropagation(otherSecondNodeForCalc)
+
+                                    if (inputToNode1 !== null && inputToNode2 !== null) {
+                                        return calculationSubroutines[nodeType](inputToNode1, inputToNode2)
+                                    } else {
+                                        state.currentWS.nodes[actualNodeId].fullyConnected = false
+                                        return null
+                                    }
                                 }
-                            
-                        }}
+                        }
+                    }
                 }
                 console.error("Recalc went wrong.")
-                return defaultOutputValue
+                return null
             }
 
             // update the value
@@ -241,7 +264,12 @@ export const workspacesSlice = createSlice({
 
                 for (let i = 0; i < state.currentWS.nodes.length; i++) {
                     if (state.currentWS.nodes[i].type === "output") {
-                        state.currentWS.nodes[i].value = calculationPropagation(state.currentWS.nodes[i].id)
+                        const nodeOutput = calculationPropagation(state.currentWS.nodes[i].id)
+                        if (nodeOutput !== null) {
+                            state.currentWS.nodes[i].value = nodeOutput
+                        } else {
+                            state.currentWS.nodes[i].value = "..."
+                        }
                     }
                 }
             }
@@ -289,13 +317,16 @@ export const workspacesSlice = createSlice({
                     }
                 }
 
+                let fullyConnected = false
+                if (action.payload.inputWSNode.type === "constant") fullyConnected = true
                 const newId = maxId + 1
                 state.currentWS.nodes.push({
                     id: newId,
                     type: action.payload.inputWSNode.type,
                     connections: [],
                     position: newPosition,
-                    value: action.payload.inputWSNode.value
+                    value: action.payload.inputWSNode.value,
+                    fullyConnected: fullyConnected
                 })
             }
         },
