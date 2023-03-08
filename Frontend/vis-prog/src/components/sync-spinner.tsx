@@ -6,7 +6,9 @@ interface SpinnerProps {
     status: "success" | "idle" | "failure" | "not logged in"
 }
 
-export function Spinner({show, status}: SpinnerProps) {
+const spinnerSize = 15
+
+export const Spinner: React.FC<SpinnerProps> = ({show, status}) => {
 
     let spinnerContent = <div></div>
 
@@ -18,7 +20,7 @@ export function Spinner({show, status}: SpinnerProps) {
             case "idle":
                 spinnerContent = (
                     <div className ="absolute bottom-0 px-2 right-0 text-white bg-yellow-600 z-10 flex flex-row gap-2 items-center">
-                        <ImSpinner2 className = "animate-spin" size = {15} color = {"white"}/>
+                        <ImSpinner2 className = "animate-spin" size = {spinnerSize} color = {"white"}/>
                         <div>Syncing to cloud</div>
                     </div>
                     )
