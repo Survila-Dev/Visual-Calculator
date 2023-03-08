@@ -4,9 +4,9 @@ import { useAppSelector, useAppDispatch } from "../store"
 import {
     WSNodeAddition, WSNodeDivision, WSNodeMultiplication,
     WSNodeSubtraction, WSNodeConstant, WSNodeOutput, WSNodeFork
-    } from "./ws-node-comp"
-import { WSNodeType } from "../store/workspaces" 
-import { WSNodeChildProps } from "./ws-node"
+    } from "./ws-node/ws-node-comp"
+import { WSNodeType } from "../store/workspaces-subroutines/index-workspaces" 
+import { WSNodeChildProps } from "./ws-node/ws-node"
 
 interface ControlBarProps {
     mousePosition: {x: number, y: number}

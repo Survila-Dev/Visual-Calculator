@@ -1,6 +1,6 @@
 import React from "react"
 import { ControlBar } from "../components/controlbar"
-import { WSNodeType } from "../store/workspaces"
+import { WSNodeType } from "../store/workspaces-subroutines/index-workspaces"
 import { BackCanvas } from "./background-canvas"
 import { useAppDispatch, useAppSelector } from "../store/index"
 import { workfieldDragActions } from "../store/workfield-drag"
@@ -8,9 +8,9 @@ import { mouseCurveTrackActions } from "../store/mouse-curve-track"
 import { mouseConnectActions } from "../store/mouse-connect"
 import {
     WSNodeAddition, WSNodeDivision, WSNodeMultiplication,
-    WSNodeSubtraction, WSNodeConstant, WSNodeOutput, WSNodeFork } from "./ws-node-comp"
+    WSNodeSubtraction, WSNodeConstant, WSNodeOutput, WSNodeFork } from "./ws-node/ws-node-comp"
 import { Spinner } from "./sync-spinner"
-import { WSNodeChildProps } from "./ws-node"
+import { WSNodeChildProps } from "./ws-node/ws-node"
 
 interface WorkspaceFieldProps {
     mousePosition: {x: number, y: number}

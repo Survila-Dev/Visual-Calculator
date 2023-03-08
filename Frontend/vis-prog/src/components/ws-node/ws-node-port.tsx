@@ -1,9 +1,9 @@
 import React from "react"
-import { useAppDispatch, useAppSelector } from "../store/index";
-import { canvasCurveActions } from "../store/canvas-curves"
-import { mouseConnectActions } from "../store/mouse-connect";
-import { mouseCurveTrackActions } from "../store/mouse-curve-track";
-import { workspacesStateActions } from "../store/workspaces";
+import { useAppDispatch, useAppSelector } from "../../store/index";
+import { canvasCurveActions } from "../../store/canvas-curves"
+import { mouseConnectActions } from "../../store/mouse-connect";
+import { mouseCurveTrackActions } from "../../store/mouse-curve-track";
+import { workspacesStateActions } from "../../store/workspaces-subroutines/index-workspaces";
 import { firstRightPortId } from "./ws-node-comp";
 
 interface WSNodePortProps {

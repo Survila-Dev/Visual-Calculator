@@ -8,6 +8,8 @@ import { useAppDispatch } from "../store"
 import { WorkspaceLoader } from "../components/workspace-loader"
 
 export const WorkspaceEditor: React.FC = () => {
+    
+    const dispatch = useAppDispatch()
 
     const [mousePosition, changeMousePosition] = React.useState<{x: number, y: number}>({x:0, y:0})
     const waitingForWorkfild = false
@@ -22,8 +24,6 @@ export const WorkspaceEditor: React.FC = () => {
             window.removeEventListener("mousemove", handleMouseMove)
         }
     })
-
-    const dispatch = useAppDispatch()
 
     const handleAddNotesMenuClose = (e: React.FormEvent) => {
         dispatch(addNodesMenuActions.closeMenu())

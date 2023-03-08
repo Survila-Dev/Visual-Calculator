@@ -1,12 +1,10 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit"
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { configureStore } from "@reduxjs/toolkit"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 import { curveConnectionsSlice } from "./canvas-curves"
 import { mouseConnectSlice } from "./mouse-connect";
-import { workspacesSlice } from "./workspaces"
+import { workspacesSlice } from "./workspaces-subroutines/index-workspaces"
 import { mouseCurveTrackSlice } from "./mouse-curve-track";
 import { workfieldDragSlice } from "./workfield-drag";
-import { calculationSlice } from "./calculation";
 import { addNodesMenuSlice } from "./add-nodes-menu";
 import { navbarSizeSlice } from "./navbar-size";
 
@@ -22,7 +20,6 @@ export const store = configureStore({
         mouseConnectReducer: mouseConnectSlice.reducer,
         mouseTrackReducer: mouseCurveTrackSlice.reducer,
         workfieldDragReducer: workfieldDragSlice.reducer,
-        calculationReducer: calculationSlice.reducer,
         addNodesMenuReducer: addNodesMenuSlice.reducer,
         navbarSizeReducer: navbarSizeSlice.reducer
     }

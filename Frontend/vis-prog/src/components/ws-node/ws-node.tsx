@@ -1,26 +1,14 @@
 import React from "react"
-import { WSNodeType, initRelativePosition } from "../store/workspaces" 
+import { WSNodeType } from "../../store/workspaces-subroutines/index-workspaces" 
 import { WSNodePort } from "./ws-node-port"
-import { useAppDispatch, useAppSelector } from "../store"
-import { workspacesStateActions } from ".././store/workspaces"
-import { TypesOfWSNodes } from ".././store/workspaces"
-import { calculationSliceActions } from "../store/calculation"
-import { canvasCurveActions } from "../store/canvas-curves"
-import { TitleWithIcon } from "./text-with-icon"
+import { useAppDispatch, useAppSelector } from "../../store"
+import { workspacesStateActions } from "../../store/workspaces-subroutines/index-workspaces"
+import { TypesOfWSNodes } from "../../store/workspaces-subroutines/index-workspaces"
+import { canvasCurveActions } from "../../store/canvas-curves"
+import { TitleWithIcon } from "../text-with-icon"
 
 import { RxCross2 } from "react-icons/rx"
-
-type WSNodeChildElement = ({ WSNodeInput, mousePosition, fieldCOS }: WSNodeChildProps) => JSX.Element
-
-interface WSNodeParentProps {
-    type: TypesOfWSNodes,
-    title: string,
-    listOfPorts: {
-        id: number,
-        position: {side: "left" | "right", row: number},
-        jsxInput: JSX.Element
-}[]
-}
+import { initRelativePosition } from "../../store/workspaces-subroutines/initial-nodes"
 
 export interface WSNodeChildProps {
     WSNodeInput: WSNodeType,
@@ -30,9 +18,22 @@ export interface WSNodeChildProps {
     key?: string
 }
 
-function convertPositionToStyleForPort(
+type WSNodeChildElement = React.FC<WSNodeChildProps>
+type IPortPosition = {side: "left" | "right", row: number}
+
+interface WSNodeParentProps {
+    type: TypesOfWSNodes,
+    title: string,
+    listOfPorts: {
+        id: number,
+        position: IPortPosition,
+        jsxInput: JSX.Element
+    }[]
+}
+
+const convertPositionToStyleForPort = (
     portOrDesc: "port" | "description",
-    position : {side: "left" | "right", row: number}) {
+    position : IPortPosition) => {
 
     const portRowOffset = 20
     const portRowStartOffsetPort = 40
@@ -64,24 +65,21 @@ function convertPositionToStyleForPort(
 }
 
 // HOC to create different types of wsnode elements
-export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChildElement => {
+export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChildElement => {
 
-    const ChildComponent = ({WSNodeInput, mousePosition, fieldCOS, inDropDown}: WSNodeChildProps): JSX.Element => {
+    const ChildComponent: WSNodeChildElement = ({WSNodeInput, mousePosition, fieldCOS, inDropDown}) => {
+
+        const dispatch = useAppDispatch()
 
         const [curPos, changeCurPos] = React.useState<{x: number, y:number}>(WSNodeInput.position)
         const [posBeforeDrag, changePosBeforeDrag] = React.useState<{x: number, y:number}>(WSNodeInput.position)
         const [isBeingDragged, changeBeingDragged] = React.useState<boolean>(false)
         const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y:number}>({x: 0, y: 0})
-        const dispatch = useAppDispatch()
+        const [inputField, updateInputField] = React.useState<number>(12)
 
         const refNode = React.useRef<HTMLElement>(null)
 
         const navbarHeight = useAppSelector((state) => state.navbarSizeReducer.height)
-
-        const [inputField, updateInputField] = React.useState<number>(12)
-        const [outputFieldValue, updateOutputFieldValue] = React.useState<number>(0)
-
-        const calculationTrigger = useAppSelector((state) => state.calculationReducer.calculationTrigger)
         const wsNodeValues = useAppSelector((state) => {
             try {
                 let actualId: (number | null) = null
@@ -99,7 +97,8 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             }
         })
 
-        const wsNodeInDropDownValue = useAppSelector((state) => state.calculationReducer.defaultOutputText)
+        const wsNodeInDropDownValue = "..."
+
         let wsNodeCalcValue: string
         if (!inDropDown) {
             wsNodeCalcValue = wsNodeValues as any as string
@@ -116,18 +115,12 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             }
         }, [mousePosition, fieldCOS])
 
-        React.useEffect(() => {
-            if (type === "output") {
-                updateOutputFieldValue(wsNodeCalcValue as any as number)
-            }
-        }, [calculationTrigger])
-
-        function handleInputFieldChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const handleInputFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
             updateInputField(e.currentTarget.value as any as number)
             dispatch(workspacesStateActions.changeVariableAndTriggerRecalc({inputNodeId: WSNodeInput.id, value: e.currentTarget.value as any as number}))
         }
 
-        function transformPositionToStyleForNode(position: {x: number, y: number}) : {top: string, left: string} {
+        const transformPositionToStyleForNode = (position: {x: number, y: number}) : {top: string, left: string} => {
             if (inDropDown) {
                 return {
                     top: (position.y) as any as string + "px",
@@ -142,11 +135,11 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             }
         }
 
-        function preventDefaultClick(e: React.FormEvent) {
+        const preventDefaultClick = (e: React.FormEvent) => {
             e.stopPropagation()
         }
 
-        function handleMouseDown(e: React.FormEvent) {
+        const handleMouseDown = (e: React.FormEvent) => {
             e.stopPropagation()
             e.preventDefault()
 
@@ -155,7 +148,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             changeMousePosBeforeDrag(mousePosition) 
         }
 
-        function handleMouseUp(e: React.FormEvent) {
+        const handleMouseUp = (e: React.FormEvent) => {
             e.stopPropagation()
             e.preventDefault()
             
@@ -180,7 +173,6 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
 
             } else {
                 changeBeingDragged(false)
-        
                 dispatch(workspacesStateActions.updateWSNodePosition({nodeId: WSNodeInput.id, newPosition: curPos}))
             }
         }
@@ -189,17 +181,16 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             e.stopPropagation()
             e.preventDefault()
 
-            // Dispatch delete connections with node
             for (let i = 0; i < 4; i++) {
                 dispatch(canvasCurveActions.deleteConnection({nodeId: WSNodeInput.id, portId: i}))
                 dispatch(workspacesStateActions.deletePortConnection({nodeId: WSNodeInput.id, portId: i}))
             }
-            // Dispatch delete node
+            
             dispatch(workspacesStateActions.removeWSNode({nodeId: WSNodeInput.id}))
             dispatch(workspacesStateActions.changeVariableAndTriggerRecalc({}))
         }
 
-        let elementContent : JSX.Element | null = <div>empty</div>
+        let elementContent : JSX.Element = <div>empty</div>
 
         if (type !== "output" && type !== "constant") {
             elementContent = (
@@ -257,6 +248,7 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
 
         const allConnected = WSNodeInput.fullyConnected
         let backPanelJSX = <div></div>
+
         if (allConnected) {
             backPanelJSX = (
                 <div className = "flex flex-col h-full">
