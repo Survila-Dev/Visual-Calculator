@@ -14,18 +14,21 @@ interface WSNodePortProps {
     mousePosition: {x: number, y: number},
 }
 
-export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged, mousePosition} :WSNodePortProps): JSX.Element {
+const nodeIdThresholdForNodesInDropDown = 1000
+
+export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positionStyle, parentBeingDragged, mousePosition}) => {
+
+    const dispatch = useAppDispatch();
 
     const portRef = React.useRef<HTMLDivElement | null>(null)
-    const [connected, changeConnected] = React.useState<boolean>(false)
+    const [isFullyConnected, changeIfFullyConnected] = React.useState<boolean>(false)
 
     const mouseConnectStatus = useAppSelector((state) => state.mouseConnectReducer)
     const listOfConnections = useAppSelector((state) => state.canvasStateReducers)
     const workfieldIsDragged = useAppSelector((state) => state.workfieldDragReducer.dragged)
 
-    const dispatch = useAppDispatch();
-
     React.useEffect(() => {
+        // Checks and updates the status of connection on every rerender
         let notConnected = true;
         for (let i = 0; i < listOfConnections.length; i++) {
             if (listOfConnections[i].firstNodeId === parentNodeId && listOfConnections[i].firstPortId === id) {
@@ -34,12 +37,13 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                 notConnected = false
             }
         }
-        changeConnected(!notConnected)
+        changeIfFullyConnected(!notConnected)
     })
 
     React.useEffect(() => {
         // Update the port positiong during dragging of the parent
-        if ((parentBeingDragged || workfieldIsDragged) && portRef.current) { // 
+        if ((parentBeingDragged || workfieldIsDragged) && portRef.current) {
+
             const rect = portRef.current.getBoundingClientRect()
             const newPosInput = {x: (rect.left + rect.right)/2, y: (rect.top + rect.bottom)/2}
 
@@ -53,16 +57,15 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
     }, [mousePosition])
 
     function preventDefaultReaction(e: React.FormEvent) {
-        e.preventDefault();
-        e.stopPropagation();
+        e.preventDefault()
+        e.stopPropagation()
     }
 
     function handleClick(e: React.FormEvent) {
-        e.preventDefault();
-        e.stopPropagation();
+        preventDefaultReaction(e)
 
-        if (connected) {
-            changeConnected(false)
+        if (isFullyConnected) {
+            changeIfFullyConnected(false)
             dispatch(canvasCurveActions.deleteConnection({
                 nodeId: parentNodeId,
                 portId: id
@@ -74,14 +77,13 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
             dispatch(workspacesStateActions.changeVariableAndTriggerRecalc({}))
 
         } else {
-            
 
             if (portRef.current) {
                 const rect = portRef.current.getBoundingClientRect()
                 const newPosInput = {x: (rect.left + rect.right)/2, y: (rect.top + rect.bottom)/2}
 
                 if (!mouseConnectStatus.firstClicked) {
-                    if (parentNodeId < 1000) {
+                    if (parentNodeId < nodeIdThresholdForNodesInDropDown) {
                         dispatch(mouseConnectActions.clickFirst({
                             nodeId: parentNodeId, portId: id, portPosition: newPosInput
                         }))
@@ -89,7 +91,7 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                     }
                 } else {
                     // create new connection
-                    // check if connection not to self and if the right side connects
+                    // check if connection not to self and if the right sides are being connected
                     let shouldConnect = true
                     shouldConnect = mouseConnectStatus.firstNodeId !== parentNodeId
                     if (id < firstRightPortId) {
@@ -101,7 +103,7 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                             shouldConnect = false
                         }
                     }
-                    if (parentNodeId >= 1000) {
+                    if (parentNodeId >= nodeIdThresholdForNodesInDropDown) {
                         shouldConnect = false
                     }
 
@@ -122,7 +124,7 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
                             secondNodeId: parentNodeId,
                             secondPortId: id,
                         }))
-                        changeConnected(true)
+                        changeIfFullyConnected(true)
                         dispatch(workspacesStateActions.changeVariableAndTriggerRecalc({}))
                     }
 
@@ -131,7 +133,7 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
         }
     }
 
-    const jsxElementActive = (
+    const jsxElementActive: JSX.Element = (
         <div
             id = {id as any as string}
             ref = {portRef}
@@ -142,7 +144,7 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
         >
         </div>
     )
-    const jsxElementNotActive = (
+    const jsxElementNotActive: JSX.Element = (
         <div
             id = {id as any as string}
             ref = {portRef}
@@ -156,8 +158,8 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
 
     return (
         <div>
-            {connected && jsxElementActive}
-            {!connected && jsxElementNotActive}
+            {isFullyConnected && jsxElementActive}
+            {!isFullyConnected && jsxElementNotActive}
         </div>
     )
 }
