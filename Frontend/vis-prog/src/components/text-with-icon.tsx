@@ -6,16 +6,17 @@ import { VscRepoForked } from "react-icons/vsc"
 import { HiVariable } from "react-icons/hi"
 import { MdOutput } from "react-icons/md"
 
-
 interface tittleWithIconInterface {
     title: string
 }
 
-export function TitleWithIcon({title}: tittleWithIconInterface) {
+const iconSize = 21
+const iconColor = "white"
 
-    let iconJSX = <div></div>
-    const iconSize = 21
-    const iconColor = "white"
+export const TitleWithIcon: React.FC<tittleWithIconInterface> = ({title}) => {
+
+    let iconJSX: JSX.Element = <div></div>
+    
     switch(title) {
         case "Variable":
             iconJSX = <HiVariable size = {iconSize} color = {iconColor}/>

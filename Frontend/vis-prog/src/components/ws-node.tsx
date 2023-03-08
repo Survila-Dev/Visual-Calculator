@@ -22,11 +22,12 @@ interface WSNodeParentProps {
 }[]
 }
 
-interface WSNodeChildProps {
+export interface WSNodeChildProps {
     WSNodeInput: WSNodeType,
     mousePosition: {x: number, y: number},
     fieldCOS: {x: number, y: number},
-    inDropDown: boolean
+    inDropDown: boolean,
+    key?: string
 }
 
 function convertPositionToStyleForPort(

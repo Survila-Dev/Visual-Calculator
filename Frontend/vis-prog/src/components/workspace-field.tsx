@@ -10,20 +10,21 @@ import {
     WSNodeAddition, WSNodeDivision, WSNodeMultiplication,
     WSNodeSubtraction, WSNodeConstant, WSNodeOutput, WSNodeFork } from "./ws-node-comp"
 import { Spinner } from "./sync-spinner"
+import { WSNodeChildProps } from "./ws-node"
 
 interface WorkspaceFieldProps {
     mousePosition: {x: number, y: number}
 }
 
-export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
+export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) => {
+
+    const dispatch = useAppDispatch()
 
     const [fieldCOS, changeFieldCOS] = React.useState<{x: number, y: number}>({x: 0, y:0})
     const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
 
-    const dispatch = useAppDispatch()
-    const workspacesStatus = useAppSelector((state) => state.workspaceStateReducers.workspaces)
     const listOfNodes: WSNodeType[] = useAppSelector((state) => {
         if (state.workspaceStateReducers.currentWS) {
             return state.workspaceStateReducers.currentWS.nodes
@@ -33,7 +34,7 @@ export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
     })
 
     React.useEffect(()=>{
-        
+        // Add event listener for key escape
         function handleCurveDragDrop(this: Window, e: KeyboardEvent) {
             if (e.code === "Escape") {
                 dispatch(mouseCurveTrackActions.stopTracking())
@@ -44,18 +45,17 @@ export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
         
         return () => {
             window.removeEventListener("keyup", handleCurveDragDrop)
-            
         }
-    },[])
+    }, [])
 
     React.useEffect(() => {
+        // When mouse moves update the field position
         if (fieldOnDrag) {
             changeFieldCOS({
                 x: fieldCOSBeforeDrag.x - (mousePosition.x - mousePosBeforeDrag.x),
                 y: fieldCOSBeforeDrag.y - (mousePosition.y - mousePosBeforeDrag.y),
             })
         }
-
     }, [mousePosition])
 
     function handleMouseDown(e: React.FormEvent) {
@@ -80,63 +80,30 @@ export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
                 <ControlBar mousePosition={mousePosition} fieldCOS = {fieldCOS} clickable = {true}/>
                 
                 {listOfNodes.map((curNode) => {
+
+                    const nodeProps: WSNodeChildProps = {
+                        WSNodeInput: curNode,
+                        mousePosition: mousePosition,
+                        fieldCOS: fieldCOS,
+                        inDropDown: false,
+                        key: (curNode.id as any) as string
+                    }
+
                     switch (curNode.type) {
                         case "addition":
-                            return <WSNodeAddition
-                                WSNodeInput = {curNode}
-                                key = {curNode.id}
-                                mousePosition = {mousePosition}
-                                fieldCOS = {fieldCOS}
-                                inDropDown = {false}
-                                />
+                            return <WSNodeAddition {...nodeProps}/>
                         case "substraction":
-                            return <WSNodeSubtraction
-                                WSNodeInput = {curNode}
-                                key = {curNode.id}
-                                mousePosition = {mousePosition}
-                                fieldCOS = {fieldCOS}
-                                inDropDown = {false}
-                                />
+                            return <WSNodeSubtraction  {...nodeProps}/>
                         case "multiplication":
-                            return <WSNodeMultiplication
-                                WSNodeInput = {curNode}
-                                key = {curNode.id}
-                                mousePosition = {mousePosition}
-                                fieldCOS = {fieldCOS}
-                                inDropDown = {false}
-                                />
+                            return <WSNodeMultiplication {...nodeProps}/>
                         case "division":
-                            return <WSNodeDivision
-                                WSNodeInput = {curNode}
-                                key = {curNode.id}
-                                mousePosition = {mousePosition}
-                                fieldCOS = {fieldCOS}
-                                inDropDown = {false}
-                                />
+                            return <WSNodeDivision {...nodeProps}/>
                         case "constant":
-                            return <WSNodeConstant
-                                WSNodeInput = {curNode}
-                                key = {curNode.id}
-                                mousePosition = {mousePosition}
-                                fieldCOS = {fieldCOS}
-                                inDropDown = {false}
-                                />
+                            return <WSNodeConstant {...nodeProps}/>
                         case "output":
-                            return <WSNodeOutput
-                                WSNodeInput = {curNode}
-                                key = {curNode.id}
-                                mousePosition = {mousePosition}
-                                fieldCOS = {fieldCOS}
-                                inDropDown = {false}
-                                />
+                            return <WSNodeOutput {...nodeProps}/>
                         case "fork":
-                            return <WSNodeFork
-                                WSNodeInput = {curNode}
-                                key = {curNode.id}
-                                mousePosition = {mousePosition}
-                                fieldCOS = {fieldCOS}
-                                inDropDown = {false}
-                                />
+                            return <WSNodeFork {...nodeProps}/>
                     }
                 })}
                 <BackCanvas mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>

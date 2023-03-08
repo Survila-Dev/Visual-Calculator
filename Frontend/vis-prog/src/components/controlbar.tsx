@@ -6,6 +6,7 @@ import {
     WSNodeSubtraction, WSNodeConstant, WSNodeOutput, WSNodeFork
     } from "./ws-node-comp"
 import { WSNodeType } from "../store/workspaces" 
+import { WSNodeChildProps } from "./ws-node"
 
 interface ControlBarProps {
     mousePosition: {x: number, y: number}
@@ -60,12 +61,13 @@ export const ControlBar: React.FC<ControlBarProps> = ({mousePosition, fieldCOS, 
             
                 {wsNodesInDropDown.map((curNode) => {
 
-                    const nodeProps = {
+                    const nodeProps: WSNodeChildProps = {
                         WSNodeInput: curNode,
-                        key: curNode.id,
                         mousePosition: mousePosition,
                         fieldCOS: fieldCOS,
-                        inDropDown: true}
+                        inDropDown: true,
+                        key: (curNode.id as any) as string
+                    }
                     
                     let outputComp = <div>Empty</div>
                     switch (curNode.type) {
