@@ -8,7 +8,7 @@ import { canvasCurveActions } from "../../store/canvas-curves"
 import { TitleWithIcon } from "../text-with-icon"
 
 import { RxCross2 } from "react-icons/rx"
-import { initRelativePosition } from "../../store/workspaces-subroutines/initial-nodes"
+import { initRelativePosition } from "../../store/workspaces-subroutines/nodes-for-dropdown"
 
 export interface WSNodeChildProps {
     WSNodeInput: WSNodeType,

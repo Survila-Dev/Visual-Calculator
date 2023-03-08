@@ -10,16 +10,18 @@ const calculationSubroutines = {
         if (Number(b) !== 0) {
             return Number(a) / Number(b)
         } else {
-            throw "Division by zero in calculation."
+            throw new Error("Division by zero in calculation.")
         }
         })
 }
 
-export const changeVariableAndTriggerRecalc
-    = (state: Workspaces, action: PayloadAction<{inputNodeId?: number, value?: number}>) => {
+//! The position of nodes within the array and the node ids are not the same!
+//! Because of that the actualNodeId is used and it entails the node index in the array.
+
+export const changeVariableAndTriggerRecalc = (state: Workspaces, action: PayloadAction<{inputNodeId?: number, value?: number}>) => {
 
     // recursive function to calculate the values
-    function calculationPropagation(nodeId: number): (number | null) {
+    const calculationPropagation = (nodeId: number): (number | null) => {
 
         const defaultOutputValue = 0
 
@@ -27,6 +29,7 @@ export const changeVariableAndTriggerRecalc
             const actualNodeId = findIdInNodeList(state.currentWS.nodes, nodeId)
 
             if (actualNodeId !== null) {
+
                 // check if all connections there and get actual connections id
                 const nodeType = state.currentWS.nodes[actualNodeId].type
                 let otherFirstNodeForCalc: (number | null) = null
@@ -38,7 +41,6 @@ export const changeVariableAndTriggerRecalc
                         otherFirstNodeForCalc = connection.otherNodeId
                         state.currentWS.nodes[actualNodeId].fullyConnected = true
                     } else {
-                        console.error("Either output or fork node does not find connection")
                         state.currentWS.nodes[actualNodeId].fullyConnected = false
                     }
                 } else if (nodeType !== "constant"){
@@ -49,7 +51,6 @@ export const changeVariableAndTriggerRecalc
                         otherSecondNodeForCalc = secondConnection.otherNodeId
                         state.currentWS.nodes[actualNodeId].fullyConnected = true
                     } else {
-                        console.error("A node with two input ports does not find connection")
                         state.currentWS.nodes[actualNodeId].fullyConnected = false
                     }
                 } 
@@ -95,7 +96,6 @@ export const changeVariableAndTriggerRecalc
                 }
             }
         }
-        console.error("Recalc went wrong.")
         return null
     }
 
