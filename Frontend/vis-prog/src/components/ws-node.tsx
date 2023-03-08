@@ -10,7 +10,6 @@ import { TitleWithIcon } from "./text-with-icon"
 
 import { RxCross2 } from "react-icons/rx"
 
-
 type WSNodeChildElement = ({ WSNodeInput, mousePosition, fieldCOS }: WSNodeChildProps) => JSX.Element
 
 interface WSNodeParentProps {
@@ -20,7 +19,7 @@ interface WSNodeParentProps {
         id: number,
         position: {side: "left" | "right", row: number},
         jsxInput: JSX.Element
-    }[]
+}[]
 }
 
 interface WSNodeChildProps {
@@ -159,7 +158,6 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
             e.stopPropagation()
             e.preventDefault()
             
-            //ToDo if in drop down dont update the position and trigger create new node with current position
             if (inDropDown) {
                 changeBeingDragged(false)
                 changeCurPos(initRelativePosition)
@@ -306,16 +304,16 @@ export const WSNode = ({type, title, listOfPorts}:WSNodeParentProps): WSNodeChil
                 ref = {refNode}
             >
                 {listOfPorts.map((curPort) => (
-                        <WSNodePort
-                            id = {curPort.id}
-                            key = {curPort.id}
-                            parentNodeId = {WSNodeInput.id}
-                            positionStyle = {convertPositionToStyleForPort("port", curPort.position)}
-                            parentBeingDragged = {isBeingDragged}
-                            mousePosition = {mousePosition}
-                        />
-                        )
-                    )}
+                    <WSNodePort
+                        id = {curPort.id}
+                        key = {curPort.id}
+                        parentNodeId = {WSNodeInput.id}
+                        positionStyle = {convertPositionToStyleForPort("port", curPort.position)}
+                        parentBeingDragged = {isBeingDragged}
+                        mousePosition = {mousePosition}
+                    />
+                    )
+                )}
                 {elementContent}
                 {backPanelJSX}
             </article>

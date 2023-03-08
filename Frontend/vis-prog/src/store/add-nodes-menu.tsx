@@ -4,7 +4,6 @@ export interface AddNodesMenuStateInterface {
     open: boolean
 }
 
-
 export const addNodesMenuSlice = createSlice({
     name: "addNodesMenuState",
     initialState: {open: false},

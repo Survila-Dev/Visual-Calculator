@@ -18,13 +18,11 @@ interface WorkspaceFieldProps {
 export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
 
     const [fieldCOS, changeFieldCOS] = React.useState<{x: number, y: number}>({x: 0, y:0})
-    
     const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
 
     const dispatch = useAppDispatch()
-
     const workspacesStatus = useAppSelector((state) => state.workspaceStateReducers.workspaces)
     const listOfNodes: WSNodeType[] = useAppSelector((state) => {
         if (state.workspaceStateReducers.currentWS) {
@@ -34,7 +32,6 @@ export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
         }
     })
 
-    // Create event listener for moving mouce and give this info to children
     React.useEffect(()=>{
         
         function handleCurveDragDrop(this: Window, e: KeyboardEvent) {
@@ -43,7 +40,6 @@ export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
                 dispatch(mouseConnectActions.clickSecond())
             }
         }
-
         window.addEventListener("keyup", handleCurveDragDrop)
         
         return () => {
@@ -51,8 +47,6 @@ export const WorkspaceField = ({mousePosition}: WorkspaceFieldProps) => {
             
         }
     },[])
-
-    
 
     React.useEffect(() => {
         if (fieldOnDrag) {

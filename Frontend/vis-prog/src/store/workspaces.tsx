@@ -153,14 +153,6 @@ const calculationSubroutines = {
         })
 }
 
-// "constant"
-// | "addition"
-// | "substraction"
-// | "multiplication"
-// | "division"
-// | "output"
-// | "fork"
-
 export const workspacesSlice = createSlice({
     name: "workspaces",
     initialState: workspacesInitValues,

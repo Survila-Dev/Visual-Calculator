@@ -26,8 +26,6 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
     const dispatch = useAppDispatch();
 
     React.useEffect(() => {
-        // Check if the port is connected via click on the connected port
-        // if (connected) {
         let notConnected = true;
         for (let i = 0; i < listOfConnections.length; i++) {
             if (listOfConnections[i].firstNodeId === parentNodeId && listOfConnections[i].firstPortId === id) {
@@ -37,11 +35,6 @@ export function WSNodePort({id, parentNodeId, positionStyle, parentBeingDragged,
             }
         }
         changeConnected(!notConnected)
-        // if (notConnected) {
-        //     changeConnected(false)
-        // } else {
-        //     changeConnected(true)
-        // }
     })
 
     React.useEffect(() => {

@@ -1,5 +1,5 @@
 import React from "react"
-import { useAppDispatch, useAppSelector } from "../store/index";
+import { useAppSelector } from "../store/index";
 import { canvasCurveActions } from "../store/canvas-curves"
 
 interface BackCanvasInteface {
@@ -7,7 +7,13 @@ interface BackCanvasInteface {
     fieldCOS: {x: number, y: number}
 }
 
-export function BackCanvas({mousePosition, fieldCOS} :BackCanvasInteface):JSX.Element {
+const defaultConnectionLineColor = '#1f2937'
+    const gridLineColor = '#1f2937'
+    const connectionLineThickness = 7.5
+    const gridLineThickness = 0.5
+    const backgroundGridSpacing = 150
+
+export const BackCanvas: React.FC<BackCanvasInteface> = ({mousePosition, fieldCOS}) => {
 
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
 
@@ -15,17 +21,10 @@ export function BackCanvas({mousePosition, fieldCOS} :BackCanvasInteface):JSX.El
     const trackMouse = useAppSelector((state) => state.mouseTrackReducer.track)
     const trackMouseFromPoint = useAppSelector((state) => state.mouseTrackReducer.startPoint)
 
-    const defaultConnectionLineColor = '#1f2937'
-    const gridLineColor = '#1f2937'
-    const connectionLineThickness = 7.5
-    const gridLineThickness = 0.5
-    const backgroundGridSpacing = 150
-
     function draw(drawToMouse: boolean = false, pointToDrawToMouse?: {x: number, y: number}) {
 
         let xOffset = 0
         let yOffset = 0
-        
         
         if (canvasRef.current) {
             const rect = canvasRef.current.getBoundingClientRect()
@@ -33,15 +32,19 @@ export function BackCanvas({mousePosition, fieldCOS} :BackCanvasInteface):JSX.El
             yOffset = -rect.top
         }
 
-        function drawGrid(
+        function drawBackgroundGrid(
             ctx: CanvasRenderingContext2D,
             fieldCOS: {x: number, y: number}) {
             if (canvasRef.current) {
-
+        
+                ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+                ctx.beginPath()
+                ctx.lineWidth = gridLineThickness
                 ctx.strokeStyle = gridLineColor
+
                 const noOfVerticalLines = Math.floor(canvasRef.current.width / backgroundGridSpacing)
                 const noOfHorizontalLines = Math.floor(canvasRef.current.height / backgroundGridSpacing)
-
+        
                 for (let i = 0; i<noOfVerticalLines+2; i++) {
                     ctx.moveTo(0 - (fieldCOS.x % backgroundGridSpacing) + i * backgroundGridSpacing, 0)
                     ctx.lineTo(0 - (fieldCOS.x % backgroundGridSpacing) + i * backgroundGridSpacing, canvasRef.current.height)
@@ -50,21 +53,26 @@ export function BackCanvas({mousePosition, fieldCOS} :BackCanvasInteface):JSX.El
                     ctx.moveTo(0, 0 - (fieldCOS.y % backgroundGridSpacing) + i * backgroundGridSpacing)
                     ctx.lineTo(canvasRef.current.width, 0 - (fieldCOS.y % backgroundGridSpacing) + i * backgroundGridSpacing)
                 }
+                ctx.stroke();
             }
         }
-
-        function drawSingleConnection(
+        
+        function drawSingleConnectionCurve(
             ctx: CanvasRenderingContext2D,
             point1: {x: number, y: number},
             point2: {x: number, y:number},
             color: string = defaultConnectionLineColor) {
 
+            ctx.beginPath()
+            ctx.lineWidth = connectionLineThickness;
+        
             ctx.strokeStyle = color;
             ctx.moveTo(point1.x + xOffset, point1.y + yOffset);
             ctx.bezierCurveTo(
                 (point1.x + point2.x)/2 + xOffset, point1.y + yOffset,
                 (point1.x + point2.x)/2 + xOffset, point2.y + yOffset,
                 point2.x + xOffset, point2.y + yOffset);
+            ctx.stroke();
             
         }
 
@@ -74,25 +82,15 @@ export function BackCanvas({mousePosition, fieldCOS} :BackCanvasInteface):JSX.El
             ctx = canvas.getContext('2d')
         }
         if (ctx && canvas) {
-            // drawing everything here
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // executing all drawing commands here
+            drawBackgroundGrid(ctx, fieldCOS)
 
-            ctx.beginPath()
-            ctx.lineWidth = gridLineThickness;
-            drawGrid(ctx, fieldCOS)
-            ctx.stroke();
-
-            ctx.beginPath()
-            ctx.lineWidth = connectionLineThickness;
-            
             listOfCurves.forEach((curCurve) => {
-                if (ctx) drawSingleConnection(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
+                if (ctx) drawSingleConnectionCurve(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
             )
-            
             if (drawToMouse && pointToDrawToMouse) {
-                drawSingleConnection(ctx, pointToDrawToMouse, mousePosition)
+                drawSingleConnectionCurve(ctx, pointToDrawToMouse, mousePosition)
             }
-            ctx.stroke();
         }
     }
 
