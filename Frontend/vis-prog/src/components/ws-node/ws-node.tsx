@@ -1,9 +1,9 @@
 import React from "react"
-import { WSNodeType } from "../../store/workspaces-subroutines/index-workspaces" 
+import { WSNodeType } from "../../store/workspaces-subroutines/types" 
 import { WSNodePort } from "./ws-node-port"
 import { useAppDispatch, useAppSelector } from "../../store"
 import { workspacesStateActions } from "../../store/workspaces-subroutines/index-workspaces"
-import { TypesOfWSNodes } from "../../store/workspaces-subroutines/index-workspaces"
+import { TypesOfWSNodes } from "../../store/workspaces-subroutines/types"
 import { canvasCurveActions } from "../../store/canvas-curves"
 import { TitleWithIcon } from "../text-with-icon"
 

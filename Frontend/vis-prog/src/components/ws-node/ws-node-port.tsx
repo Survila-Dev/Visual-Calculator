@@ -5,13 +5,14 @@ import { mouseConnectActions } from "../../store/mouse-connect";
 import { mouseCurveTrackActions } from "../../store/mouse-curve-track";
 import { workspacesStateActions } from "../../store/workspaces-subroutines/index-workspaces";
 import { firstRightPortId } from "./ws-node-comp";
+import { Coordinates2D } from "../../store/workspaces-subroutines/types";
 
 interface WSNodePortProps {
     id: number,
     parentNodeId: number,
     positionStyle: {top: string, left: string } | {top: string, right: string},
     parentBeingDragged: boolean,
-    mousePosition: {x: number, y: number},
+    mousePosition: Coordinates2D,
 }
 
 const nodeIdThresholdForNodesInDropDown = 1000

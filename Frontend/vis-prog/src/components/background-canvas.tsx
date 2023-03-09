@@ -1,6 +1,5 @@
 import React from "react"
 import { useAppSelector } from "../store/index";
-import { canvasCurveActions } from "../store/canvas-curves"
 
 interface BackCanvasInteface {
     mousePosition: {x: number, y: number},

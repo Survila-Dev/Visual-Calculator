@@ -5,7 +5,7 @@ import {
     WSNodeAddition, WSNodeDivision, WSNodeMultiplication,
     WSNodeSubtraction, WSNodeConstant, WSNodeOutput, WSNodeFork
     } from "./ws-node/ws-node-comp"
-import { WSNodeType } from "../store/workspaces-subroutines/index-workspaces" 
+import { WSNodeType } from "../store/workspaces-subroutines/types" 
 import { WSNodeChildProps } from "./ws-node/ws-node"
 
 interface ControlBarProps {

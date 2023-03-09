@@ -1,5 +1,5 @@
-import { Workspace, Workspaces, WSNodeType } from "./index-workspaces"
 import { initNodeAdd, initNodeConstant, initNodeDivision, initNodeFork, initNodeMultiply, initNodeOutput, initNodeSubstract } from "./nodes-for-dropdown"
+import { Workspace, Workspaces, WSNodeType } from "./types"
 
 export const initNode1: WSNodeType = {
     id: 0, type: "constant", connections: [], position: {x: 50, y: 180}, value: 12, fullyConnected: true

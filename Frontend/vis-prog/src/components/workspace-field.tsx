@@ -1,6 +1,6 @@
 import React from "react"
 import { ControlBar } from "../components/controlbar"
-import { WSNodeType } from "../store/workspaces-subroutines/index-workspaces"
+import { WSNodeType } from "../store/workspaces-subroutines/types"
 import { BackCanvas } from "./background-canvas"
 import { useAppDispatch, useAppSelector } from "../store/index"
 import { workfieldDragActions } from "../store/workfield-drag"

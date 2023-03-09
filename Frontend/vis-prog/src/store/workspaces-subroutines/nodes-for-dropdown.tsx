@@ -1,4 +1,4 @@
-import { WSNodeType } from "./index-workspaces"
+import { WSNodeType } from "./types"
 
 export const initRelativePosition = {x: 50, y: 0}
 export const initNodeConstant: WSNodeType = {

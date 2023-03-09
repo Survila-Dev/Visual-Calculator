@@ -1,9 +1,10 @@
 import React from "react"
 import { ImSpinner2 } from "react-icons/im"
+import { AsyncStatus } from "../store/workspaces-subroutines/types"
 
 interface SpinnerProps {
     show: boolean,
-    status: "success" | "idle" | "failure" | "not logged in"
+    status: "success" | "failure" | "idle" | "not logged in"
 }
 
 const spinnerSize = 15

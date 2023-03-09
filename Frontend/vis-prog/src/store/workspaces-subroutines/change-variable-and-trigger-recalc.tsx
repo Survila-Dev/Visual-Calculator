@@ -1,8 +1,8 @@
-import { CaseReducer, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from ".."
-import { findIdInNodeList, Workspaces, WSNodeType } from "./index-workspaces"
+import { PayloadAction } from "@reduxjs/toolkit"
+import { findIdInNodeList } from "./index-workspaces"
+import { Workspaces, CalculationSubroutines } from "./types"
 
-const calculationSubroutines = {
+const calculationSubroutines: CalculationSubroutines = {
     "addition": (a: number, b: number): number => Number(a) + Number(b),
     "substraction": (a: number, b: number): number => Number(a) - Number(b),
     "multiplication": (a: number, b: number): number => Number(a) * Number(b),
@@ -12,7 +12,10 @@ const calculationSubroutines = {
         } else {
             throw new Error("Division by zero in calculation.")
         }
-        })
+        }),
+    "fork": (a: number, b: number) => a,
+    "constant": (a: number, b: number) => a,
+    "output": (a: number, b: number) => a,
 }
 
 //! The position of nodes within the array and the node ids are not the same!

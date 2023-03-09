@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
-import { Workspace } from "./index-workspaces"
+import { Workspace } from "./types"
 
 // Thunks:
 export const updateWorkspacesForServer = createAsyncThunk(

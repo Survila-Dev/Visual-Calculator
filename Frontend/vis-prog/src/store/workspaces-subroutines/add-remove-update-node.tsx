@@ -1,5 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit"
-import { findIdInNodeList, Workspaces, WSNodeType } from "./index-workspaces"
+import { findIdInNodeList } from "./index-workspaces"
+import { Workspaces, WSNodeType } from "./types"
 
 export const removeWSNode = (state: Workspaces, action: PayloadAction<{nodeId: number}>) => {
             

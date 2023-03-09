@@ -1,5 +1,6 @@
 import { PayloadAction } from "@reduxjs/toolkit"
-import { findIdInNodeList, Workspaces } from "./index-workspaces"
+import { findIdInNodeList } from "./index-workspaces"
+import { Workspaces } from "./types"
 
 export const addNewPortConnection = (
     state: Workspaces,
