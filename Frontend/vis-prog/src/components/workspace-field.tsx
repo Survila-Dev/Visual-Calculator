@@ -1,6 +1,6 @@
 import React from "react"
 import { ControlBar } from "../components/controlbar"
-import { WSNodeType } from "../store/workspaces-subroutines/types"
+import { AsyncStatus, Workspace, WSNodeType } from "../store/workspaces-subroutines/types"
 import { BackCanvas } from "./background-canvas"
 import { useAppDispatch, useAppSelector } from "../store/index"
 import { workfieldDragActions } from "../store/workfield-drag"
@@ -11,6 +11,8 @@ import {
     WSNodeSubtraction, WSNodeConstant, WSNodeOutput, WSNodeFork } from "./ws-node/ws-node-comp"
 import { Spinner } from "./sync-spinner"
 import { WSNodeChildProps } from "./ws-node/ws-node"
+import { workspacesStateActions } from "../store/workspaces-subroutines/index-workspaces"
+import { uploadWorkspaceToBackend } from "../store/workspaces-subroutines/workspaces-thunks"
 
 interface WorkspaceFieldProps {
     mousePosition: {x: number, y: number}
@@ -25,6 +27,8 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
 
+    const curWorkspace: Workspace = useAppSelector((state) => state.workspaceStateReducers.currentWS)
+    const statusPost: AsyncStatus = useAppSelector((state) => state.workspaceStateReducers.statusPost)
     const listOfNodes: WSNodeType[] = useAppSelector((state) => {
         if (state.workspaceStateReducers.currentWS) {
             return state.workspaceStateReducers.currentWS.nodes
@@ -39,6 +43,10 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
             if (e.code === "Escape") {
                 dispatch(mouseCurveTrackActions.stopTracking())
                 dispatch(mouseConnectActions.clickSecond())
+            }
+            if (e.code === "Space") {
+                console.log("hit space")
+                dispatch(uploadWorkspaceToBackend(curWorkspace))
             }
         }
         window.addEventListener("keyup", handleCurveDragDrop)
@@ -107,7 +115,7 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
                     }
                 })}
                 <BackCanvas mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
-                <Spinner show = {true} status = {"not logged in"} />
+                <Spinner show = {true} status = {statusPost} />
             </div>
         </section>
     )

@@ -14,23 +14,26 @@ export const initNode4: WSNodeType = {
     id: 3, type: "multiplication", connections: [], position: {x: 300, y: 400}, value: 0, fullyConnected: false
 }
 
+export const dropDownNodes = [
+    initNodeConstant,
+    initNodeOutput,
+    initNodeAdd,
+    initNodeSubstract,
+    initNodeMultiply,
+    initNodeDivision,
+    initNodeFork
+]
+
 const initWorkspace: Workspace = {
     name: "First workspace",
     id: 0,
     nodes: [],
-    initNodes: [
-        initNodeConstant,
-        initNodeOutput,
-        initNodeAdd,
-        initNodeSubstract,
-        initNodeMultiply,
-        initNodeDivision,
-        initNodeFork
-    ],
+    initNodes: [],
     triggerCalc: false
 }
 
 export const workspacesInitValues: Workspaces = {
     currentWS: initWorkspace,
-    status: "idle"
+    statusGet: "idle",
+    statusPost: "idle"
 }

@@ -4,8 +4,9 @@ import { AsyncStatus } from "../store/workspaces-subroutines/types"
 
 interface SpinnerProps {
     show: boolean,
-    status: "success" | "failure" | "idle" | "not logged in"
+    status: AsyncStatus
 }
+
 
 const spinnerSize = 15
 
@@ -15,10 +16,10 @@ export const Spinner: React.FC<SpinnerProps> = ({show, status}) => {
 
     if (show) {
         switch (status) {
-            case "success":
+            case "idle":
                 spinnerContent = <div className ="absolute bottom-0 px-2 right-0 text-white bg-green-600">Successful sync. to cloud</div>
                 break
-            case "idle":
+            case "loading":
                 spinnerContent = (
                     <div className ="absolute bottom-0 px-2 right-0 text-white bg-yellow-600 z-10 flex flex-row gap-2 items-center">
                         <ImSpinner2 className = "animate-spin" size = {spinnerSize} color = {"white"}/>
@@ -26,7 +27,7 @@ export const Spinner: React.FC<SpinnerProps> = ({show, status}) => {
                     </div>
                     )
                 break
-            case "failure":
+            case "failed":
                 spinnerContent = <div className ="absolute bottom-0 px-2 right-0 text-white bg-red-600">Failed sync. to cloud</div>
                 break
             case "not logged in":

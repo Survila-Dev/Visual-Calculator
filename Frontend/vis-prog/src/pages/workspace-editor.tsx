@@ -4,15 +4,22 @@ import { Navbar } from "../components/navbar"
 import { Footer } from "../components/footer"
 import { WorkspaceField } from "../components/workspace-field"
 import { addNodesMenuActions } from "../store/add-nodes-menu"
-import { useAppDispatch } from "../store"
+import { useAppDispatch, useAppSelector } from "../store"
 import { WorkspaceLoader } from "../components/workspace-loader"
+import { workspacesSlice } from "../store/workspaces-subroutines/index-workspaces"
+import { getWorkspaceFromBackend } from "../store/workspaces-subroutines/workspaces-thunks"
 
 export const WorkspaceEditor: React.FC = () => {
     
     const dispatch = useAppDispatch()
 
     const [mousePosition, changeMousePosition] = React.useState<{x: number, y: number}>({x:0, y:0})
-    const waitingForWorkfild = false
+    const getWorkspaceStatus = useAppSelector((state) => state.workspaceStateReducers.statusGet)
+    const waitingForWorkfield = getWorkspaceStatus === "loading"
+
+    React.useEffect(() => {
+        dispatch(getWorkspaceFromBackend())
+    }, [])
 
     React.useEffect(() => {
         function handleMouseMove(this: Window, e: MouseEvent) {
@@ -32,8 +39,8 @@ export const WorkspaceEditor: React.FC = () => {
     return (
         <section className="h-screen flex flex-col overflow-hidden" onMouseDown = {handleAddNotesMenuClose}>
             <Navbar/>
-            {(!waitingForWorkfild) && <WorkspaceField mousePosition = {mousePosition}/>}
-            {waitingForWorkfild && <WorkspaceLoader/>}
+            {(!waitingForWorkfield) && <WorkspaceField mousePosition = {mousePosition}/>}
+            {waitingForWorkfield && <WorkspaceLoader/>}
             <Footer/>
         </section>
     )

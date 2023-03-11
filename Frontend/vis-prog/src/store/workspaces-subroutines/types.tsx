@@ -1,5 +1,5 @@
 export type Coordinates2D = {x: number, y: number}
-export type AsyncStatus = "idle" | "loading" | "failed"
+export type AsyncStatus = "idle" | "loading" | "failed" | "not logged in"
 
 export type TypesOfWSNodes =
     | "constant"
@@ -31,7 +31,8 @@ export interface Workspace {
 
 export interface Workspaces {
     currentWS: Workspace,
-    status: AsyncStatus,
+    statusGet: AsyncStatus,
+    statusPost: AsyncStatus
 }
 
 export type CalculationSubroutines = {
