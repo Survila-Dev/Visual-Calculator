@@ -54,39 +54,78 @@ export const getWorkspaceFromBackend = createAsyncThunk(
                             id
                             name
                             nodes {
-                            id
-                            type
-                            position {
+                              id
+                              type
+                              position {
                                 x
                                 y
+                              }
+                              connections {
+                                portSelf
+                                otherNodeId
+                                portOther
+                              }
+                              value
+                              fullyConnected
                             }
-                            connections {
-                                id
-                            }
-                            value
-                            fullyConnected
-                            }
-                        }
-                    }
+                          }
                     `
             }
         })
-        const newWorkspace: Workspace = result.data.data.currentWorkspace
+        
+        const newWorkspace = result.data.data.currentWorkspace
         newWorkspace.initNodes = dropDownNodes
+        // newWorkspace.nodes = []
+        console.log(newWorkspace)
         return newWorkspace
     }
 )
 
+const removeQuotesFromJSONStringifyKeys = (inputText: string) => {
+    let outputText: string = ""
+    let removeQuote = true
+    for (let i = 0; i < inputText.length; i++) {
+        if (inputText[i] === "{" || inputText[i] === ",") {
+            removeQuote = true
+        }
+        if (inputText[i] === ":") {
+            removeQuote = false
+        }
+        if (!(removeQuote && inputText[i] === '"')) {
+            outputText += inputText[i]
+        }
+    }
+    return outputText
+} 
+
 export const uploadWorkspaceToBackend = createAsyncThunk(
     "workspace/uploadWholeWorkspaceToBackend",
     async (curWorkspace: Workspace, thunkAPI) => {
+
+        const wsToUpload = {
+            id: curWorkspace.id,
+            name: curWorkspace.name,
+            nodes: curWorkspace.nodes
+        }
+
+        for (let i = 0; i < wsToUpload.nodes.length; i++) {
+            wsToUpload.nodes[i].value = wsToUpload.nodes[i].value as string 
+        }
+
+        console.log(`
+        mutation {
+            updateWholeWorkspace(workspace: ${removeQuotesFromJSONStringifyKeys(JSON.stringify(wsToUpload))}) {
+                id
+            }
+        }
+        `)
         const result = await axios({
             url: BACKENDURL,
             method: "post",
             data: {
                 query: `
-                    mutation {
-                        updateWholeWorkspace(workspace: "${JSON.stringify(curWorkspace)}") {
+                    mutation updateWS {
+                        updateWholeWorkspace(workspace: ${removeQuotesFromJSONStringifyKeys(JSON.stringify(wsToUpload))}) {
                             id
                         }
                     }

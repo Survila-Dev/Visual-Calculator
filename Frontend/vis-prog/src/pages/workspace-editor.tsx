@@ -7,7 +7,7 @@ import { addNodesMenuActions } from "../store/add-nodes-menu"
 import { useAppDispatch, useAppSelector } from "../store"
 import { WorkspaceLoader } from "../components/workspace-loader"
 import { workspacesSlice } from "../store/workspaces-subroutines/index-workspaces"
-import { getWorkspaceFromBackend } from "../store/workspaces-subroutines/workspaces-thunks"
+import { getWorkspaceFromBackend, uploadWorkspaceToBackend } from "../store/workspaces-subroutines/workspaces-thunks"
 
 export const WorkspaceEditor: React.FC = () => {
     
@@ -16,8 +16,17 @@ export const WorkspaceEditor: React.FC = () => {
     const [mousePosition, changeMousePosition] = React.useState<{x: number, y: number}>({x:0, y:0})
     const getWorkspaceStatus = useAppSelector((state) => state.workspaceStateReducers.statusGet)
     const waitingForWorkfield = getWorkspaceStatus === "loading"
+    const curWorkspace = useAppSelector((state) => state.workspaceStateReducers.currentWS)
+
+    const [triggerUpload, changeTriggerUpload] = React.useState<boolean>(false)
 
     React.useEffect(() => {
+        console.log(curWorkspace)
+        // dispatch(uploadWorkspaceToBackend(curWorkspace))
+    }, [triggerUpload])
+
+    React.useEffect(() => {
+        console.log("Getting workspace from backend")
         dispatch(getWorkspaceFromBackend())
     }, [])
 
@@ -25,12 +34,19 @@ export const WorkspaceEditor: React.FC = () => {
         function handleMouseMove(this: Window, e: MouseEvent) {
             changeMousePosition({x: e.clientX, y: e.clientY})
         }
+        function handleSyncButtom(this: Window, e: KeyboardEvent) {
+            if (e.code === "Space") {
+                changeTriggerUpload((cur) => !cur)
+            }
+        }
 
         window.addEventListener("mousemove", handleMouseMove)
+        window.addEventListener("keyup", handleSyncButtom)
         return () => {
             window.removeEventListener("mousemove", handleMouseMove)
+            window.removeEventListener("keyup", handleSyncButtom)
         }
-    })
+    }, [])
 
     const handleAddNotesMenuClose = (e: React.FormEvent) => {
         dispatch(addNodesMenuActions.closeMenu())

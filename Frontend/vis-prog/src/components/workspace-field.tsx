@@ -26,9 +26,10 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
     const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
+    
 
-    const curWorkspace: Workspace = useAppSelector((state) => state.workspaceStateReducers.currentWS)
     const statusPost: AsyncStatus = useAppSelector((state) => state.workspaceStateReducers.statusPost)
+    const curWorkspace: Workspace = useAppSelector((state) => state.workspaceStateReducers.currentWS)
     const listOfNodes: WSNodeType[] = useAppSelector((state) => {
         if (state.workspaceStateReducers.currentWS) {
             return state.workspaceStateReducers.currentWS.nodes
@@ -37,22 +38,21 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
         }
     })
 
+    
+
+    function handleKeyDown(this: Window, e: KeyboardEvent) {
+        if (e.code === "Escape") {
+            dispatch(mouseCurveTrackActions.stopTracking())
+            dispatch(mouseConnectActions.clickSecond())
+        }
+    }
+
     React.useEffect(()=>{
         // Add event listener for key escape
-        function handleCurveDragDrop(this: Window, e: KeyboardEvent) {
-            if (e.code === "Escape") {
-                dispatch(mouseCurveTrackActions.stopTracking())
-                dispatch(mouseConnectActions.clickSecond())
-            }
-            if (e.code === "Space") {
-                console.log("hit space")
-                dispatch(uploadWorkspaceToBackend(curWorkspace))
-            }
-        }
-        window.addEventListener("keyup", handleCurveDragDrop)
+        window.addEventListener("keyup", handleKeyDown)
         
         return () => {
-            window.removeEventListener("keyup", handleCurveDragDrop)
+            window.removeEventListener("keyup", handleKeyDown)
         }
     }, [])
 
