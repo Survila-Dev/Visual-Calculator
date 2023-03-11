@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
 import { Workspace } from "./types"
+import axios from "axios"
 
 // Thunks:
 export const updateWorkspacesForServer = createAsyncThunk(
@@ -18,9 +19,36 @@ export const getWorkspacesForOverview = createAsyncThunk(
     }
 )
 
-export const getSingleWorkspace = createAsyncThunk(
+export const getCurrentWorkspace = createAsyncThunk(
     "workspace/getSingleWorkspace",
     async () => {
+        const curWorkspace = axios({
+            url: process.env.BACKENDURL,
+            method: "get",
+            data: {
+                query: `
+                    {
+                        currentWorkspace {
+                            id
+                            name
+                            nodes {
+                            id
+                            type
+                            position {
+                                x
+                                y
+                            }
+                            connections {
+                                id
+                            }
+                            value
+                            fullyConnected
+                            }
+                        }
+                    }
+                    `
+            }
+        })
         //ToDO Get a Workspace object from server and return it
     }
 )

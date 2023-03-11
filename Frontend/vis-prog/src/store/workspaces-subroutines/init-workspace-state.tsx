@@ -17,7 +17,7 @@ export const initNode4: WSNodeType = {
 const initWorkspace: Workspace = {
     name: "First workspace",
     id: 0,
-    nodes: [initNode1, initNode2, initNode3, initNode4],
+    nodes: [],
     initNodes: [
         initNodeConstant,
         initNodeOutput,
