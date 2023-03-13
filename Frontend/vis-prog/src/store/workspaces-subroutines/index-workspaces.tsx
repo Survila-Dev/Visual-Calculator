@@ -41,7 +41,8 @@ export const workspacesSlice = createSlice({
             state.statusGet = "loading"
         })
         builder.addCase(getWorkspaceFromBackend.fulfilled, (state, action) => {
-            state.currentWS = action.payload
+            state.currentWS = action.payload.workspace
+            state.currentCurveConnections = action.payload.curveConnections
             state.statusGet = "idle"
         })
         builder.addCase(getWorkspaceFromBackend.rejected, (state, action) => {

@@ -23,6 +23,12 @@ export const curveConnectionsSlice = createSlice({
     name: "curveConnections",
     initialState: initCurveConnections,
     reducers: {
+        updateFromWorkspaceState(
+            state,
+            action: PayloadAction<CurveConnection[]>
+        ) {
+            state = action.payload
+        },
         updatePosition(
             state,
             action: PayloadAction<{nodeId: number, portId: number, newPos: {x: number, y:number}}>) {

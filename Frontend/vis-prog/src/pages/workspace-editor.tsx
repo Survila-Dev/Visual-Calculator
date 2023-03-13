@@ -18,6 +18,7 @@ export const WorkspaceEditor: React.FC = () => {
     const getWorkspaceStatus = useAppSelector((state) => state.workspaceStateReducers.statusGet)
     const waitingForWorkfield = getWorkspaceStatus === "loading"
     const curWorkspace = useAppSelector((state) => state.workspaceStateReducers.currentWS)
+    const curConnections = useAppSelector((state) => state.canvasStateReducers)
 
     const [triggerUpload, changeTriggerUpload] = React.useState<boolean>(false)
 
@@ -26,7 +27,7 @@ export const WorkspaceEditor: React.FC = () => {
             updateSkipFirstEvalForWSUpload(false)
         } else {
             console.log("Uploading workspace:")
-            dispatch(uploadWorkspaceToBackend(curWorkspace))
+            dispatch(uploadWorkspaceToBackend({curWorkspace: curWorkspace, curveConnections: curConnections }))
         }
         
     }, [triggerUpload])

@@ -1,3 +1,5 @@
+import { CurveConnection } from "../canvas-curves"
+
 export type Coordinates2D = {x: number, y: number}
 export type AsyncStatus = "idle" | "loading" | "failed" | "not logged in"
 
@@ -38,7 +40,8 @@ export interface Workspace {
 export interface Workspaces {
     currentWS: Workspace,
     statusGet: AsyncStatus,
-    statusPost: AsyncStatus
+    statusPost: AsyncStatus,
+    currentCurveConnections?: CurveConnection[]
 }
 
 export type CalculationSubroutines = {

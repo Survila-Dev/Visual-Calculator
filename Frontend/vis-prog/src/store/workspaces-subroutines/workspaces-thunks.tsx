@@ -4,6 +4,7 @@ import axios from "axios"
 
 import { workspacesStateActions } from "./index-workspaces"
 import { dropDownNodes } from "./init-workspace-state"
+import { CurveConnection, CurveConnectionList } from "../canvas-curves"
 
 const BACKENDURL = "http://localhost:4000/"
 
@@ -69,18 +70,44 @@ export const getWorkspaceFromBackend = createAsyncThunk(
                             }
                             value
                             fullyConnected
+                            
                             }
+                            curveConnections {
+                                firstNodeId
+                                firstPortId
+                                secondNodeId
+                                secondPortId
+                                firstPortPosition {
+                                    x
+                                    y
+                                }
+                                secondPortPosition {
+                                    x
+                                    y
+                                }
+                            }
+                            
                         }
                     }
                     `
             }
         })
+
+        // firstNodeId: { type: new GraphQLNonNull(GraphQLInt) },
+        // firstPortId: { type: new GraphQLNonNull(GraphQLInt) },
+        // secondNodeId: { type: new GraphQLNonNull(GraphQLInt) },
+        // secondPortId: { type: new GraphQLNonNull(GraphQLInt) },
+        // firstPortPosition: { type: PositionType },
+        // secondPortPosition: { type: PositionType },
         
         const newWorkspace = result.data.data.currentWorkspace
         newWorkspace.initNodes = dropDownNodes
+        const curConnections = JSON.parse(JSON.stringify(newWorkspace.curveConnections))
+        delete newWorkspace.curveConnections
         // newWorkspace.nodes = []
         console.log(newWorkspace)
-        return newWorkspace
+        console.log(curConnections)
+        return {workspace: newWorkspace, curveConnections: curConnections}
     }
 )
 
@@ -105,12 +132,13 @@ const removeQuotesFromJSONStringifyKeys = (inputText: string) => {
 
 export const uploadWorkspaceToBackend = createAsyncThunk(
     "workspace/uploadWholeWorkspaceToBackend",
-    async (curWorkspace: Workspace, thunkAPI) => {
+    async (input: {curWorkspace: Workspace, curveConnections: CurveConnection[]}, thunkAPI) => {
 
         const wsToUpload = {
-            id: curWorkspace.id,
-            name: curWorkspace.name,
-            nodes: JSON.parse(JSON.stringify(curWorkspace.nodes))
+            id: input.curWorkspace.id,
+            name: input.curWorkspace.name,
+            nodes: JSON.parse(JSON.stringify(input.curWorkspace.nodes)),
+            curveConnections: JSON.parse(JSON.stringify(input.curveConnections))
         }
 
         for (let i = 0; i < wsToUpload.nodes.length; i++) {
