@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
-import { curveConnectionsSlice } from "./canvas-curves"
+// import { curveConnectionsSlice } from "./canvas-curves"
 import { mouseConnectSlice } from "./mouse-connect";
 import { workspacesSlice } from "./workspaces-subroutines/index-workspaces"
 import { mouseCurveTrackSlice } from "./mouse-curve-track";
@@ -16,7 +16,7 @@ export interface UserInfo {
 export const store = configureStore({
     reducer: {
         workspaceStateReducers: workspacesSlice.reducer,
-        canvasStateReducers: curveConnectionsSlice.reducer,
+        // canvasStateReducers: curveConnectionsSlice.reducer,
         mouseConnectReducer: mouseConnectSlice.reducer,
         mouseTrackReducer: mouseCurveTrackSlice.reducer,
         workfieldDragReducer: workfieldDragSlice.reducer,

@@ -21,6 +21,12 @@ export const findIdInNodeList = (nodeList: WSNodeType[], idToFind: number) => {
     }
 }
 
+const checkIfInputValidAndEval = (input: any, evalFunction: Function) => {
+    if (input) {
+        evalFunction()
+    }
+}
+
 export const workspacesSlice = createSlice({
     name: "workspaces",
     initialState: workspacesInitValues,
@@ -33,7 +39,58 @@ export const workspacesSlice = createSlice({
         updateWSNodePosition,
         updateWorkspace,
         updateWorkspacesStatusGet,
-        updateWorkspacesStatusPost
+        updateWorkspacesStatusPost,
+        
+        updatePosition(
+            state,
+            action: PayloadAction<{nodeId: number, portId: number, newPos: {x: number, y:number}}>) {
+            
+            if (state.currentCurveConnections) {
+                for (let i = 0; i < state.currentCurveConnections.length; i++) {
+                    if (state.currentCurveConnections[i].firstNodeId === action.payload.nodeId && state.currentCurveConnections[i].firstPortId === action.payload.portId) {
+                        state.currentCurveConnections[i].firstPortPosition = action.payload.newPos
+                    } else if (state.currentCurveConnections[i].secondNodeId === action.payload.nodeId && state.currentCurveConnections[i].secondPortId === action.payload.portId){
+                        state.currentCurveConnections[i].secondPortPosition = action.payload.newPos
+                    }
+                }
+            }
+            
+        },
+        addNewConnection(
+            state,
+            action: PayloadAction<{
+                firstNodeId: number, firstPortId: number, 
+                secondNodeId: number, secondPortId: number,
+                firstPortPos: {x: number, y:number},
+                secondPortPos: {x: number, y:number}}>) {
+
+            if (state.currentCurveConnections) {
+                state.currentCurveConnections.push({
+                    firstNodeId: action.payload.firstNodeId ,
+                    firstPortId: action.payload.firstPortId,
+                    secondNodeId: action.payload.secondNodeId,
+                    secondPortId: action.payload.secondPortId,
+                    firstPortPosition: action.payload.firstPortPos,
+                    secondPortPosition: action.payload.secondPortPos
+                })
+            }
+
+        },
+        deleteConnection(
+            state,
+            action: PayloadAction<{
+                nodeId: number, portId: number}>){
+
+            if (state.currentCurveConnections) {
+                for (let i = state.currentCurveConnections.length-1; i >= 0; i--) {
+                    if (state.currentCurveConnections[i].firstNodeId === action.payload.nodeId && state.currentCurveConnections[i].firstPortId === action.payload.portId) {
+                        state.currentCurveConnections.splice(i, 1)
+                    } else if (state.currentCurveConnections[i].secondNodeId === action.payload.nodeId && state.currentCurveConnections[i].secondPortId === action.payload.portId){
+                        state.currentCurveConnections.splice(i, 1)
+                    }
+                }
+            }
+        }
     },
     extraReducers: (builder) => {
         //ToDo different handling of the three async function

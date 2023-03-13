@@ -16,7 +16,7 @@ export const BackCanvas: React.FC<BackCanvasInteface> = ({mousePosition, fieldCO
 
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
 
-    const listOfCurves = useAppSelector((state) => state.canvasStateReducers)
+    const listOfCurves = useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections)
     const trackMouse = useAppSelector((state) => state.mouseTrackReducer.track)
     const trackMouseFromPoint = useAppSelector((state) => state.mouseTrackReducer.startPoint)
 
@@ -83,10 +83,11 @@ export const BackCanvas: React.FC<BackCanvasInteface> = ({mousePosition, fieldCO
         if (ctx && canvas) {
             // executing all drawing commands here
             drawBackgroundGrid(ctx, fieldCOS)
-
-            listOfCurves.forEach((curCurve) => {
-                if (ctx) drawSingleConnectionCurve(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
-            )
+            if (listOfCurves) {
+                listOfCurves.forEach((curCurve) => {
+                    if (ctx) drawSingleConnectionCurve(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}
+                )
+            }
             if (drawToMouse && pointToDrawToMouse) {
                 drawSingleConnectionCurve(ctx, pointToDrawToMouse, mousePosition)
             }

@@ -4,7 +4,7 @@ import { WSNodePort } from "./ws-node-port"
 import { useAppDispatch, useAppSelector } from "../../store"
 import { workspacesStateActions } from "../../store/workspaces-subroutines/index-workspaces"
 import { TypesOfWSNodes } from "../../store/workspaces-subroutines/types"
-import { canvasCurveActions } from "../../store/canvas-curves"
+// import { canvasCurveActions } from "../../store/canvas-curves"
 import { TitleWithIcon } from "../text-with-icon"
 
 import { RxCross2 } from "react-icons/rx"
@@ -182,7 +182,7 @@ export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChi
             e.preventDefault()
 
             for (let i = 0; i < 4; i++) {
-                dispatch(canvasCurveActions.deleteConnection({nodeId: WSNodeInput.id, portId: i}))
+                dispatch(workspacesStateActions.deleteConnection({nodeId: WSNodeInput.id, portId: i}))
                 dispatch(workspacesStateActions.deletePortConnection({nodeId: WSNodeInput.id, portId: i}))
             }
             

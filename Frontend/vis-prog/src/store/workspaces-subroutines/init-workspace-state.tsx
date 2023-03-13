@@ -35,5 +35,6 @@ const initWorkspace: Workspace = {
 export const workspacesInitValues: Workspaces = {
     currentWS: initWorkspace,
     statusGet: "idle",
-    statusPost: "idle"
+    statusPost: "idle",
+    currentCurveConnections: []
 }

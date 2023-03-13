@@ -1,6 +1,6 @@
 import React from "react"
 import { useAppDispatch, useAppSelector } from "../../store/index";
-import { canvasCurveActions } from "../../store/canvas-curves"
+// import { canvasCurveActions } from "../../store/canvas-curves"
 import { mouseConnectActions } from "../../store/mouse-connect";
 import { mouseCurveTrackActions } from "../../store/mouse-curve-track";
 import { workspacesStateActions } from "../../store/workspaces-subroutines/index-workspaces";
@@ -25,17 +25,19 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
     const [isFullyConnected, changeIfFullyConnected] = React.useState<boolean>(false)
 
     const mouseConnectStatus = useAppSelector((state) => state.mouseConnectReducer)
-    const listOfConnections = useAppSelector((state) => state.canvasStateReducers)
+    const listOfConnections = useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections)
     const workfieldIsDragged = useAppSelector((state) => state.workfieldDragReducer.dragged)
 
     React.useEffect(() => {
         // Checks and updates the status of connection on every rerender
         let notConnected = true;
-        for (let i = 0; i < listOfConnections.length; i++) {
-            if (listOfConnections[i].firstNodeId === parentNodeId && listOfConnections[i].firstPortId === id) {
-                notConnected = false
-            } else if (listOfConnections[i].secondNodeId === parentNodeId && listOfConnections[i].secondPortId === id) {
-                notConnected = false
+        if (listOfConnections) {
+            for (let i = 0; i < listOfConnections.length; i++) {
+                if (listOfConnections[i].firstNodeId === parentNodeId && listOfConnections[i].firstPortId === id) {
+                    notConnected = false
+                } else if (listOfConnections[i].secondNodeId === parentNodeId && listOfConnections[i].secondPortId === id) {
+                    notConnected = false
+                }
             }
         }
         changeIfFullyConnected(!notConnected)
@@ -48,7 +50,7 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
             const rect = portRef.current.getBoundingClientRect()
             const newPosInput = {x: (rect.left + rect.right)/2, y: (rect.top + rect.bottom)/2}
 
-            dispatch(canvasCurveActions.updatePosition({
+            dispatch(workspacesStateActions.updatePosition({
                     nodeId: parentNodeId,
                     portId: id,
                     newPos: newPosInput
@@ -67,7 +69,7 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
 
         if (isFullyConnected) {
             changeIfFullyConnected(false)
-            dispatch(canvasCurveActions.deleteConnection({
+            dispatch(workspacesStateActions.deleteConnection({
                 nodeId: parentNodeId,
                 portId: id
             }))
@@ -109,7 +111,7 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
                     }
 
                     if (shouldConnect) {
-                        dispatch(canvasCurveActions.addNewConnection({
+                        dispatch(workspacesStateActions.addNewConnection({
                             firstNodeId: mouseConnectStatus.firstNodeId,
                             firstPortId: mouseConnectStatus.firstPortId,
                             secondNodeId: parentNodeId,

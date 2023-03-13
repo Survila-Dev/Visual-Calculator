@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../store"
 import { WorkspaceLoader } from "../components/workspace-loader"
 import { workspacesSlice } from "../store/workspaces-subroutines/index-workspaces"
 import { getWorkspaceFromBackend, uploadWorkspaceToBackend } from "../store/workspaces-subroutines/workspaces-thunks"
+// import { canvasCur@veActions } from "../store/canvas-curves"
 
 export const WorkspaceEditor: React.FC = () => {
     
@@ -18,7 +19,9 @@ export const WorkspaceEditor: React.FC = () => {
     const getWorkspaceStatus = useAppSelector((state) => state.workspaceStateReducers.statusGet)
     const waitingForWorkfield = getWorkspaceStatus === "loading"
     const curWorkspace = useAppSelector((state) => state.workspaceStateReducers.currentWS)
-    const curConnections = useAppSelector((state) => state.canvasStateReducers)
+    const curveConnectionsFromWSState = useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections)
+    const curConnections = useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections)
+    const [triggerSyncBetweenStates, updateTriggerSyncBetweenStates] = React.useState<boolean>(false)
 
     const [triggerUpload, changeTriggerUpload] = React.useState<boolean>(false)
 
@@ -27,7 +30,11 @@ export const WorkspaceEditor: React.FC = () => {
             updateSkipFirstEvalForWSUpload(false)
         } else {
             console.log("Uploading workspace:")
-            dispatch(uploadWorkspaceToBackend({curWorkspace: curWorkspace, curveConnections: curConnections }))
+            if (curConnections) {
+                dispatch(uploadWorkspaceToBackend({curWorkspace: curWorkspace, curveConnections: curConnections }))
+            } else {
+                dispatch(uploadWorkspaceToBackend({curWorkspace: curWorkspace, curveConnections: [] }))
+            }
         }
         
     }, [triggerUpload])
@@ -35,7 +42,17 @@ export const WorkspaceEditor: React.FC = () => {
     React.useEffect(() => {
         console.log("Getting workspace from backend")
         dispatch(getWorkspaceFromBackend())
+        // console.log("Trigger sync.")
+        // updateTriggerSyncBetweenStates((cur) => !cur)
     }, [])
+
+    // React.useEffect(() => {
+    //     console.log("Updating curveConnection state")
+    //     console.log(curveConnectionsFromWSState)
+    //     if (curveConnectionsFromWSState) {
+    //         dispatch(canvasCurveActions.updateFromWorkspaceState(curveConnectionsFromWSState))
+    //     }
+    // }, [triggerSyncBetweenStates])
 
     React.useEffect(() => {
         function handleMouseMove(this: Window, e: MouseEvent) {
