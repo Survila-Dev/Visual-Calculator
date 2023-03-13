@@ -26,8 +26,7 @@ export const WorkspaceEditor: React.FC = () => {
             updateSkipFirstEvalForWSUpload(false)
         } else {
             console.log("Uploading workspace:")
-            console.log(curWorkspace)
-            dispatch(uploadWorkspaceToBackend())
+            dispatch(uploadWorkspaceToBackend(curWorkspace))
         }
         
     }, [triggerUpload])

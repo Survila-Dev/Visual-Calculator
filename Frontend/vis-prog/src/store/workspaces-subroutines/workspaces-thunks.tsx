@@ -105,35 +105,24 @@ const removeQuotesFromJSONStringifyKeys = (inputText: string) => {
 
 export const uploadWorkspaceToBackend = createAsyncThunk(
     "workspace/uploadWholeWorkspaceToBackend",
-    async (thunkAPI) => {
+    async (curWorkspace: Workspace, thunkAPI) => {
 
-        // const wsToUpload = {
-        //     id: curWorkspace.id,
-        //     name: curWorkspace.name,
-        //     nodes: curWorkspace.nodes
-        // }
+        const wsToUpload = {
+            id: curWorkspace.id,
+            name: curWorkspace.name,
+            nodes: JSON.parse(JSON.stringify(curWorkspace.nodes))
+        }
 
-        // for (let i = 0; i < wsToUpload.nodes.length; i++) {
-        //     wsToUpload.nodes[i].value = wsToUpload.nodes[i].value as string 
-        //     for (let j = 0; j < wsToUpload.nodes[i].connections.length; j++) {
-        //         wsToUpload.nodes[i].connections[j].id = j
-        //         wsToUpload.nodes[i].connections[j].nodeId = i
-        //     }
-        // }
-
-        // const result = await axios({
-        //     url: BACKENDURL,
-        //     method: "post",
-        //     data: {
-        //         query: `
-        //             mutation {
-        //                 updateWholeWorkspace(workspace: ${removeQuotesFromJSONStringifyKeys(JSON.stringify(wsToUpload))}) {
-        //                     id
-        //                 }
-        //             }
-        //             `
-        //     }
-        // }
+        for (let i = 0; i < wsToUpload.nodes.length; i++) {
+            if (typeof wsToUpload.nodes[i].value === "number") {
+                console.log("Converting to string")
+                wsToUpload.nodes[i].value = "12"
+            }
+            for (let j = 0; j < wsToUpload.nodes[i].connections.length; j++) {
+                wsToUpload.nodes[i].connections[j].id = j
+                wsToUpload.nodes[i].connections[j].nodeId = i
+            }
+        }
 
         const result = await axios({
             url: BACKENDURL,
@@ -141,13 +130,27 @@ export const uploadWorkspaceToBackend = createAsyncThunk(
             data: {
                 query: `
                     mutation {
-                        updateWholeWorkspace(workspace:  {id:0,name:"First workspace",nodes:[{id:1,type:"output",connections:[],position:{x:145,y:155.3333282470703},value:"12",fullyConnected:true},{id:2,type:"constant",connections:[],position:{x:153,y:329.33331298828125},value:"12",fullyConnected:true}]}) {
+                        updateWholeWorkspace(workspace: ${removeQuotesFromJSONStringifyKeys(JSON.stringify(wsToUpload))}) {
                             id
                         }
                     }
                     `
             }
         }
+
+        // const result = await axios({
+        //     url: BACKENDURL,
+        //     method: "post",
+        //     data: {
+        //         query: `
+        //             mutation {
+        //                 updateWholeWorkspace(workspace: ${requestArg}) {
+        //                     id
+        //                 }
+        //             }
+        //             `
+        //     }
+        // }
         
         )
         
