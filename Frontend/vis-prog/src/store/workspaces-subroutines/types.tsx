@@ -10,7 +10,13 @@ export type TypesOfWSNodes =
     | "output"
     | "fork"
 
-export type WSNodePortConnectionType = {portSelf: number, portOther: number, otherNodeId: number}
+export type WSNodePortConnectionType = {
+    portSelf: number,
+    portOther: number,
+    otherNodeId: number
+    id?: number,
+    nodeId?: number
+}
 
 export interface WSNodeType {
     id: number,

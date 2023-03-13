@@ -13,6 +13,7 @@ export const WorkspaceEditor: React.FC = () => {
     
     const dispatch = useAppDispatch()
 
+    const [skipFirstEvalForWSUpload, updateSkipFirstEvalForWSUpload] = React.useState<boolean>(true)
     const [mousePosition, changeMousePosition] = React.useState<{x: number, y: number}>({x:0, y:0})
     const getWorkspaceStatus = useAppSelector((state) => state.workspaceStateReducers.statusGet)
     const waitingForWorkfield = getWorkspaceStatus === "loading"
@@ -21,8 +22,14 @@ export const WorkspaceEditor: React.FC = () => {
     const [triggerUpload, changeTriggerUpload] = React.useState<boolean>(false)
 
     React.useEffect(() => {
-        console.log(curWorkspace)
-        // dispatch(uploadWorkspaceToBackend(curWorkspace))
+        if (skipFirstEvalForWSUpload) {
+            updateSkipFirstEvalForWSUpload(false)
+        } else {
+            console.log("Uploading workspace:")
+            console.log(curWorkspace)
+            dispatch(uploadWorkspaceToBackend())
+        }
+        
     }, [triggerUpload])
 
     React.useEffect(() => {

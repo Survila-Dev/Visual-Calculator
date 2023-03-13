@@ -49,26 +49,29 @@ export const getWorkspaceFromBackend = createAsyncThunk(
             method: "post",
             data: {
                 query: `
-                    {
+                    query {
                         currentWorkspace {
                             id
                             name
                             nodes {
-                              id
-                              type
-                              position {
+                            id
+                            type
+                            position {
                                 x
                                 y
-                              }
-                              connections {
+                            }
+                            connections {
+                                id
+                                nodeId
                                 portSelf
                                 otherNodeId
                                 portOther
-                              }
-                              value
-                              fullyConnected
                             }
-                          }
+                            value
+                            fullyConnected
+                            }
+                        }
+                    }
                     `
             }
         })
@@ -95,43 +98,58 @@ const removeQuotesFromJSONStringifyKeys = (inputText: string) => {
             outputText += inputText[i]
         }
     }
+    console.log("String literal used in axios request:")
+    console.log(outputText)
     return outputText
 } 
 
 export const uploadWorkspaceToBackend = createAsyncThunk(
     "workspace/uploadWholeWorkspaceToBackend",
-    async (curWorkspace: Workspace, thunkAPI) => {
+    async (thunkAPI) => {
 
-        const wsToUpload = {
-            id: curWorkspace.id,
-            name: curWorkspace.name,
-            nodes: curWorkspace.nodes
-        }
+        // const wsToUpload = {
+        //     id: curWorkspace.id,
+        //     name: curWorkspace.name,
+        //     nodes: curWorkspace.nodes
+        // }
 
-        for (let i = 0; i < wsToUpload.nodes.length; i++) {
-            wsToUpload.nodes[i].value = wsToUpload.nodes[i].value as string 
-        }
+        // for (let i = 0; i < wsToUpload.nodes.length; i++) {
+        //     wsToUpload.nodes[i].value = wsToUpload.nodes[i].value as string 
+        //     for (let j = 0; j < wsToUpload.nodes[i].connections.length; j++) {
+        //         wsToUpload.nodes[i].connections[j].id = j
+        //         wsToUpload.nodes[i].connections[j].nodeId = i
+        //     }
+        // }
 
-        console.log(`
-        mutation {
-            updateWholeWorkspace(workspace: ${removeQuotesFromJSONStringifyKeys(JSON.stringify(wsToUpload))}) {
-                id
-            }
-        }
-        `)
+        // const result = await axios({
+        //     url: BACKENDURL,
+        //     method: "post",
+        //     data: {
+        //         query: `
+        //             mutation {
+        //                 updateWholeWorkspace(workspace: ${removeQuotesFromJSONStringifyKeys(JSON.stringify(wsToUpload))}) {
+        //                     id
+        //                 }
+        //             }
+        //             `
+        //     }
+        // }
+
         const result = await axios({
             url: BACKENDURL,
             method: "post",
             data: {
                 query: `
-                    mutation updateWS {
-                        updateWholeWorkspace(workspace: ${removeQuotesFromJSONStringifyKeys(JSON.stringify(wsToUpload))}) {
+                    mutation {
+                        updateWholeWorkspace(workspace:  {id:0,name:"First workspace",nodes:[{id:1,type:"output",connections:[],position:{x:145,y:155.3333282470703},value:"12",fullyConnected:true},{id:2,type:"constant",connections:[],position:{x:153,y:329.33331298828125},value:"12",fullyConnected:true}]}) {
                             id
                         }
                     }
                     `
             }
-        })
+        }
+        
+        )
         
         return result.data.data.currentWorkspace
     } 

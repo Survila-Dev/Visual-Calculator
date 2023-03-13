@@ -2,9 +2,7 @@ import { PayloadAction } from "@reduxjs/toolkit"
 import { findIdInNodeList } from "./index-workspaces"
 import { Workspace, Workspaces, WSNodeType } from "./types"
 
-export const updateWorkspace = (state: Workspaces, action: PayloadAction<{updatedWorkspace: Workspace}>) => {
-    state.currentWS = action.payload.updatedWorkspace
-}
+
 
 export const removeWSNode = (state: Workspaces, action: PayloadAction<{nodeId: number}>) => {
             
