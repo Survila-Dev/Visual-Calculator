@@ -3,7 +3,7 @@ import { useAppSelector } from "../store/index";
 
 interface BackCanvasInteface {
     mousePosition: {x: number, y: number},
-    fieldCOS: {x: number, y: number}
+    // fieldCOS: {x: number, y: number}
 }
 
 const defaultConnectionLineColor = '#1f2937'
@@ -12,9 +12,10 @@ const defaultConnectionLineColor = '#1f2937'
     const gridLineThickness = 0.5
     const backgroundGridSpacing = 150
 
-export const BackCanvas: React.FC<BackCanvasInteface> = ({mousePosition, fieldCOS}) => {
+export const BackCanvas: React.FC<BackCanvasInteface> = ({mousePosition}) => {
 
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
+    const fieldCOS = useAppSelector((state) => state.workspaceStateReducers.currentWS.fieldPosition)
 
     const listOfCurves = useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections)
     const trackMouse = useAppSelector((state) => state.mouseTrackReducer.track)
@@ -33,7 +34,7 @@ export const BackCanvas: React.FC<BackCanvasInteface> = ({mousePosition, fieldCO
 
         function drawBackgroundGrid(
             ctx: CanvasRenderingContext2D,
-            fieldCOS: {x: number, y: number}) {
+            ) {
             if (canvasRef.current) {
         
                 ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
@@ -62,6 +63,8 @@ export const BackCanvas: React.FC<BackCanvasInteface> = ({mousePosition, fieldCO
             point2: {x: number, y:number},
             color: string = defaultConnectionLineColor) {
 
+            // console.log("Drawing curve")
+
             ctx.beginPath()
             ctx.lineWidth = connectionLineThickness;
         
@@ -82,7 +85,7 @@ export const BackCanvas: React.FC<BackCanvasInteface> = ({mousePosition, fieldCO
         }
         if (ctx && canvas) {
             // executing all drawing commands here
-            drawBackgroundGrid(ctx, fieldCOS)
+            drawBackgroundGrid(ctx)
             if (listOfCurves) {
                 listOfCurves.forEach((curCurve) => {
                     if (ctx) drawSingleConnectionCurve(ctx, curCurve.firstPortPosition, curCurve.secondPortPosition)}

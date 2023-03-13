@@ -20,6 +20,10 @@ export const getWorkspaceFromBackend = createAsyncThunk(
                         currentWorkspace {
                             id
                             name
+                            fieldPosition {
+                                x
+                                y
+                              }
                             nodes {
                             id
                             type

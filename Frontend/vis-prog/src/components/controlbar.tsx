@@ -64,7 +64,7 @@ export const ControlBar: React.FC<ControlBarProps> = ({mousePosition, fieldCOS, 
                     const nodeProps: WSNodeChildProps = {
                         WSNodeInput: curNode,
                         mousePosition: mousePosition,
-                        fieldCOS: fieldCOS,
+                        // fieldCOS: fieldCOS,
                         inDropDown: true,
                         key: (curNode.id as any) as string
                     }

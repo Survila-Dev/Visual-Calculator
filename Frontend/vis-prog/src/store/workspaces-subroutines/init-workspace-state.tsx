@@ -29,12 +29,14 @@ const initWorkspace: Workspace = {
     id: 0,
     nodes: [],
     initNodes: [],
-    triggerCalc: false
+    triggerCalc: false,
+    fieldPosition: {x: 1, y: 1}
 }
 
 export const workspacesInitValues: Workspaces = {
     currentWS: initWorkspace,
     statusGet: "idle",
     statusPost: "idle",
-    currentCurveConnections: []
+    currentCurveConnections: [],
+    
 }

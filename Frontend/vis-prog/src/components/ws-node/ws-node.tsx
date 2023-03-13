@@ -1,5 +1,5 @@
 import React from "react"
-import { WSNodeType } from "../../store/workspaces-subroutines/types" 
+import { Coordinates2D, WSNodeType } from "../../store/workspaces-subroutines/types" 
 import { WSNodePort } from "./ws-node-port"
 import { useAppDispatch, useAppSelector } from "../../store"
 import { workspacesStateActions } from "../../store/workspaces-subroutines/index-workspaces"
@@ -13,7 +13,7 @@ import { initRelativePosition } from "../../store/workspaces-subroutines/nodes-f
 export interface WSNodeChildProps {
     WSNodeInput: WSNodeType,
     mousePosition: {x: number, y: number},
-    fieldCOS: {x: number, y: number},
+    // fieldCOS: {x: number, y: number},
     inDropDown: boolean,
     key?: string
 }
@@ -67,10 +67,12 @@ const convertPositionToStyleForPort = (
 // HOC to create different types of wsnode elements
 export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChildElement => {
 
-    const ChildComponent: WSNodeChildElement = ({WSNodeInput, mousePosition, fieldCOS, inDropDown}) => {
+    const ChildComponent: WSNodeChildElement = ({WSNodeInput, mousePosition, inDropDown}) => {
 
         const dispatch = useAppDispatch()
 
+        const fieldCOS: Coordinates2D = useAppSelector((state) => state.workspaceStateReducers.currentWS.fieldPosition)
+        
         const [curPos, changeCurPos] = React.useState<{x: number, y:number}>(WSNodeInput.position)
         const [posBeforeDrag, changePosBeforeDrag] = React.useState<{x: number, y:number}>(WSNodeInput.position)
         const [isBeingDragged, changeBeingDragged] = React.useState<boolean>(false)
@@ -130,7 +132,6 @@ export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChi
                     left: (position.x) as any as string + "px"
                 }
             } else {
-            
                 return {
                     top: (position.y - fieldCOS.y) as any as string + "px",
                     left: (position.x - fieldCOS.x) as any as string + "px"

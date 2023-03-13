@@ -3,7 +3,7 @@ import { addNewPortConnection, deletePortConnection } from "./add-delete-port-co
 import { addWSNode, removeWSNode, updateWSNodePosition } from "./add-remove-update-node"
 import { changeVariableAndTriggerRecalc } from "./change-variable-and-trigger-recalc"
 import { workspacesInitValues } from "./init-workspace-state"
-import { WSNodeType } from "./types"
+import { Coordinates2D, WSNodeType } from "./types"
 import { updateWorkspace, updateWorkspacesStatusGet, updateWorkspacesStatusPost } from "./update-workspace"
 import { getWorkspaceFromBackend, uploadWorkspaceToBackend } from "./workspaces-thunks"
 
@@ -40,6 +40,13 @@ export const workspacesSlice = createSlice({
         updateWorkspace,
         updateWorkspacesStatusGet,
         updateWorkspacesStatusPost,
+
+        updateFieldPosition(
+            state,
+            action: PayloadAction<{newPosition: Coordinates2D}>
+        ) {
+            state.currentWS.fieldPosition = action.payload.newPosition
+        },
         
         updatePosition(
             state,

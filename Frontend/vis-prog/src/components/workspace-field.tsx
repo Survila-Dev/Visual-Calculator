@@ -1,6 +1,6 @@
 import React from "react"
 import { ControlBar } from "../components/controlbar"
-import { AsyncStatus, Workspace, WSNodeType } from "../store/workspaces-subroutines/types"
+import { AsyncStatus, Coordinates2D, Workspace, WSNodeType } from "../store/workspaces-subroutines/types"
 import { BackCanvas } from "./background-canvas"
 import { useAppDispatch, useAppSelector } from "../store/index"
 import { workfieldDragActions } from "../store/workfield-drag"
@@ -22,14 +22,19 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
 
     const dispatch = useAppDispatch()
 
-    const [fieldCOS, changeFieldCOS] = React.useState<{x: number, y: number}>({x: 0, y:0})
+    // const [fieldCOS, changeFieldCOS] = React.useState<{x: number, y: number}>({x: 0, y:0})
+
+    // const fieldCOS: Coordinates2D = useAppSelector((state) => state.workspaceStateReducers.currentWS.fieldPosition)
+    
+
     const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
     
 
     const statusPost: AsyncStatus = useAppSelector((state) => state.workspaceStateReducers.statusPost)
-    const curWorkspace: Workspace = useAppSelector((state) => state.workspaceStateReducers.currentWS)
+    const fieldCOS: Coordinates2D  = useAppSelector((state) => state.workspaceStateReducers.currentWS.fieldPosition)
+
     const listOfNodes: WSNodeType[] = useAppSelector((state) => {
         if (state.workspaceStateReducers.currentWS) {
             return state.workspaceStateReducers.currentWS.nodes
@@ -37,8 +42,6 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
             return []
         }
     })
-
-    
 
     function handleKeyDown(this: Window, e: KeyboardEvent) {
         if (e.code === "Escape") {
@@ -59,10 +62,14 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
     React.useEffect(() => {
         // When mouse moves update the field position
         if (fieldOnDrag) {
-            changeFieldCOS({
+            dispatch(workspacesStateActions.updateFieldPosition({newPosition: {
                 x: fieldCOSBeforeDrag.x - (mousePosition.x - mousePosBeforeDrag.x),
-                y: fieldCOSBeforeDrag.y - (mousePosition.y - mousePosBeforeDrag.y),
-            })
+                y: fieldCOSBeforeDrag.y - (mousePosition.y - mousePosBeforeDrag.y)
+            }}))
+            // changeFieldCOS({
+            //     x: fieldCOSBeforeDrag.x - (mousePosition.x - mousePosBeforeDrag.x),
+            //     y: fieldCOSBeforeDrag.y - (mousePosition.y - mousePosBeforeDrag.y),
+            // })
         }
     }, [mousePosition])
 
@@ -92,7 +99,7 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
                     const nodeProps: WSNodeChildProps = {
                         WSNodeInput: curNode,
                         mousePosition: mousePosition,
-                        fieldCOS: fieldCOS,
+                        // fieldCOS: fieldCOS,
                         inDropDown: false,
                         key: (curNode.id as any) as string
                     }
@@ -114,7 +121,7 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
                             return <WSNodeFork {...nodeProps}/>
                     }
                 })}
-                <BackCanvas mousePosition = {mousePosition} fieldCOS = {fieldCOS}/>
+                <BackCanvas mousePosition = {mousePosition}/>
                 <Spinner show = {true} status = {statusPost} />
             </div>
         </section>

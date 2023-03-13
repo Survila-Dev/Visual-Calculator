@@ -64,6 +64,8 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
         e.stopPropagation()
     }
 
+    console.log(useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections))
+
     function handleClick(e: React.FormEvent) {
         preventDefaultReaction(e)
 
@@ -129,6 +131,7 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
                         }))
                         changeIfFullyConnected(true)
                         dispatch(workspacesStateActions.changeVariableAndTriggerRecalc({}))
+                        
                     }
 
                 }

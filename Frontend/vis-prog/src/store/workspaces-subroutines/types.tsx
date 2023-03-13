@@ -34,14 +34,16 @@ export interface Workspace {
     id: number,
     nodes: WSNodeType[],
     initNodes: WSNodeType[],
-    triggerCalc: boolean
+    triggerCalc: boolean,
+    fieldPosition: Coordinates2D,
 }
 
 export interface Workspaces {
     currentWS: Workspace,
     statusGet: AsyncStatus,
     statusPost: AsyncStatus,
-    currentCurveConnections?: CurveConnection[]
+    currentCurveConnections: CurveConnection[],
+    
 }
 
 export type CalculationSubroutines = {
