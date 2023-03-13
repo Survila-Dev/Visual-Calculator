@@ -102,9 +102,11 @@ export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChi
         let wsNodeCalcValue: string
         if (!inDropDown) {
             wsNodeCalcValue = wsNodeValues as any as string
+            
         } else {
             wsNodeCalcValue = wsNodeInDropDownValue
         }
+        
 
         React.useEffect(() => {
             if (isBeingDragged) {
@@ -113,6 +115,7 @@ export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChi
                     y: posBeforeDrag.y + mousePosition.y - mousePosBeforeDrag.y,
                 })
             }
+            updateInputField(wsNodeCalcValue as any as number)
         }, [mousePosition, fieldCOS])
 
         const handleInputFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
