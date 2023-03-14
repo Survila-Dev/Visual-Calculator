@@ -8,6 +8,7 @@ const RETURNTO: string = "/"
 export const Navbar: React.FC = () => {
 
   const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+  
   const signIn: boolean = false;
   const navbarRef = React.useRef<HTMLElement>(null)
 
@@ -23,6 +24,7 @@ export const Navbar: React.FC = () => {
   const handleClickLogIn = async (e: React.FormEvent) => {
     await loginWithRedirect({
         appState: {
+          someValue: 69,
           returnTo: RETURNTO,
         },
         authorizationParams: {
@@ -34,6 +36,7 @@ export const Navbar: React.FC = () => {
   const handleClickSignUp = async (e: React.FormEvent) => {
     await loginWithRedirect({
         appState: {
+          someValue: 69,
           returnTo: RETURNTO,
         },
         authorizationParams: {
@@ -54,7 +57,7 @@ export const Navbar: React.FC = () => {
   return (
       <section ref = {navbarRef} className=" flex-none z-20 min-h-0 bg-black text-white text-lg px-1 h-14">
         <div className ="flex flex-row justify-between">
-          <h1 className = "p-0.5 m-0.5">Visual Programming Interface</h1>
+          <h1 className = "p-0.5 m-0.5">Visual Programming Interface {}</h1>
           <div className = "flex flex-row">
             {!isAuthenticated && <button className = "my-1 px-2 mx-1 border-2 text-white text-sm" onClick = {handleClickLogIn}>Log In</button>}
             {!isAuthenticated && <button className = "my-1 px-2 bg-slate-600 text-white border-2 text-sm"  onClick = {handleClickSignUp}>Sign Up</button>}
