@@ -100,7 +100,8 @@ export const uploadWorkspaceToBackend = createAsyncThunk(
             id: input.curWorkspace.id,
             name: input.curWorkspace.name,
             nodes: JSON.parse(JSON.stringify(input.curWorkspace.nodes)),
-            curveConnections: JSON.parse(JSON.stringify(input.curveConnections))
+            curveConnections: JSON.parse(JSON.stringify(input.curveConnections)),
+            fieldPosition: JSON.parse(JSON.stringify(input.curWorkspace.fieldPosition))
         }
 
         for (let i = 0; i < wsToUpload.nodes.length; i++) {

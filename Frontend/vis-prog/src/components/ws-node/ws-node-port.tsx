@@ -64,7 +64,7 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
         e.stopPropagation()
     }
 
-    console.log(useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections))
+    // console.log(useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections))
 
     function handleClick(e: React.FormEvent) {
         preventDefaultReaction(e)
