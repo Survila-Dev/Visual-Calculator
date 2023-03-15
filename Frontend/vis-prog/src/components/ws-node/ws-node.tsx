@@ -109,7 +109,6 @@ export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChi
             wsNodeCalcValue = wsNodeInDropDownValue
         }
         
-
         React.useEffect(() => {
             if (isBeingDragged) {
                 changeCurPos({
