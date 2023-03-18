@@ -1,5 +1,5 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { useAppDispatch } from "../store";
+import { useAppDispatch, useAppSelector } from "../store";
 import React from "react"
 import { navbarSizeActions } from "../store/navbar-size";
 
@@ -21,10 +21,12 @@ export const Navbar: React.FC = () => {
     }
   }, [])
 
+  const appStateWorkspaces = useAppSelector((state) => state.workspaceStateReducers)
+
   const handleClickLogIn = async (e: React.FormEvent) => {
     await loginWithRedirect({
         appState: {
-          someValue: 69,
+          appStateWS: appStateWorkspaces,
           returnTo: RETURNTO,
         },
         authorizationParams: {
@@ -36,7 +38,7 @@ export const Navbar: React.FC = () => {
   const handleClickSignUp = async (e: React.FormEvent) => {
     await loginWithRedirect({
         appState: {
-          someValue: 69,
+          appStateWS: appStateWorkspaces,
           returnTo: RETURNTO,
         },
         authorizationParams: {

@@ -31,9 +31,9 @@ export const WorkspaceEditor: React.FC = () => {
         } else {
             console.log("Uploading workspace:")
             if (curConnections) {
-                dispatch(uploadWorkspaceToBackend({curWorkspace: curWorkspace, curveConnections: curConnections }))
+                dispatch(uploadWorkspaceToBackend({authToken: "", curWorkspace: curWorkspace, curveConnections: curConnections }))
             } else {
-                dispatch(uploadWorkspaceToBackend({curWorkspace: curWorkspace, curveConnections: [] }))
+                dispatch(uploadWorkspaceToBackend({authToken: "", curWorkspace: curWorkspace, curveConnections: [] }))
             }
         }
         
@@ -41,7 +41,7 @@ export const WorkspaceEditor: React.FC = () => {
 
     React.useEffect(() => {
         console.log("Getting workspace from backend")
-        dispatch(getWorkspaceFromBackend())
+        dispatch(getWorkspaceFromBackend({authToken: ""}))
         // console.log("Trigger sync.")
         // updateTriggerSyncBetweenStates((cur) => !cur)
     }, [])

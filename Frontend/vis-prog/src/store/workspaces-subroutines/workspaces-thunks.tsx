@@ -10,10 +10,11 @@ const BACKENDURL = "http://localhost:4000/"
 
 export const getWorkspaceFromBackend = createAsyncThunk(
     "workspace/getWorkspaceFromBackend",
-    async (thunkAPI) => {
+    async (input: {authToken: string}, thunkAPI) => {
         const result = await axios({
             url: BACKENDURL,
             method: "post",
+            headers: {'Authorization': 'Bearer ' + input.authToken},
             data: {
                 query: `
                     query {
@@ -63,14 +64,10 @@ export const getWorkspaceFromBackend = createAsyncThunk(
             }
         })
         
-        
         const newWorkspace = result.data.data.currentWorkspace
-        // console.log(newWorkspace)
         newWorkspace.initNodes = dropDownNodes
         const curConnections = JSON.parse(JSON.stringify(newWorkspace.curveConnections))
         delete newWorkspace.curveConnections
-        // console.log(newWorkspace)
-        // console.log(curConnections)
         return {workspace: newWorkspace, curveConnections: curConnections}
     }
 )
@@ -96,7 +93,7 @@ const removeQuotesFromJSONStringifyKeys = (inputText: string) => {
 
 export const uploadWorkspaceToBackend = createAsyncThunk(
     "workspace/uploadWholeWorkspaceToBackend",
-    async (input: {curWorkspace: Workspace, curveConnections: CurveConnection[]}, thunkAPI) => {
+    async (input: {authToken: string, curWorkspace: Workspace, curveConnections: CurveConnection[]}, thunkAPI) => {
 
         const wsToUpload = {
             id: input.curWorkspace.id,
@@ -121,6 +118,7 @@ export const uploadWorkspaceToBackend = createAsyncThunk(
         const result = await axios({
             url: BACKENDURL,
             method: "post",
+            headers: {'Authorization': 'Bearer ' + input.authToken},
             data: {
                 query: `
                     mutation {
