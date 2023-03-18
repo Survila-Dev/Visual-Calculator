@@ -63,12 +63,14 @@ export const getWorkspaceFromBackend = createAsyncThunk(
             }
         })
         
+        
         const newWorkspace = result.data.data.currentWorkspace
+        // console.log(newWorkspace)
         newWorkspace.initNodes = dropDownNodes
         const curConnections = JSON.parse(JSON.stringify(newWorkspace.curveConnections))
         delete newWorkspace.curveConnections
-        console.log(newWorkspace)
-        console.log(curConnections)
+        // console.log(newWorkspace)
+        // console.log(curConnections)
         return {workspace: newWorkspace, curveConnections: curConnections}
     }
 )
