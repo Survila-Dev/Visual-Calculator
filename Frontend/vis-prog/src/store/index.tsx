@@ -7,6 +7,7 @@ import { mouseCurveTrackSlice } from "./mouse-curve-track";
 import { workfieldDragSlice } from "./workfield-drag";
 import { addNodesMenuSlice } from "./add-nodes-menu";
 import { navbarSizeSlice } from "./navbar-size";
+import { accessTokenSlice } from "./access-token";
 
 export interface UserInfo {
     isLoggedIn: boolean,
@@ -21,7 +22,8 @@ export const store = configureStore({
         mouseTrackReducer: mouseCurveTrackSlice.reducer,
         workfieldDragReducer: workfieldDragSlice.reducer,
         addNodesMenuReducer: addNodesMenuSlice.reducer,
-        navbarSizeReducer: navbarSizeSlice.reducer
+        navbarSizeReducer: navbarSizeSlice.reducer,
+        accessTokenReducer: accessTokenSlice.reducer
     }
 })
 

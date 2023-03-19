@@ -20,15 +20,9 @@ export const Auth0ProviderWithNavigate = ({
 
   const onRedirectCallback = (appState?: AppState) => {
 
-    //ToDo Set state from appState
-    // if (appState) {
-    //   dispatch(workspacesStateActions.updateWorkspaces(appState.appStateWS))
-    // }
-    // appStateWS: appStateWorkspace,
-    // appStateCurves: appStateCurves,
+    //ToDo async call to silently get the access token
 
     navigate(appState?.returnTo || window.location.pathname);
-    // console.log(appState?.someValue)
   };
 
   if (!(domain && clientId && redirectUri)) {

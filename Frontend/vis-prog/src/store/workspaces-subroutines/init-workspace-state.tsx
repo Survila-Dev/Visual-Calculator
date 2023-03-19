@@ -28,7 +28,7 @@ const initWorkspace: Workspace = {
     name: "First workspace",
     id: 0,
     nodes: [],
-    initNodes: [],
+    initNodes: dropDownNodes,
     triggerCalc: false,
     fieldPosition: {x: 1, y: 1}
 }

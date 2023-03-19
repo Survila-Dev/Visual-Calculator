@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from "../store"
 import { WorkspaceLoader } from "../components/workspace-loader"
 import { workspacesSlice } from "../store/workspaces-subroutines/index-workspaces"
 import { getWorkspaceFromBackend, uploadWorkspaceToBackend } from "../store/workspaces-subroutines/workspaces-thunks"
+import { useAuth0 } from "@auth0/auth0-react"
+import { accessTokenActions } from "../store/access-token"
 // import { canvasCur@veActions } from "../store/canvas-curves"
 
 export const WorkspaceEditor: React.FC = () => {
@@ -25,15 +27,21 @@ export const WorkspaceEditor: React.FC = () => {
 
     const [triggerUpload, changeTriggerUpload] = React.useState<boolean>(false)
 
+    const accessTokenAlreadyRead = useAppSelector((state) => state.accessTokenReducer.tokenRead)
+    const { getAccessTokenSilently, isAuthenticated } = useAuth0()
+    const accessToken = useAppSelector((state) => state.accessTokenReducer.accessToken)
+
     React.useEffect(() => {
-        if (skipFirstEvalForWSUpload) {
-            updateSkipFirstEvalForWSUpload(false)
-        } else {
-            console.log("Uploading workspace:")
-            if (curConnections) {
-                dispatch(uploadWorkspaceToBackend({authToken: "", curWorkspace: curWorkspace, curveConnections: curConnections }))
+        if (isAuthenticated) {
+            if (skipFirstEvalForWSUpload) {
+                updateSkipFirstEvalForWSUpload(false)
             } else {
-                dispatch(uploadWorkspaceToBackend({authToken: "", curWorkspace: curWorkspace, curveConnections: [] }))
+                console.log("Uploading workspace:")
+                if (curConnections) {
+                    dispatch(uploadWorkspaceToBackend({authToken: accessToken, curWorkspace: curWorkspace, curveConnections: curConnections }))
+                } else {
+                    dispatch(uploadWorkspaceToBackend({authToken: accessToken, curWorkspace: curWorkspace, curveConnections: [] }))
+                }
             }
         }
         
@@ -41,9 +49,18 @@ export const WorkspaceEditor: React.FC = () => {
 
     React.useEffect(() => {
         console.log("Getting workspace from backend")
-        dispatch(getWorkspaceFromBackend({authToken: ""}))
-        // console.log("Trigger sync.")
-        // updateTriggerSyncBetweenStates((cur) => !cur)
+        if (isAuthenticated) {
+            dispatch(getWorkspaceFromBackend({authToken: accessToken}))
+        }
+
+        const getAccessToken = async () => {
+            if (isAuthenticated && !accessTokenAlreadyRead) {
+                const accToken = await getAccessTokenSilently()
+                dispatch(accessTokenActions.updateAccessToken(accToken))
+            }
+        }
+
+        getAccessToken()
     }, [])
 
     // React.useEffect(() => {
