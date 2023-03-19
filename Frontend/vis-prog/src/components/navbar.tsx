@@ -7,7 +7,7 @@ const RETURNTO: string = "/"
 
 export const Navbar: React.FC = () => {
 
-  const { loginWithRedirect, logout, isAuthenticated } = useAuth0();
+  const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
   
   const signIn: boolean = false;
   const navbarRef = React.useRef<HTMLElement>(null)
@@ -63,7 +63,8 @@ export const Navbar: React.FC = () => {
           <div className = "flex flex-row">
             {!isAuthenticated && <button className = "my-1 px-2 mx-1 border-2 text-white text-sm" onClick = {handleClickLogIn}>Log In</button>}
             {!isAuthenticated && <button className = "my-1 px-2 bg-slate-600 text-white border-2 text-sm"  onClick = {handleClickSignUp}>Sign Up</button>}
-            {isAuthenticated && <button className = "my-1 px-2 border-2"  onClick = {handleClickLogOut}>Log Out</button>}
+            {(isAuthenticated && user) && <p className = "pt-1 pr-2">User: {user.name}</p>}
+            {isAuthenticated && <button className = "my-1 px-2 border-2 text-white text-sm"  onClick = {handleClickLogOut}>Log Out</button>}
           </div>
         </div>
       </section>
