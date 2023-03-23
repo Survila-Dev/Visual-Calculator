@@ -11,10 +11,15 @@ const BACKENDURL = "http://localhost:4000/"
 export const getWorkspaceFromBackend = createAsyncThunk(
     "workspace/getWorkspaceFromBackend",
     async (input: {authToken: string}, thunkAPI) => {
+
+        console.log({'Authorization': 'Bearer ' + input.authToken})
         const result = await axios({
             url: BACKENDURL,
             method: "post",
-            headers: {'Authorization': 'Bearer ' + input.authToken},
+            headers: {
+                'Authorization': 'Bearer ' + input.authToken,
+                'Content-Type': `application/json`,
+                'Accept'      : `application/json`},
             data: {
                 query: `
                     query {

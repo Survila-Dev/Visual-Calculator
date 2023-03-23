@@ -48,15 +48,19 @@ export const WorkspaceEditor: React.FC = () => {
     }, [triggerUpload])
 
     React.useEffect(() => {
-        console.log("Getting workspace from backend")
-        if (isAuthenticated) {
+        if (isAuthenticated && accessToken) {
+            console.log("Getting workspace from backend")
             dispatch(getWorkspaceFromBackend({authToken: accessToken}))
         }
 
         const getAccessToken = async () => {
             if (isAuthenticated && !accessTokenAlreadyRead) {
+                console.log("Getting access token silently")
                 const accToken = await getAccessTokenSilently()
+                console.log("Updating the access token in state")
+                console.log(accToken)
                 dispatch(accessTokenActions.updateAccessToken(accToken))
+                dispatch(getWorkspaceFromBackend({authToken: accToken}))
             }
         }
 
