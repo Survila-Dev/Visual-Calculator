@@ -28,7 +28,7 @@ export const WorkspaceEditor: React.FC = () => {
     const [triggerUpload, changeTriggerUpload] = React.useState<boolean>(false)
 
     const accessTokenAlreadyRead = useAppSelector((state) => state.accessTokenReducer.tokenRead)
-    const { getAccessTokenSilently, isAuthenticated } = useAuth0()
+    const { user, getAccessTokenSilently, isAuthenticated } = useAuth0()
     const accessToken = useAppSelector((state) => state.accessTokenReducer.accessToken)
 
     React.useEffect(() => {
@@ -47,6 +47,8 @@ export const WorkspaceEditor: React.FC = () => {
         
     }, [triggerUpload])
 
+
+
     React.useEffect(() => {
         if (isAuthenticated && accessToken) {
             console.log("Getting workspace from backend")
@@ -54,14 +56,46 @@ export const WorkspaceEditor: React.FC = () => {
         }
 
         const getAccessToken = async () => {
-            if (isAuthenticated && !accessTokenAlreadyRead) {
-                console.log("Getting access token silently")
-                const accToken = await getAccessTokenSilently()
-                console.log("Updating the access token in state")
-                console.log(accToken)
-                dispatch(accessTokenActions.updateAccessToken(accToken))
-                dispatch(getWorkspaceFromBackend({authToken: accToken}))
+            try {
+                if (isAuthenticated && !accessTokenAlreadyRead && user) {
+
+                    console.log("Getting access token silently")
+                    const accessToken = await getAccessTokenSilently({
+                        authorizationParams: {
+                            audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+                            scope: "read:current_user",
+                        },
+                        })
+
+                    console.log("access token")
+                    console.log(accessToken)
+
+                    const userDetailsByIdUrl = process.env.REACT_APP_AUTH0_AUDIENCE + `users/${user.sub}`;
+
+                    const metadataResponse = await fetch(userDetailsByIdUrl, {
+                        headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        },
+                    });
+
+                    console.log("metadataResponse")
+                    console.log(metadataResponse)
+                
+                    const user_metadata = await metadataResponse.json();
+
+                    console.log("Meta data")
+                    console.log(user_metadata)
+                    
+                    // console.log("Updating the access token in state")
+                    // console.log(accToken)
+                    // dispatch(accessTokenActions.updateAccessToken(accToken))
+                    // dispatch(getWorkspaceFromBackend({authToken: accToken}))
+                }
+            } catch (e) {
+
+                console.error(e)
             }
+            
         }
 
         getAccessToken()
