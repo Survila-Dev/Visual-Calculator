@@ -34,11 +34,11 @@ export const getWorkspaceFromBackend = createAsyncThunk(
             const result = await fetch(
                 BACKENDURL, {
                     method: "post",
-                    mode: "cors",
+                    // mode: "cors",
                     headers: {
                         Authorization: "Bearer "+ input.authToken,// eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Il96RlZ1Uk5BVGlwdnIyYmVtOFRMdyJ9.eyJpc3MiOiJodHRwczovL2Rldi1odXFlZGdqdHViY213cGRlLnVzLmF1dGgwLmNvbS8iLCJzdWIiOiJnb29nbGUtb2F1dGgyfDEwMTUwMDY0NDMxNjI4NzcwNzAzOSIsImF1ZCI6WyJodHRwczovL3Zpc3Byb2cuYmFja2VuZC5jb20iLCJodHRwczovL2Rldi1odXFlZGdqdHViY213cGRlLnVzLmF1dGgwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2Nzk4OTI2ODgsImV4cCI6MTY3OTk3OTA4OCwiYXpwIjoiYm1pRUFTUTZPVkdreUVmRWRBZnh0TVQ1a2NSN2FKam8iLCJzY29wZSI6Im9wZW5pZCBwcm9maWxlIGVtYWlsIn0.KcLMKAkTC7naqTWArYuFS5V4TxFlj_dIuPpEhtBizTwyRNDtQVhS1c0mR57Rl_9QRC-vaK4n8e8NvvV52OnjQvG7kcTBWCr_WIJ9sQRm1EKTrOtHLu60UUC_nuSRL6p2s-IRBSFsRJoWl3RBchOl4YuSWwiR7e1GevxBUbj8lkXhRgknyzNVBIwQCirkUgFzaRJsTSMhpdnsZHpxx1ay0mR6aO1lz4zLdZ9Wsc50igVpeQbRUOcgpbJOlOCys49Zevb2k2mcbYI2Bi8CTPn7eH7dEK2KCTgcrLEFFxP7iAM3psnnuw6xfGvgnvg4AVHBYN_tI_aNo3_5qWxiEFNrHw",
                         // "Access-Control-Allow-Origin": "*",
-                        'Content-type': 'application/json'
+                        // 'Content-type': 'application/json'
                     },
                     body: `
                     query {
