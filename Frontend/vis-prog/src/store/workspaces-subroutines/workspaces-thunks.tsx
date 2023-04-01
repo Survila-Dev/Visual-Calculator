@@ -87,7 +87,7 @@ export const getWorkspaceFromBackend = createAsyncThunk(
             //         `
             //     }
             // )
-            console.log("Fetch successful.")
+            
 
             const result = await axios({
                 method: "post",
@@ -146,6 +146,9 @@ export const getWorkspaceFromBackend = createAsyncThunk(
                         `
                 }
             })
+
+            console.log("Fetch successful.")
+
             const newWorkspace = result.data.data.currentWorkspace
             newWorkspace.initNodes = dropDownNodes
             const curConnections = JSON.parse(JSON.stringify(newWorkspace.curveConnections))
