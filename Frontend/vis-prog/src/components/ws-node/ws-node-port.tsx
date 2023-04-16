@@ -163,9 +163,9 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
     )
 
     return (
-        <div>
+        <>
             {isFullyConnected && jsxElementActive}
             {!isFullyConnected && jsxElementNotActive}
-        </div>
+        </>
     )
 }

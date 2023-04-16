@@ -15,7 +15,7 @@ const iconColor = "white"
 
 export const TitleWithIcon: React.FC<tittleWithIconInterface> = ({title}) => {
 
-    let iconJSX: JSX.Element = <div></div>
+    let iconJSX: JSX.Element = <></>
     
     switch(title) {
         case "Variable":

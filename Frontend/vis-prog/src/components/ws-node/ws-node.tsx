@@ -197,7 +197,7 @@ export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChi
 
         if (type !== "output" && type !== "constant") {
             elementContent = (
-                <div>
+                <>
                     {listOfPorts.map((curPort) => (
                         <div 
                             className = "absolute text-white px-1"
@@ -207,11 +207,11 @@ export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChi
                             {curPort.jsxInput}
                         </div>
                     ))}
-                </div>
+                </>
             )
         } else if (type === "output") {
             elementContent = (
-                <div>
+                <>
                     {listOfPorts.map((curPort) => (
                         <div 
                             className = "absolute text-white px-1"
@@ -221,12 +221,12 @@ export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChi
                             {wsNodeCalcValue}
                         </div>
                     ))}
-                </div>
+                </>
             )
 
         } else if (type === "constant") {
             elementContent = (
-                <div>
+                <>
                     {listOfPorts.map((curPort) => (
                         <div 
                             className = "absolute text-white px-1 w-1/2"
@@ -244,7 +244,7 @@ export const WSNode = ({type, title, listOfPorts}: WSNodeParentProps): WSNodeChi
                                  />
                         </div>
                     ))}
-                </div>
+                </>
             )
 
         }

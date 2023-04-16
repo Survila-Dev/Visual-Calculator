@@ -12,7 +12,7 @@ const spinnerSize = 15
 
 export const Spinner: React.FC<SpinnerProps> = ({show, status}) => {
 
-    let spinnerContent = <div></div>
+    let spinnerContent = <></>
 
     if (show) {
         switch (status) {
