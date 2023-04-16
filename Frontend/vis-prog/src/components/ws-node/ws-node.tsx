@@ -4,7 +4,6 @@ import { WSNodePort } from "./ws-node-port"
 import { useAppDispatch, useAppSelector } from "../../store"
 import { workspacesStateActions } from "../../store/workspaces-subroutines/index-workspaces"
 import { TypesOfWSNodes } from "../../store/workspaces-subroutines/types"
-// import { canvasCurveActions } from "../../store/canvas-curves"
 import { TitleWithIcon } from "../text-with-icon"
 
 import { RxCross2 } from "react-icons/rx"
@@ -13,7 +12,6 @@ import { initRelativePosition } from "../../store/workspaces-subroutines/nodes-f
 export interface WSNodeChildProps {
     WSNodeInput: WSNodeType,
     mousePosition: {x: number, y: number},
-    // fieldCOS: {x: number, y: number},
     inDropDown: boolean,
     key?: string
 }

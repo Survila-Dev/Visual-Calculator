@@ -1,6 +1,5 @@
 import React from "react"
 import { useAppDispatch, useAppSelector } from "../../store/index";
-// import { canvasCurveActions } from "../../store/canvas-curves"
 import { mouseConnectActions } from "../../store/mouse-connect";
 import { mouseCurveTrackActions } from "../../store/mouse-curve-track";
 import { workspacesStateActions } from "../../store/workspaces-subroutines/index-workspaces";
@@ -63,8 +62,6 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
         e.preventDefault()
         e.stopPropagation()
     }
-
-    // console.log(useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections))
 
     function handleClick(e: React.FormEvent) {
         preventDefaultReaction(e)
