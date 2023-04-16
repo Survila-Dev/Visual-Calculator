@@ -5,9 +5,11 @@ import { navbarSizeActions } from "../store/navbar-size";
 
 const RETURNTO: string = "/"
 
+
 export const Navbar: React.FC = () => {
 
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
+  const backendDisabled: boolean = true
   
   const signIn: boolean = false;
   const navbarRef = React.useRef<HTMLElement>(null)
@@ -24,36 +26,42 @@ export const Navbar: React.FC = () => {
   const appStateWorkspaces = useAppSelector((state) => state.workspaceStateReducers)
 
   const handleClickLogIn = async (e: React.FormEvent) => {
-    await loginWithRedirect({
-        appState: {
-          appStateWS: appStateWorkspaces,
-          returnTo: RETURNTO,
-        },
-        authorizationParams: {
-          prompt: "login",
-        },
-      });
+    if (!backendDisabled) {
+      await loginWithRedirect({
+          appState: {
+            appStateWS: appStateWorkspaces,
+            returnTo: RETURNTO,
+          },
+          authorizationParams: {
+            prompt: "login",
+          },
+        });
+      }
   }
 
   const handleClickSignUp = async (e: React.FormEvent) => {
-    await loginWithRedirect({
-        appState: {
-          appStateWS: appStateWorkspaces,
-          returnTo: RETURNTO,
-        },
-        authorizationParams: {
-          prompt: "login",
-          screen_hint: "signup",
-        },
-      });
+    if (!backendDisabled) {
+      await loginWithRedirect({
+          appState: {
+            appStateWS: appStateWorkspaces,
+            returnTo: RETURNTO,
+          },
+          authorizationParams: {
+            prompt: "login",
+            screen_hint: "signup",
+          },
+        });
+    }
   }
 
   const handleClickLogOut = (e: React.FormEvent) => {
+    if (!backendDisabled) {
       logout({
           logoutParams: {
               returnTo: window.location.origin,
           },
       });
+    }
   }
 
   return (
@@ -61,6 +69,7 @@ export const Navbar: React.FC = () => {
         <div className ="flex flex-row justify-between">
           <h1 className = "p-0.5 m-0.5">Visual Programming Interface {}</h1>
           <div className = "flex flex-row">
+            {backendDisabled &&  <p className = "pt-1 pr-2">Back end disabled</p>}
             {!isAuthenticated && <button className = "my-1 px-2 mx-1 border-2 text-white text-sm" onClick = {handleClickLogIn}>Log In</button>}
             {!isAuthenticated && <button className = "my-1 px-2 bg-slate-600 text-white border-2 text-sm"  onClick = {handleClickSignUp}>Sign Up</button>}
             {(isAuthenticated && user) && <p className = "pt-1 pr-2">User: {user.name}</p>}
