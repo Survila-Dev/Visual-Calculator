@@ -68,8 +68,8 @@ export const Navbar: React.FC = () => {
       <section ref = {navbarRef} className=" flex-none z-20 min-h-0 bg-black text-white text-lg px-1 h-14">
         <div className ="flex flex-row justify-between">
           <h1 className = "p-0.5 m-0.5">Visual Programming Interface {}</h1>
-          <div className = "flex flex-row">
-            {backendDisabled &&  <p className = "pt-1 pr-2">Back end disabled</p>}
+          <div className = "flex flex-row items-center">
+            {backendDisabled &&  <p className = "pt-1 pr-2 text-sm">Back end disabled</p>}
             {!isAuthenticated && <button className = "my-1 px-2 mx-1 border-2 text-white text-sm" onClick = {handleClickLogIn}>Log In</button>}
             {!isAuthenticated && <button className = "my-1 px-2 bg-slate-600 text-white border-2 text-sm"  onClick = {handleClickSignUp}>Sign Up</button>}
             {(isAuthenticated && user) && <p className = "pt-1 pr-2">User: {user.name}</p>}
