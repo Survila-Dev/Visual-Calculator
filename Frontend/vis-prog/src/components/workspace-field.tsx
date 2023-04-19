@@ -122,7 +122,7 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
                     }
                 })}
                 <BackCanvas mousePosition = {mousePosition}/>
-                <Spinner show = {true} status = {statusPost} />
+                {/* <Spinner show = {true} status = {statusPost} /> */}
             </div>
         </section>
     )

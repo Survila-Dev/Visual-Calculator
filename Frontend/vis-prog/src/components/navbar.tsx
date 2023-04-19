@@ -9,7 +9,7 @@ const RETURNTO: string = "/"
 export const Navbar: React.FC = () => {
 
   const { loginWithRedirect, logout, isAuthenticated, user } = useAuth0();
-  const backendDisabled: boolean = true
+  const backendDisabled: boolean = false
   
   const signIn: boolean = false;
   const navbarRef = React.useRef<HTMLElement>(null)
