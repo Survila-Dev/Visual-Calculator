@@ -67,7 +67,7 @@ export const Navbar: React.FC = () => {
   return (
       <section ref = {navbarRef} className=" flex-none z-20 min-h-0 bg-black text-white text-lg px-1 h-14">
         <div className ="flex flex-row justify-between">
-          <h1 className = "p-0.5 m-0.5">Visual Programming Interface {}</h1>
+          <h1 className = "p-0.5 m-0.5">Visual Calculator</h1>
           <div className = "flex flex-row items-center">
             {/* {backendDisabled &&  <p className = "pt-1 pr-2 text-sm">Back end disabled</p>} */}
             {!isAuthenticated && <button className = "my-1 px-2 mx-1 border-2 py-1 text-white text-sm" onClick = {handleClickLogIn}>Log In</button>}
