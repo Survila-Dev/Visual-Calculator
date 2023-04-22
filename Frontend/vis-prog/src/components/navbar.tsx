@@ -69,7 +69,7 @@ export const Navbar: React.FC = () => {
         <div className ="flex flex-row justify-between">
           <h1 className = "p-0.5 m-0.5">Visual Calculator</h1>
           <div className = "flex flex-row items-center">
-            {/* {backendDisabled &&  <p className = "pt-1 pr-2 text-sm">Back end disabled</p>} */}
+            {backendDisabled &&  <p className = "pt-1 pr-2 text-sm">Back end disabled</p>}
             {!isAuthenticated && <button className = "my-1 px-2 mx-1 border-2 py-1 text-white text-sm" onClick = {handleClickLogIn}>Log In</button>}
             {!isAuthenticated && <button className = "my-1 px-2 py-1 bg-slate-600 text-white border-2 text-sm"  onClick = {handleClickSignUp}>Sign Up</button>}
             {(isAuthenticated && user) && <p className = "pt-1 pr-2">User: {user.name}</p>}
