@@ -34,11 +34,11 @@ const convertPositionToStyleForPort = (
     position : IPortPosition) => {
 
     const portRowOffset = 20
-    const portRowStartOffsetPort = 40
+    const portRowStartOffsetPort = 37
     const portRowStartOffsetDesc = 33
 
     if (portOrDesc === "port") {
-        const portLateralOffset = 18
+        const portLateralOffset = 25
         const vertOffset = portRowStartOffsetPort + portRowOffset * position.row;
 
         if (position.side === "left") {
