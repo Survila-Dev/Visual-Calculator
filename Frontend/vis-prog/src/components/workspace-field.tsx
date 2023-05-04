@@ -21,18 +21,11 @@ interface WorkspaceFieldProps {
 export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) => {
 
     const dispatch = useAppDispatch()
-
-    // const [fieldCOS, changeFieldCOS] = React.useState<{x: number, y: number}>({x: 0, y:0})
-
-    // const fieldCOS: Coordinates2D = useAppSelector((state) => state.workspaceStateReducers.currentWS.fieldPosition)
-    
-
     const [mousePosBeforeDrag, changeMousePosBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldCOSBeforeDrag, changeFieldCOSBeforeDrag] = React.useState<{x: number, y: number}>({x:0, y:0})
     const [fieldOnDrag, changeFieldOnDrag] = React.useState<boolean>(false)
     
-
-    const statusPost: AsyncStatus = useAppSelector((state) => state.workspaceStateReducers.statusPost)
+    // const statusPost: AsyncStatus = useAppSelector((state) => state.workspaceStateReducers.statusPost)
     const fieldCOS: Coordinates2D  = useAppSelector((state) => state.workspaceStateReducers.currentWS.fieldPosition)
 
     const listOfNodes: WSNodeType[] = useAppSelector((state) => {
@@ -51,7 +44,6 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
     }
 
     React.useEffect(()=>{
-        // Add event listener for key escape
         window.addEventListener("keyup", handleKeyDown)
         
         return () => {
@@ -66,10 +58,6 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
                 x: fieldCOSBeforeDrag.x - (mousePosition.x - mousePosBeforeDrag.x),
                 y: fieldCOSBeforeDrag.y - (mousePosition.y - mousePosBeforeDrag.y)
             }}))
-            // changeFieldCOS({
-            //     x: fieldCOSBeforeDrag.x - (mousePosition.x - mousePosBeforeDrag.x),
-            //     y: fieldCOSBeforeDrag.y - (mousePosition.y - mousePosBeforeDrag.y),
-            // })
         }
     }, [mousePosition])
 
@@ -122,7 +110,6 @@ export const WorkspaceField: React.FC<WorkspaceFieldProps> = ({mousePosition}) =
                     }
                 })}
                 <BackCanvas mousePosition = {mousePosition}/>
-                {/* <Spinner show = {true} status = {statusPost} /> */}
             </div>
         </section>
     )

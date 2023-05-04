@@ -104,7 +104,6 @@ export const workspacesSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        //ToDo different handling of the three async function
         builder.addCase(getWorkspaceFromBackend.pending, (state, action) => {
             state.statusGet = "loading"
         })

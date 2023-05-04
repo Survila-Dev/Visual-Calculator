@@ -10,7 +10,6 @@ import { workspacesSlice } from "../store/workspaces-subroutines/index-workspace
 import { getWorkspaceFromBackend, uploadWorkspaceToBackend } from "../store/workspaces-subroutines/workspaces-thunks"
 import { useAuth0 } from "@auth0/auth0-react"
 import { accessTokenActions } from "../store/access-token"
-// import { canvasCur@veActions } from "../store/canvas-curves"
 
 export const WorkspaceEditor: React.FC = () => {
     
@@ -21,9 +20,7 @@ export const WorkspaceEditor: React.FC = () => {
     const getWorkspaceStatus = useAppSelector((state) => state.workspaceStateReducers.statusGet)
     const waitingForWorkfield = getWorkspaceStatus === "loading"
     const curWorkspace = useAppSelector((state) => state.workspaceStateReducers.currentWS)
-    const curveConnectionsFromWSState = useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections)
     const curConnections = useAppSelector((state) => state.workspaceStateReducers.currentCurveConnections)
-    const [triggerSyncBetweenStates, updateTriggerSyncBetweenStates] = React.useState<boolean>(false)
 
     const [triggerUpload, changeTriggerUpload] = React.useState<boolean>(false)
 
@@ -31,6 +28,7 @@ export const WorkspaceEditor: React.FC = () => {
     const { user, getAccessTokenSilently, isAuthenticated } = useAuth0()
     const accessToken = useAppSelector((state) => state.accessTokenReducer.accessToken)
 
+    // Send data to backend
     React.useEffect(() => {
         if (isAuthenticated) {
             if (skipFirstEvalForWSUpload) {
@@ -47,8 +45,6 @@ export const WorkspaceEditor: React.FC = () => {
         
     }, [triggerUpload])
 
-
-
     React.useEffect(() => {
         if (isAuthenticated && accessToken) {
             console.log("Getting workspace from backend")
@@ -58,43 +54,12 @@ export const WorkspaceEditor: React.FC = () => {
         const getAccessToken = async () => {
             try {
                 if (isAuthenticated && !accessTokenAlreadyRead && user) {
+                    const accessToken = await getAccessTokenSilently()
 
-                    console.log("Getting access token silently")
-                    const accessToken = await getAccessTokenSilently(
-                        // {
-                        // authorizationParams: {
-                        //     audience: process.env.REACT_APP_AUTH0_AUDIENCE_ADMIN,
-                        //     scope: "read:current_user",
-                        // },
-                        // }
-                        )
-
-                    console.log("access token")
-                    console.log(accessToken)
-
-                    // const userDetailsByIdUrl = process.env.REACT_APP_AUTH0_AUDIENCE_ADMIN + `users/${user.sub}`;
-
-                    // const metadataResponse = await fetch(userDetailsByIdUrl, {
-                    //     headers: {
-                    //     Authorization: `Bearer ${accessToken}`,
-                    //     },
-                    // });
-
-                    // console.log("metadataResponse")
-                    // console.log(metadataResponse)
-                
-                    // const user_metadata = await metadataResponse.json();
-
-                    // console.log("Meta data")
-                    // console.log(user_metadata)
-                    
-                    // console.log("Updating the access token in state")
-                    // console.log(accToken)
                     dispatch(accessTokenActions.updateAccessToken(accessToken))
                     dispatch(getWorkspaceFromBackend({authToken: accessToken}))
                 }
             } catch (e) {
-
                 console.error(e)
             }
             
@@ -103,29 +68,14 @@ export const WorkspaceEditor: React.FC = () => {
         getAccessToken()
     }, [])
 
-    // React.useEffect(() => {
-    //     console.log("Updating curveConnection state")
-    //     console.log(curveConnectionsFromWSState)
-    //     if (curveConnectionsFromWSState) {
-    //         dispatch(canvasCurveActions.updateFromWorkspaceState(curveConnectionsFromWSState))
-    //     }
-    // }, [triggerSyncBetweenStates])
-
     React.useEffect(() => {
         function handleMouseMove(this: Window, e: MouseEvent) {
             changeMousePosition({x: e.clientX, y: e.clientY})
         }
-        function handleSyncButtom(this: Window, e: KeyboardEvent) {
-            if (e.code === "Space") {
-                changeTriggerUpload((cur) => !cur)
-            }
-        }
 
         window.addEventListener("mousemove", handleMouseMove)
-        window.addEventListener("keyup", handleSyncButtom)
         return () => {
             window.removeEventListener("mousemove", handleMouseMove)
-            window.removeEventListener("keyup", handleSyncButtom)
         }
     }, [])
 

@@ -2,9 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit"
 import { Workspace, Workspaces } from "./types"
 import axios from "axios"
 
-import { workspacesStateActions } from "./index-workspaces"
 import { dropDownNodes } from "./init-workspace-state"
 import { CurveConnection, CurveConnectionList } from "../canvas-curves"
+
+const BACKENDURL = "http://localhost:3001"
 
 const defaultWS = {
     "name": "First workspace - hello world",
@@ -18,8 +19,6 @@ const defaultWS = {
     },
     "curveConnections": []
 }
-
-const BACKENDURL = "http://localhost:3001"
 
 export const getWorkspaceFromBackend = createAsyncThunk(
     "workspace/getWorkspaceFromBackend",
