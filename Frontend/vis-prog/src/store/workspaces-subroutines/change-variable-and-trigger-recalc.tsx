@@ -37,8 +37,8 @@ export const changeVariableAndTriggerRecalc = (state: Workspaces, action: Payloa
                 const nodeType = state.currentWS.nodes[actualNodeId].type
                 let otherFirstNodeForCalc: (number | null) = null
                 let otherSecondNodeForCalc: (number | null) = null
+
                 if (nodeType === "output" || nodeType === "fork") {
-                    // should have connection with selfPort === 0
                     const connection = state.currentWS.nodes[actualNodeId].connections.find((cur) => cur.portSelf === 0)
                     if (connection) {
                         otherFirstNodeForCalc = connection.otherNodeId
@@ -46,6 +46,7 @@ export const changeVariableAndTriggerRecalc = (state: Workspaces, action: Payloa
                     } else {
                         state.currentWS.nodes[actualNodeId].fullyConnected = false
                     }
+
                 } else if (nodeType !== "constant"){
                     const firstConnection = state.currentWS.nodes[actualNodeId].connections.find((cur) => cur.portSelf === 0)
                     const secondConnection = state.currentWS.nodes[actualNodeId].connections.find((cur) => cur.portSelf === 1)
@@ -81,7 +82,6 @@ export const changeVariableAndTriggerRecalc = (state: Workspaces, action: Payloa
                                 state.currentWS.nodes[actualNodeId].fullyConnected = false
                                 return null
                             }
-                            // return calculationPropagation(otherFirstNodeForCalc)
                         }
                         break
                     default:
@@ -103,7 +103,6 @@ export const changeVariableAndTriggerRecalc = (state: Workspaces, action: Payloa
     }
 
     // update the value
-
     if (state.currentWS) {
         state.currentWS.triggerCalc = !state.currentWS.triggerCalc
 

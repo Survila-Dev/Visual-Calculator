@@ -3,14 +3,13 @@ import { useAppSelector } from "../store/index";
 
 interface BackCanvasInteface {
     mousePosition: {x: number, y: number},
-    // fieldCOS: {x: number, y: number}
 }
 
 const defaultConnectionLineColor = '#1f2937'
-    const gridLineColor = '#1f2937'
-    const connectionLineThickness = 7.5
-    const gridLineThickness = 0.5
-    const backgroundGridSpacing = 150
+const gridLineColor = '#1f2937'
+const connectionLineThickness = 7.5
+const gridLineThickness = 0.5
+const backgroundGridSpacing = 150
 
 export const BackCanvas: React.FC<BackCanvasInteface> = ({mousePosition}) => {
 
@@ -62,8 +61,6 @@ export const BackCanvas: React.FC<BackCanvasInteface> = ({mousePosition}) => {
             point1: {x: number, y: number},
             point2: {x: number, y:number},
             color: string = defaultConnectionLineColor) {
-
-            // console.log("Drawing curve")
 
             ctx.beginPath()
             ctx.lineWidth = connectionLineThickness;

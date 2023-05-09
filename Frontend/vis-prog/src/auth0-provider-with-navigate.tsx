@@ -2,7 +2,6 @@ import { Auth0Provider, AppState } from "@auth0/auth0-react";
 import React, { PropsWithChildren } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { workspacesStateActions } from "./store/workspaces-subroutines/index-workspaces";
 
 interface Auth0ProviderWithNavigateProps {
   children: React.ReactNode;
@@ -20,9 +19,6 @@ export const Auth0ProviderWithNavigate = ({
   const dispatch = useDispatch()
 
   const onRedirectCallback = (appState?: AppState) => {
-
-    //ToDo async call to silently get the access token
-
     navigate(appState?.returnTo || window.location.pathname);
   };
 

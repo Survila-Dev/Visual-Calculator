@@ -149,9 +149,6 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
                 id = {id as any as string}
                 ref = {portRef}
                 className = {"absolute left-[6px] top-[3px] w-3 h-3 border-[1px] rounded-full shadow-2xl bg-gray-800 border-white cursor-pointer group-hover:bg-white"}
-                // style = {positionStyle}
-                // onMouseDown = {handleClick}
-                // onMouseUp = {preventDefaultReaction}
             >  
             </div>
 
@@ -170,7 +167,6 @@ export const WSNodePort: React.FC<WSNodePortProps> = ({id, parentNodeId, positio
                 id = {id as any as string}  
                 ref = {portRef}
                 className = {"absolute w-3 h-3 left-[6px] top-[3px]  border-[1px] rounded-full shadow-2xl border-white cursor-pointer group-hover:bg-white"}
-                // style = {positionStyle}
                 onMouseDown = {handleClick}
                 onMouseUp = {preventDefaultReaction}
             >
